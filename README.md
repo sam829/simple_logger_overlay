@@ -1,15 +1,13 @@
-# simple_logger_overlay
+# simple_logger_overlay [![Pub Version](https://img.shields.io/pub/v/simple_logger_overlay)](https://pub.dev/packages/simple_logger_overlay)
 
 A lightweight, Dart 3 compatible Flutter logging package with an in-app log viewer overlay — inspired by let_log, rebuilt for modern apps. Built with 💙 by Saumya Macwan.
 
 - 📄 UI for logs and network traffic
-- 🚀 Supports BLoC, Riverpod, GetX, and `logger`
+- 🚀 Supports BLoC, Riverpod, GetX, and Logger
 - 📂 Persistent log file system (auto-purges after 2 days)
 - 📳 Shake-to-open for quick debug access
 - 🔍 Search, filter, sort
 - 📤 Export logs to JSON and share
-
-[![Pub Version](https://img.shields.io/pub/v/simple_logger_overlay)](https://pub.dev/packages/simple_logger_overlay)
 
 ---
 
@@ -56,5 +54,3 @@ Use the export button in the overlay’s top-right corner to share a JSON file o
 ## 🛠️ License
 
 MIT © 2025 [Saumya Macwan](https://github.com/sam829)
-
-```
