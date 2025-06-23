@@ -1,4 +1,12 @@
-library;
+library simple_logger_overlay;
 
-export 'src/logger_core.dart';
-export 'src/logger_overlay.dart';
+import 'package:flutter/material.dart';
+import 'package:simple_logger_overlay/ui/logger_overlay.dart';
+
+class SimpleLoggerOverlay {
+  static void show(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (_) => const LoggerOverlay(),
+    ));
+  }
+}

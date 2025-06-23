@@ -10,8 +10,11 @@ environment:
   sdk: '>=3.3.0 <4.0.0'
 
 dependencies:
+  dio: ^5.8.0+1
   flutter:
     sdk: flutter
+  path_provider: ^2.1.5
+  shake: ^3.0.0
 
 dev_dependencies:
   flutter_test:
