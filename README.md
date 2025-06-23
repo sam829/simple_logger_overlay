@@ -9,6 +9,8 @@ A lightweight, Dart 3 compatible Flutter logging package with an in-app log view
 - 🔍 Search, filter, sort
 - 📤 Export logs to JSON and share
 
+[![Pub Version](https://img.shields.io/pub/v/simple_logger_overlay)](https://pub.dev/packages/simple_logger_overlay)
+
 ---
 
 ## 🚀 Getting Started
