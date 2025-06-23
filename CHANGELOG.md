@@ -1,8 +1,9 @@
 # Changelog
 
-## 1.0.0
+## 0.0.1
 
 - Initial release
-- LoggerCore for log levels
-- LoggerOverlay for UI
-- Dio interceptor support
+- Added `LoggerCore` for log collection
+- Added `LoggerOverlay` for in-app log viewer
+- Supports log levels (debug, info, warning, error)
+- Optional Dio interceptor integration
