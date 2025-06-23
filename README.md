@@ -1,86 +1,58 @@
 # simple_logger_overlay
 
-A lightweight, Dart 3 compatible Flutter logging package with an in-app log viewer overlay — inspired by let_log, rebuilt for modern apps.
+A lightweight, Dart 3 compatible Flutter logging package with an in-app log viewer overlay — inspired by let_log, rebuilt for modern apps. Built with 💙 by Saumya Macwan.
 
-![screenshot](https://raw.githubusercontent.com/YOUR_USERNAME/simple_logger_overlay/main/screenshot.png)
-
----
-
-## ✨ Features
-
-✅ Clean Dart 3+ codebase  
-✅ Log levels (debug, info, warning, error)  
-✅ In-app draggable log viewer  
-✅ Custom tags  
-✅ Dio interceptor support  
-✅ No extra dependencies
+- 📄 UI for logs and network traffic
+- 🚀 Supports BLoC, Riverpod, GetX, and `logger`
+- 📂 Persistent log file system (auto-purges after 2 days)
+- 📳 Shake-to-open for quick debug access
+- 🔍 Search, filter, sort
+- 📤 Export logs to JSON and share
 
 ---
 
 ## 🚀 Getting Started
 
-### 1. Add to your `pubspec.yaml`
-
-```yaml
-dependencies:
-  simple_logger_overlay: ^1.0.0
+```dart
+SimpleLoggerOverlay.show(context);
 ````
 
-### 2. Use Logger in Your Code
+### Optional integrations:
+
+#### BLoC
 
 ```dart
-import 'package:simple_logger_overlay/simple_logger_overlay.dart';
-
-LoggerCore().d("Debug log");
-LoggerCore().e("Something went wrong", tag: "Auth");
+Bloc.observer = LoggerBlocObserver();
 ```
 
-### 3. Add UI Overlay (in debug mode)
+#### Riverpod
 
 ```dart
-return Stack(
-  children: [
-    MaterialApp(...),
-    if (kDebugMode) const LoggerOverlay(),
-  ],
-);
+ProviderScope(observers: [LoggerRiverpodObserver()], child: MyApp());
 ```
 
----
-
-## 🔌 Dio Integration (Optional)
+#### GetX
 
 ```dart
-void setupDioLogger(Dio dio) {
-  dio.interceptors.add(
-    InterceptorsWrapper(
-      onRequest: (o, h) {
-        LoggerCore().i("➡️ ${o.method} ${o.uri}");
-        return h.next(o);
-      },
-      onResponse: (r, h) {
-        LoggerCore().d("✅ ${r.statusCode} ${r.requestOptions.uri}");
-        return h.next(r);
-      },
-      onError: (e, h) {
-        LoggerCore().e("❌ ${e.message}", tag: e.requestOptions.path);
-        return h.next(e);
-      },
-    ),
-  );
-}
+patchGetXLogger();
+```
+
+#### Dio Interceptor
+
+```dart
+dio.interceptors.add(NetworkLoggerInterceptor());
 ```
 
 ---
 
-## 🧪 Example
+## 📦 Export logs
 
-See `/example/lib/main.dart` for a full integration example.
+Use the export button in the overlay’s top-right corner to share a JSON file of your logs.
 
 ---
 
-## 📃 License
+## 🛠️ License
 
-MIT © 2025 \Sam
+MIT © 2025 [Saumya Macwan](https://github.com/sam829)
 
-````
+```

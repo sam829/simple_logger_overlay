@@ -3,7 +3,6 @@ description: "A simple, Dart 3+ compatible Flutter logging plugin with an in-app
 version: 0.0.1
 repository: https://github.com/sam829/simple_logger_overlay
 homepage: https://github.com/sam829/simple_logger_overlay
-documentation: https://github.com/sam829/simple_logger_overlay
 issue_tracker: https://github.com/sam829/simple_logger_overlay/issues
 
 environment:
@@ -24,6 +23,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+  lints: ^5.0.0
 
 flutter:
   uses-material-design: true

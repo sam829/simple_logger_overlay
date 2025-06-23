@@ -1,9 +1,8 @@
-# Changelog
-
-## 0.0.1
-
+## 0.1.0
 - Initial release
-- Added `LoggerCore` for log collection
-- Added `LoggerOverlay` for in-app log viewer
-- Supports log levels (debug, info, warning, error)
-- Optional Dio interceptor integration
+- Supports:
+    - Simple log + network log overlay
+    - Material 3 tabbed UI with theming
+    - Shake-to-open
+    - Bloc, Riverpod, GetX integration
+    - Export logs as JSON
