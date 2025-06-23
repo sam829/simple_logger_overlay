@@ -1,6 +1,6 @@
 # simple_logger_overlay [![Pub Version](https://img.shields.io/pub/v/simple_logger_overlay)](https://pub.dev/packages/simple_logger_overlay)
 
-A lightweight, Dart 3 compatible Flutter logging package with an in-app log viewer overlay — inspired by let_log, rebuilt for modern apps. Built with 💙 by Saumya Macwan.
+A lightweight, Dart 3 compatible Flutter logging package with an in-app log viewer overlay — inspired by let_log, rebuilt for modern apps. Built with 💙 by [Saumya Macwan](https://github.com/sam829).
 
 - 🧠 Non-blocking: Log I/O now runs in a background isolate
 - 🚀 Shake-to-open debug UI (configurable)
