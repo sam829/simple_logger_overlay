@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:simple_logger_overlay/core/utils/date_time_helper.dart';
 
 import '../../models/network_log.dart';
 import '../../models/simple_log.dart';
@@ -22,11 +23,11 @@ class LogCard extends StatelessWidget {
 
       return Card(
         margin: const EdgeInsets.all(8),
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: (255 * 0.4).roundToDouble()),
         child: ListTile(
           title: Text(simple!.message),
           subtitle: Text(
-            simple!.timestamp.toIso8601String(),
+            formatTimestamp(simple!.timestamp),
             style: const TextStyle(fontSize: 12),
           ),
           trailing: Text(simple!.level.name.toUpperCase()),
@@ -45,11 +46,11 @@ class LogCard extends StatelessWidget {
 
       return Card(
         margin: const EdgeInsets.all(8),
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: (255 * 0.4).roundToDouble()),
         child: ListTile(
           title: Text('${network!.method} ${network!.url}'),
           subtitle: Text(
-            network!.timestamp.toIso8601String(),
+            formatTimestamp(network!.timestamp),
             style: const TextStyle(fontSize: 12),
           ),
           trailing: Text(

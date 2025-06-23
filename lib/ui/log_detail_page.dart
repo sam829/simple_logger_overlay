@@ -1,5 +1,8 @@
+import 'dart:convert' show json, JsonEncoder;
+
 import 'package:flutter/material.dart';
 
+import '../core/utils/date_time_helper.dart';
 import '../models/network_log.dart';
 import '../models/simple_log.dart';
 
@@ -47,15 +50,21 @@ class LogDetailPage extends StatelessWidget {
         _section("Method", network!.method),
         _section("URL", network!.url),
         _section("Status Code", '${network!.statusCode ?? 'ERROR'}'),
-        _section("Timestamp", network!.timestamp.toIso8601String()),
-        _section("Request Headers", network!.requestHeaders.toString(),
+        _section("Timestamp", formatTimestamp(network!.timestamp)),
+        _section(
+            "Request Headers", _prettyPrintJsonFromMap(network!.requestHeaders),
             monospace: true),
-        _section("Request Body", network!.requestBody, monospace: true),
+        _section(
+            "Request Body", _prettyPrintJsonFromString(network!.requestBody),
+            monospace: true),
         if (network!.responseHeaders != null)
-          _section("Response Headers", network!.responseHeaders.toString(),
+          _section("Response Headers",
+              _prettyPrintJsonFromMap(network!.responseHeaders ?? {}),
               monospace: true),
         if (network!.responseBody != null)
-          _section("Response Body", network!.responseBody!, monospace: true),
+          _section("Response Body",
+              _prettyPrintJsonFromString(network!.responseBody!),
+              monospace: true),
       ],
     );
   }
@@ -85,5 +94,24 @@ class LogDetailPage extends StatelessWidget {
         )
       ],
     );
+  }
+
+  String _prettyPrintJsonFromMap(Map<String, String> input) {
+    try {
+      const encoder = JsonEncoder.withIndent('  ');
+      return encoder.convert(input);
+    } catch (e) {
+      return input.toString(); // fallback to raw if not JSON
+    }
+  }
+
+  String _prettyPrintJsonFromString(String input) {
+    try {
+      final decoded = json.decode(input);
+      const encoder = JsonEncoder.withIndent('  ');
+      return encoder.convert(decoded);
+    } catch (e) {
+      return input; // fallback to raw if not JSON
+    }
   }
 }

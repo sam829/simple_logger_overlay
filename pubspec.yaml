@@ -15,6 +15,7 @@ dependencies:
   flutter_bloc: ^9.1.1
   flutter_riverpod: ^2.6.1
   get: ^4.7.2
+  intl: ^0.20.2
   path_provider: ^2.1.5
   shake: ^3.0.0
   share_plus: ^11.0.0
