@@ -1,64 +1,35 @@
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:path_provider/path_provider.dart';
+import 'dart:isolate' show Isolate;
 
 import '../models/network_log.dart';
 import '../models/simple_log.dart';
+import 'isolate_log_writer.dart';
 
 class LogStorageService {
-  static const _simpleLogFile = 'simple_logs.json';
-  static const _networkLogFile = 'network_logs.json';
-
-  Future<File> _getFile(String name) async {
-    final dir = await getApplicationSupportDirectory();
-    return File('${dir.path}/$name');
+  Future<void> addSimpleLog(SimpleLog log) async {
+    await _writeToIsolate({...log.toJson(), 'type': 'simple'});
   }
 
-  Future<void> addSimpleLog(SimpleLog log) async {
-    final logs = await getSimpleLogs();
-    logs.add(log);
-    await _write(_simpleLogFile, logs.map((e) => e.toJson()).toList());
+  Future<void> _writeToIsolate(Map<String, dynamic> data) async {
+    await Isolate.run(() => IsolateLogWriter.writeLog(data));
   }
 
   Future<void> addNetworkLog(NetworkLog log) async {
-    final logs = await getNetworkLogs();
-    logs.add(log);
-    await _write(_networkLogFile, logs.map((e) => e.toJson()).toList());
+    await _writeToIsolate({...log.toJson(), 'type': 'network'});
   }
 
   Future<List<SimpleLog>> getSimpleLogs() async {
-    final file = await _getFile(_simpleLogFile);
-    if (!await file.exists()) return [];
-    final content = await file.readAsString();
-    final jsonList = jsonDecode(content) as List;
-    return jsonList
-        .map((e) => SimpleLog.fromJson(e))
-        .where((e) => DateTime.now().difference(e.timestamp).inDays < 2)
-        .toList();
+    final rawLogs =
+        await Isolate.run(() => IsolateLogWriter.readLogs('simple'));
+    return rawLogs.map((e) => SimpleLog.fromJson(e)).toList();
   }
 
   Future<List<NetworkLog>> getNetworkLogs() async {
-    final file = await _getFile(_networkLogFile);
-    if (!await file.exists()) return [];
-    final content = await file.readAsString();
-    final jsonList = jsonDecode(content) as List;
-    return jsonList
-        .map((e) => NetworkLog.fromJson(e))
-        .where((e) => DateTime.now().difference(e.timestamp).inDays < 2)
-        .toList();
+    final rawLogs =
+        await Isolate.run(() => IsolateLogWriter.readLogs('network'));
+    return rawLogs.map((e) => NetworkLog.fromJson(e)).toList();
   }
 
-  Future<void> _write(String fileName, List<Map<String, dynamic>> data) async {
-    final file = await _getFile(fileName);
-    await file.writeAsString(jsonEncode(data));
-  }
-
-  Future<void> clearOldLogs() async {
-    final simpleLogs = await getSimpleLogs();
-    await _write(_simpleLogFile, simpleLogs.map((e) => e.toJson()).toList());
-
-    final networkLogs = await getNetworkLogs();
-    await _write(_networkLogFile, networkLogs.map((e) => e.toJson()).toList());
+  Future<void> purgeOldLogs() async {
+    await Isolate.run(() => IsolateLogWriter.purgeOldLogs(2));
   }
 }
