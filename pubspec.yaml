@@ -5,7 +5,6 @@ repository: https://github.com/sam829/simple_logger_overlay
 homepage: https://github.com/sam829/simple_logger_overlay
 documentation: https://github.com/sam829/simple_logger_overlay
 issue_tracker: https://github.com/sam829/simple_logger_overlay/issues
-publish_to: https://pub.dev
 
 environment:
   sdk: '>=3.3.0 <4.0.0'
