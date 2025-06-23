@@ -2,19 +2,30 @@
 
 A lightweight, Dart 3 compatible Flutter logging package with an in-app log viewer overlay — inspired by let_log, rebuilt for modern apps. Built with 💙 by Saumya Macwan.
 
-- 📄 UI for logs and network traffic
-- 🚀 Supports BLoC, Riverpod, GetX, and Logger
-- 📂 Persistent log file system (auto-purges after 2 days)
-- 📳 Shake-to-open for quick debug access
-- 🔍 Search, filter, sort
-- 📤 Export logs to JSON and share
+- 🧠 Non-blocking: Log I/O now runs in a background isolate
+- 🚀 Shake-to-open debug UI (configurable)
+- 🌐 Dio network logging with status coloring
+- 💬 BLoC, Riverpod, GetX, and `logger` package integration
+- 🧾 Pretty-printed JSON body view
+- 🎨 Dark/light theme-aware design with icon-based log cards
+- 🔍 Filter, search, and export logs as `.json`
 
 ---
 
 ## 🚀 Getting Started
 
 ```dart
-SimpleLoggerOverlay.show(context);
+import 'package:simple_logger_overlay/simple_logger_overlay.dart';
+
+@override
+Widget build(BuildContext context) {
+  return FloatingActionButton(
+    onPressed: () {
+      SimpleLoggerOverlay.show(context);
+    },
+    child: const Icon(Icons.file_present),
+  );
+}
 ````
 
 ### Optional integrations:
@@ -22,25 +33,55 @@ SimpleLoggerOverlay.show(context);
 #### BLoC
 
 ```dart
-Bloc.observer = LoggerBlocObserver();
+import 'package:simple_logger_overlay/core/bloc_logger_observer.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Bloc.observer = SimpleOverlayBlocObserverLogger();
+}
 ```
 
 #### Riverpod
 
 ```dart
-ProviderScope(observers: [LoggerRiverpodObserver()], child: MyApp());
+import 'package:simple_logger_overlay/core/riverpod_logger.dart';
+
+void main() {
+  runApp(
+    ProviderScope(
+      observers: [SimpleOverlayLoggerRiverpodObserver()],
+      child: const LoggerDemo(),
+    ),
+  );
+}
 ```
 
 #### GetX
 
 ```dart
-patchGetXLogger();
+import 'package:simple_logger_overlay/core/getx_logger_patch.dart';
+
+void main() {
+  simpleOverlayGetXLogObserver();
+}
 ```
 
 #### Dio Interceptor
 
 ```dart
-dio.interceptors.add(NetworkLoggerInterceptor());
+import 'package:dio/dio.dart';
+import 'package:simple_logger_overlay/core/network_logger_interceptor.dart';
+
+class ApiClient {
+  static final Dio dio = Dio(
+    BaseOptions(
+      baseUrl: 'https://jsonplaceholder.typicode.com/',
+      connectTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(seconds: 10),
+    ),
+  )..interceptors.add(NetworkLoggerInterceptor());
+}
+
 ```
 
 ---
