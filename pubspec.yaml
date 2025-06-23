@@ -1,5 +1,5 @@
 name: simple_logger_overlay
-description: "A simple, Dart 3+ compatible Flutter logging plugin with an in-app draggable overlay, log levels, and Dio support. built with 💙 by Sam"
+description: "A simple, Dart 3+ compatible Flutter logging plugin with an in-app draggable overlay, log levels, and Dio support"
 version: 0.0.1
 repository: https://github.com/sam829/simple_logger_overlay
 homepage: https://github.com/sam829/simple_logger_overlay
