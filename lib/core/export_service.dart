@@ -1,0 +1,27 @@
+import 'dart:convert' show jsonEncode;
+import 'dart:io' show File;
+
+import 'package:path_provider/path_provider.dart';
+
+import 'log_storage_service.dart';
+
+class ExportService {
+  final _storage = LogStorageService();
+
+  Future<String> exportLogsToFile() async {
+    final simple = await _storage.getSimpleLogs();
+    final network = await _storage.getNetworkLogs();
+
+    final Map<String, dynamic> json = {
+      "simple_logs": simple.map((e) => e.toJson()).toList(),
+      "network_logs": network.map((e) => e.toJson()).toList(),
+    };
+
+    final dir = await getTemporaryDirectory();
+    final file = File(
+        '${dir.path}/exported_logs_${DateTime.now().millisecondsSinceEpoch}.json');
+
+    await file.writeAsString(jsonEncode(json));
+    return file.path;
+  }
+}

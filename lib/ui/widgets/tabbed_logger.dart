@@ -18,6 +18,10 @@ class _TabbedLoggerState extends State<TabbedLogger>
   late TabController _tabController;
   List<SimpleLog> _simpleLogs = [];
   List<NetworkLog> _networkLogs = [];
+  String? _searchText;
+  bool _sortDesc = true;
+
+  final TextEditingController _controller = TextEditingController();
 
   @override
   void initState() {
@@ -37,11 +41,18 @@ class _TabbedLoggerState extends State<TabbedLogger>
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return Column(
       children: [
+        _buildSearchAndSortBar(),
         TabBar(
           controller: _tabController,
           labelColor: theme.colorScheme.primary,
@@ -57,17 +68,17 @@ class _TabbedLoggerState extends State<TabbedLogger>
               RefreshIndicator(
                 onRefresh: _loadLogs,
                 child: ListView.builder(
-                  itemCount: _simpleLogs.length,
+                  itemCount: _filteredSimpleLogs().length,
                   itemBuilder: (_, index) =>
-                      LogCard.simple(simple: _simpleLogs[index]),
+                      LogCard.simple(simple: _filteredSimpleLogs()[index]),
                 ),
               ),
               RefreshIndicator(
                 onRefresh: _loadLogs,
                 child: ListView.builder(
-                  itemCount: _networkLogs.length,
+                  itemCount: _filteredNetworkLogs().length,
                   itemBuilder: (_, index) =>
-                      LogCard.network(network: _networkLogs[index]),
+                      LogCard.network(network: _filteredNetworkLogs()[index]),
                 ),
               ),
             ],
@@ -75,5 +86,59 @@ class _TabbedLoggerState extends State<TabbedLogger>
         )
       ],
     );
+  }
+
+  Widget _buildSearchAndSortBar() {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              controller: _controller,
+              onChanged: (val) => setState(() => _searchText = val),
+              decoration: const InputDecoration(
+                labelText: 'Search',
+                prefixIcon: Icon(Icons.search),
+              ),
+            ),
+          ),
+          IconButton(
+            icon: Icon(_sortDesc ? Icons.arrow_downward : Icons.arrow_upward),
+            onPressed: () => setState(() => _sortDesc = !_sortDesc),
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<SimpleLog> _filteredSimpleLogs() {
+    final filtered = _simpleLogs.where((log) {
+      return _searchText == null || _searchText!.isEmpty
+          ? true
+          : log.message.toLowerCase().contains(_searchText!.toLowerCase()) ||
+              log.tag.toLowerCase().contains(_searchText!.toLowerCase());
+    }).toList();
+
+    filtered.sort((a, b) => _sortDesc
+        ? b.timestamp.compareTo(a.timestamp)
+        : a.timestamp.compareTo(b.timestamp));
+
+    return filtered;
+  }
+
+  List<NetworkLog> _filteredNetworkLogs() {
+    final filtered = _networkLogs.where((log) {
+      return _searchText == null || _searchText!.isEmpty
+          ? true
+          : log.url.toLowerCase().contains(_searchText!.toLowerCase()) ||
+              log.method.toLowerCase().contains(_searchText!.toLowerCase());
+    }).toList();
+
+    filtered.sort((a, b) => _sortDesc
+        ? b.timestamp.compareTo(a.timestamp)
+        : a.timestamp.compareTo(b.timestamp));
+
+    return filtered;
   }
 }
