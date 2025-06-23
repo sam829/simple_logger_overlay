@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import '../models/simple_log.dart';
 import 'log_storage_service.dart';
 
-void patchGetXLogger() {
+void simpleOverlayGetXLogObserver() {
   final storage = LogStorageService();
   Get.config(
     logWriterCallback: (text, {bool isError = false}) {
