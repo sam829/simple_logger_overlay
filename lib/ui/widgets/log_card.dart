@@ -30,7 +30,10 @@ class LogCard extends StatelessWidget {
             formatTimestamp(simple!.timestamp),
             style: const TextStyle(fontSize: 12),
           ),
-          trailing: Text(simple!.level.name.toUpperCase()),
+          trailing: Icon(
+            _getLogLevelIcon(simple!.level),
+            color: color,
+          ),
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
@@ -67,6 +70,17 @@ class LogCard extends StatelessWidget {
       );
     } else {
       return const SizedBox();
+    }
+  }
+
+  IconData _getLogLevelIcon(LogLevel level) {
+    switch (level) {
+      case LogLevel.debug:
+        return Icons.bug_report_outlined;
+      case LogLevel.info:
+        return Icons.info_outline;
+      case LogLevel.error:
+        return Icons.error_outline;
     }
   }
 }

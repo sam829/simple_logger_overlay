@@ -6,11 +6,11 @@ import 'package:simple_logger_overlay/core/getx_logger_patch.dart';
 import 'package:simple_logger_overlay/core/riverpod_logger.dart';
 
 void main() {
-  patchGetXLogger();
-  Bloc.observer = LoggerBlocObserver();
+  simpleOverlayGetXLogObserver();
+  Bloc.observer = SimpleOverlayBlocObserverLogger();
   runApp(
     ProviderScope(
-      observers: [LoggerRiverpodObserver()],
+      observers: [SimpleOverlayLoggerRiverpodObserver()],
       child: const LoggerDemo(),
     ),
   );

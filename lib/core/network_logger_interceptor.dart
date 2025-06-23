@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import '../models/network_log.dart';
 import 'log_storage_service.dart';
 
-class NetworkLoggerInterceptor extends Interceptor {
+class SimpleOverlayNetworkLoggerInterceptor extends Interceptor {
   final LogStorageService _storageService = LogStorageService();
 
   @override

@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/simple_log.dart';
 import 'log_storage_service.dart';
 
-class LoggerRiverpodObserver extends ProviderObserver {
+class SimpleOverlayLoggerRiverpodObserver extends ProviderObserver {
   final LogStorageService _storage = LogStorageService();
 
   @override

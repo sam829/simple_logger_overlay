@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../models/simple_log.dart';
 import 'log_storage_service.dart';
 
-class LoggerBlocObserver extends BlocObserver {
+class SimpleOverlayBlocObserverLogger extends BlocObserver {
   final LogStorageService _storage = LogStorageService();
 
   @override
