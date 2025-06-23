@@ -1,4 +1,4 @@
-## 0.0.2
+## 0.1.0
 
 - Initial release of `simple_logger_overlay`
 - 🌈 Material 3 overlay for logs and network traffic
