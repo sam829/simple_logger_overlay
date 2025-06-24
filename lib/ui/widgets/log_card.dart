@@ -23,7 +23,7 @@ class LogCard extends StatelessWidget {
 
       return Card(
         margin: const EdgeInsets.all(8),
-        color: color.withValues(alpha: (255 * 0.4).roundToDouble()),
+        color: color.withValues(alpha: (255 * 0.2).roundToDouble()),
         child: ListTile(
           title: Text(simple!.message),
           subtitle: Text(
@@ -49,7 +49,7 @@ class LogCard extends StatelessWidget {
 
       return Card(
         margin: const EdgeInsets.all(8),
-        color: color.withValues(alpha: (255 * 0.4).roundToDouble()),
+        color: color.withValues(alpha: (255 * 0.2).roundToDouble()),
         child: ListTile(
           title: Text('${network!.method} ${network!.url}'),
           subtitle: Text(

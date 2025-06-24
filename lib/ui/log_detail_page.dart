@@ -1,6 +1,7 @@
-import 'dart:convert' show json, JsonEncoder;
+import 'dart:convert' show json, JsonEncoder, jsonEncode;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 
 import '../core/utils/date_time_helper.dart';
 import '../models/network_log.dart';
@@ -15,6 +16,15 @@ class LogDetailPage extends StatelessWidget {
   const LogDetailPage.network({super.key, required this.network})
       : simple = null;
 
+  String _buildCopyableLogText() {
+    if (simple != null) {
+      return jsonEncode(simple!.toJson());
+    } else if (network != null) {
+      return jsonEncode(network!.toJson());
+    }
+    return '';
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -23,6 +33,19 @@ class LogDetailPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(simple != null ? 'Log Detail' : 'Network Log Detail'),
         backgroundColor: theme.colorScheme.surface,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.copy),
+            tooltip: "Copy Log to Clipboard",
+            onPressed: () {
+              final content = _buildCopyableLogText();
+              Clipboard.setData(ClipboardData(text: content));
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text("Log copied to clipboard")),
+              );
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -38,7 +61,7 @@ class LogDetailPage extends StatelessWidget {
       children: [
         _section("Tag", simple!.tag),
         _section("Level", simple!.level.name),
-        _section("Timestamp", simple!.timestamp.toIso8601String()),
+        _section("Timestamp", formatTimestamp(simple!.timestamp)),
         _section("Message", simple!.message, monospace: true),
       ],
     );
