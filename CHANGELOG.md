@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.1.2
+
+### ⚡ Performance & Stability
+- ✅ **Isolate-based logging**: Moved all file read/write/purge operations to background isolates
+  - Prevents UI lag during high-frequency logging
+  - Main thread stays unblocked
+- ✅ **Safe platform channel usage**:
+  - All `path_provider` calls now run on the main isolate
+  - Eliminated `BackgroundIsolateBinaryMessenger` crash
+
+### 🧼 Log Management
+- 🧹 Auto-purges logs older than 2 days using isolates
+- 🧾 Pretty-printed JSON body in network log detail page
+
+### 🎨 UI Improvements
+- 🔁 Replaced log level text (DEBUG / INFO / ERROR) with intuitive icons
+  - 🐞 Debug → `bug_report`
+  - ℹ️ Info → `info_outline`
+  - ❗ Error → `error_outline`
+
 ## 0.1.1
 
 - 🧠 Major performance enhancements:

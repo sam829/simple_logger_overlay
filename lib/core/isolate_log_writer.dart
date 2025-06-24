@@ -1,26 +1,30 @@
 import 'dart:convert' show jsonDecode, jsonEncode;
-import 'dart:io' show File, FileMode;
-
-import 'package:path_provider/path_provider.dart'
-    show getApplicationSupportDirectory;
+import 'dart:io' show File, FileMode, Directory;
 
 class IsolateLogWriter {
-  static Future<void> writeLog(Map<String, dynamic> logMap) async {
-    final dir = await getApplicationSupportDirectory();
-    final logType = logMap['type'] ?? 'simple';
-    final file = File('${dir.path}/${logType}_logs.jsonl');
+  static Future<void> writeLog(Map<String, dynamic> payload) async {
+    final path = payload['path'] as String;
+    final type = payload['type'] ?? 'simple';
 
+    final file = File('$path/${type}_logs.jsonl');
     final sink = file.openWrite(mode: FileMode.append);
-    sink.writeln(jsonEncode(logMap));
+
+    // remove path/type from actual log
+    final logCopy = Map.of(payload)
+      ..remove('path')
+      ..remove('type');
+    sink.writeln(jsonEncode(logCopy));
+
     await sink.flush();
     await sink.close();
   }
 
-  static Future<void> purgeOldLogs(int daysToKeep) async {
-    final dir = await getApplicationSupportDirectory();
+  static Future<void> purgeOldLogs(String dirPath, int daysToKeep) async {
+    final dir = Directory(dirPath);
     final now = DateTime.now();
 
-    for (final file in dir.listSync()) {
+    final files = dir.listSync();
+    for (final file in files) {
       if (file is File && file.path.endsWith('.jsonl')) {
         final stat = await file.stat();
         final diff = now.difference(stat.modified);
@@ -31,9 +35,9 @@ class IsolateLogWriter {
     }
   }
 
-  static Future<List<Map<String, dynamic>>> readLogs(String type) async {
-    final dir = await getApplicationSupportDirectory();
-    final file = File('${dir.path}/${type}_logs.jsonl');
+  static Future<List<Map<String, dynamic>>> readLogs(
+      String dirPath, String type) async {
+    final file = File('$dirPath/${type}_logs.jsonl');
     if (!await file.exists()) return [];
 
     final lines = await file.readAsLines();
