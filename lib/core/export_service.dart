@@ -5,9 +5,12 @@ import 'package:path_provider/path_provider.dart';
 
 import 'log_storage_service.dart';
 
+/// Service that exports all logs (simple + network) as JSON
+/// and opens a native share sheet using `share_plus`.
 class ExportService {
   final _storage = LogStorageService();
 
+  /// Exports both simple and network logs to JSON and triggers native share dialog.
   Future<String> exportLogsToFile() async {
     final simple = await _storage.getSimpleLogs();
     final network = await _storage.getNetworkLogs();

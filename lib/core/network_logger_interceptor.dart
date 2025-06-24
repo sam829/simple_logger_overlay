@@ -3,6 +3,17 @@ import 'package:dio/dio.dart';
 import '../models/network_log.dart';
 import 'log_storage_service.dart';
 
+/// Dio interceptor that captures and stores network requests/responses.
+///
+/// Automatically logs:
+/// - request headers/body
+/// - response headers/body
+/// - success/failure color
+///
+/// Attach to your Dio instance:
+/// ```dart
+/// dio.interceptors.add(SimpleOverlayNetworkLoggerInterceptor());
+/// ```
 class SimpleOverlayNetworkLoggerInterceptor extends Interceptor {
   final LogStorageService _storageService = LogStorageService();
 

@@ -2,8 +2,12 @@ import 'base_log.dart';
 
 enum LogLevel { debug, info, error }
 
+/// A simple log entry, typically from `LoggerController.log()`.
 class SimpleLog extends BaseLog {
+  /// The log message body.
   final String message;
+
+  /// Log level: debug, info, or error.
   final LogLevel level;
 
   SimpleLog({
