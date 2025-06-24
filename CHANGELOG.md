@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.1.3
+
+### ✨ New Features
+- 📝 Added **"Copy to Clipboard"** button on log detail pages
+  - Copies full log as formatted JSON
+  - Available via AppBar action for both simple and network logs
+
+### 🔧 Improvements
+- ✨ Log detail now shows clean, shareable JSON
+- 📋 SnackBar confirmation after copying log
+
 ## 0.1.2
 
 ### ⚡ Performance & Stability
