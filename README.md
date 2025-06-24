@@ -12,6 +12,11 @@ A lightweight, Dart 3 compatible Flutter logging package with an in-app log view
 
 ---
 
+[![network_list](https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/network_list.jpeg?raw=true)]
+[![network_page](https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/network_detail.jpeg?raw=true)]
+
+---
+
 ## 🚀 Getting Started
 
 ```dart
