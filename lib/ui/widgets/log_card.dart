@@ -5,15 +5,42 @@ import '../../models/network_log.dart';
 import '../../models/simple_log.dart';
 import '../log_detail_page.dart';
 
+/// A card widget that displays a log entry in a visually appealing way.
+/// 
+/// This widget can display either a [SimpleLog] or [NetworkLog] entry.
+/// The appearance changes based on the log type and level/status:
+/// - Simple logs show different colors based on their [LogLevel]
+/// - Network logs show green for success and red for errors
+/// 
+/// Tapping on a card navigates to a detailed view of the log entry.
 class LogCard extends StatelessWidget {
+  /// The simple log entry to display, if any.
+  /// 
+  /// Only one of [simple] or [network] should be non-null.
   final SimpleLog? simple;
+
+  /// The network log entry to display, if any.
+  /// 
+  /// Only one of [simple] or [network] should be non-null.
   final NetworkLog? network;
 
+  /// Creates a [LogCard] that displays a [SimpleLog] entry.
+  /// 
+  /// The [simple] parameter must not be null.
   const LogCard.simple({super.key, required this.simple}) : network = null;
+
+  /// Creates a [LogCard] that displays a [NetworkLog] entry.
+  /// 
+  /// The [network] parameter must not be null.
   const LogCard.network({super.key, required this.network}) : simple = null;
 
   @override
   Widget build(BuildContext context) {
+    // Only one of simple or network should be non-null
+    assert(
+      (simple != null) ^ (network != null),
+      'Exactly one of simple or network must be non-null',
+    );
     if (simple != null) {
       final color = switch (simple!.level) {
         LogLevel.debug => Colors.blue,
@@ -73,6 +100,16 @@ class LogCard extends StatelessWidget {
     }
   }
 
+  /// Returns an appropriate icon for a given log level.
+  /// 
+  /// Parameters:
+  /// - [level]: The log level to get an icon for
+  /// 
+  /// Returns:
+  /// An [IconData] representing the log level:
+  /// - debug: Bug report icon
+  /// - info: Info icon
+  /// - error: Error icon
   IconData _getLogLevelIcon(LogLevel level) {
     switch (level) {
       case LogLevel.debug:
