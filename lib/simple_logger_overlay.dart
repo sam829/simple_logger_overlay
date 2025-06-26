@@ -3,9 +3,11 @@ library simple_logger_overlay;
 import 'package:flutter/material.dart';
 import 'package:simple_logger_overlay/ui/logger_overlay.dart';
 
+export 'core/app_lifecycle_logger.dart';
 export 'core/bloc_logger_observer.dart';
 export 'core/export_service.dart';
 export 'core/getx_logger_patch.dart';
+export 'core/go_router_observer.dart';
 export 'core/logger_controller.dart';
 export 'core/network_logger_interceptor.dart';
 export 'core/riverpod_logger.dart';

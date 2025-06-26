@@ -17,6 +17,9 @@ import 'isolate_log_writer.dart';
 /// the second file contains logs from the [NetworkLoggerInterceptor].
 ///
 class LogStorageService {
+  /// Enables styled logging to console. Defaults to true.
+  static bool enableConsole = true;
+
   /// Writes a [SimpleLog] to the persistent log file.
   ///
   /// The log is written to a file named `simple_logs.jsonl` within the
@@ -34,6 +37,8 @@ class LogStorageService {
   ///   or "error".
   /// * `message`: The log message itself, a string.
   Future<void> addSimpleLog(SimpleLog log) async {
+    _printStyled(log.level.name, log.tag, log.message);
+
     final dir = await getApplicationSupportDirectory();
     final path = dir.path;
     final payload = {
@@ -66,6 +71,12 @@ class LogStorageService {
   /// * `responseBody`: The body of the response, if any.
   /// * `isSuccess`: A boolean indicating if the network request was successful.
   Future<void> addNetworkLog(NetworkLog log) async {
+    final tag = '${log.method} ${log.url}';
+    final msg =
+        'Status: ${log.statusCode} | ${log.isSuccess ? 'Success' : 'Error'}';
+
+    _printStyled(log.isSuccess ? 'info' : 'error', tag, msg);
+
     final dir = await getApplicationSupportDirectory();
     final path = dir.path;
     final payload = {
@@ -118,5 +129,53 @@ class LogStorageService {
     final dir = await getApplicationSupportDirectory();
     final path = dir.path;
     await Isolate.run(() => IsolateLogWriter.purgeOldLogs(path, 2));
+  }
+
+  void _printStyled(String level, String tag, String message) {
+    if (!LogStorageService.enableConsole) return;
+
+    final timestamp = DateTime.now().toIso8601String();
+
+    // ANSI color codes
+    const reset = '\x1B[0m';
+    const gray = '\x1B[90m';
+    const blue = '\x1B[34m';
+    const yellow = '\x1B[33m';
+    const red = '\x1B[31m';
+
+    String color;
+    String emoji;
+    String label;
+
+    switch (level.toLowerCase()) {
+      case 'debug':
+        color = gray;
+        emoji = '🔍';
+        label = 'DEBUG';
+        break;
+      case 'info':
+        color = blue;
+        emoji = 'ℹ️';
+        label = 'INFO';
+        break;
+      case 'warn':
+      case 'warning':
+        color = yellow;
+        emoji = '🟡';
+        label = 'WARN';
+        break;
+      case 'error':
+        color = red;
+        emoji = '🔥';
+        label = 'ERROR';
+        break;
+      default:
+        color = reset;
+        emoji = '📌';
+        label = level.toUpperCase();
+    }
+
+    final formatted = '[$timestamp] $emoji [$label] [$tag] $message';
+    print('$color$formatted$reset');
   }
 }

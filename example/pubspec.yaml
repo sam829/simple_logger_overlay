@@ -17,6 +17,8 @@ dependencies:
   dartz: ^0.10.1
   equatable: ^2.0.7
   flutter_bloc: ^9.1.1
+  simple_logger_overlay:
+    path: ../
 
 dev_dependencies:
   flutter_test:
