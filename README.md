@@ -25,11 +25,16 @@ Built with 💙 by [Saumya Macwan](https://github.com/sam829).
 
 ### 📱 Screenshots
 
-**Listing Page**  
-![network_list](https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/network_list.jpeg?raw=true)
-
-**Detail Page**  
-![network_page](https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/network_detail.jpeg?raw=true)
+<div align="center">
+  <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/network_list.jpeg?raw=true" alt="Image 1" width="200" style="display:inline-block; margin: 0 20px 20px 0;"/>
+  <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/network_detail.jpeg?raw=true" alt="Image 2" width="200" style="display:inline-block; margin: 0 20px 20px 0;"/>
+  <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/console.png?raw=true" alt="Image 1" width="200" style="display:inline-block; margin: 0 20px 20px 0;"/>
+  <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/export.png?raw=true" alt="Image 2" width="200" style="display:inline-block; margin: 0 20px 20px 0;"/>
+  <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/debug_overlay.png?raw=true" alt="Image 1" width="200" style="display:inline-block; margin: 0 20px 20px 0;"/>
+  <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/search.png?raw=true" alt="Image 2" width="200" style="display:inline-block; margin: 0 20px 20px 0;"/>
+  <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/simple_detail.png?raw=true" alt="Image 2" width="200" style="display:inline-block; margin: 0 20px 20px 0;"/>
+  <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/simple_list.png?raw=true" alt="Image 2" width="200" style="display:inline-block; margin: 0 20px 20px 0;"/>
+</div>
 
 ---
 
