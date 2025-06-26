@@ -1,21 +1,34 @@
 # simple_logger_overlay [![Pub Version](https://img.shields.io/pub/v/simple_logger_overlay)](https://pub.dev/packages/simple_logger_overlay)
 
-A lightweight, Dart 3 compatible Flutter logging package with an in-app log viewer overlay — inspired by let_log, rebuilt for modern apps. Built with 💙 by [Saumya Macwan](https://github.com/sam829).
-
-- 🧠 Non-blocking: Log I/O now runs in a background isolate
-- 🚀 Shake-to-open debug UI (configurable)
-- 🌐 Dio network logging with status coloring
-- 💬 BLoC, Riverpod, GetX, and `logger` package integration
-- 🧾 Pretty-printed JSON body view
-- 🎨 Dark/light theme-aware design with icon-based log cards
-- 🔍 Filter, search, and export logs as `.json`
+A lightweight, Dart 3-compatible Flutter logging package with a draggable in-app log viewer overlay — inspired by `let_log`, rebuilt for modern apps.  
+Built with 💙 by [Saumya Macwan](https://github.com/sam829).
 
 ---
 
-### Listing Page
+### ✨ Features
+
+- 🧠 **Non-blocking:** Log I/O runs in a background isolate
+- 🌈 **Material 3 overlay**, dark/light theme aware
+- 📄 **Pretty-printed JSON views** for network logs
+- 🌐 **Dio interceptor** for network logging with status coloring
+- 💬 Integrates with BLoC, Riverpod, GetX, and `logger`
+- 🔍 Filter, sort, search logs
+- 📤 Export logs as `.json`, or copy to clipboard
+- 🧾 Detailed log view on card tap
+- 🚀 Shake-to-open overlay (debug-only)
+- 🐞 **Draggable floating debug button**
+- 🔌 Optional: `GoRouterObserver`, `AppLifecycleObserver`
+- 🖥️ Emoji + color-coded **console logging** (with toggle)
+- 🧰 Simple static API: `SimpleLoggerOverlay.log(...)`
+
+---
+
+### 📱 Screenshots
+
+**Listing Page**  
 ![network_list](https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/network_list.jpeg?raw=true)
 
-### Detail Page
+**Detail Page**  
 ![network_page](https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/network_detail.jpeg?raw=true)
 
 ---
@@ -36,9 +49,21 @@ Widget build(BuildContext context) {
 }
 ````
 
-### Optional integrations:
+---
 
-#### BLoC
+### 🪵 Log from Anywhere
+
+Log directly with the static API:
+
+```dart
+SimpleLoggerOverlay.log("Something happened", level: LogLevel.info, tag: 'HomeScreen');
+```
+
+---
+
+### 🧩 Integrations
+
+#### 🧠 BLoC
 
 ```dart
 import 'package:simple_logger_overlay/core/bloc_logger_observer.dart';
@@ -49,7 +74,7 @@ Future<void> main() async {
 }
 ```
 
-#### Riverpod
+#### 🌱 Riverpod
 
 ```dart
 import 'package:simple_logger_overlay/core/riverpod_logger.dart';
@@ -58,13 +83,13 @@ void main() {
   runApp(
     ProviderScope(
       observers: [SimpleOverlayLoggerRiverpodObserver()],
-      child: const LoggerDemo(),
+      child: const MyApp(),
     ),
   );
 }
 ```
 
-#### GetX
+#### ⚡ GetX
 
 ```dart
 import 'package:simple_logger_overlay/core/getx_logger_patch.dart';
@@ -74,29 +99,71 @@ void main() {
 }
 ```
 
-#### Dio Interceptor
+#### 🌐 Dio Interceptor
 
 ```dart
 import 'package:dio/dio.dart';
 import 'package:simple_logger_overlay/core/network_logger_interceptor.dart';
 
-class ApiClient {
-  static final Dio dio = Dio(
-    BaseOptions(
-      baseUrl: 'https://jsonplaceholder.typicode.com/',
-      connectTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 10),
-    ),
-  )..interceptors.add(NetworkLoggerInterceptor());
-}
+final dio = Dio()
+  ..interceptors.add(NetworkLoggerInterceptor());
+```
 
+#### 🧭 GoRouter
+
+```dart
+MaterialApp.router(
+  routerDelegate: GoRouter(
+    observers: [SimpleOverlayGoRouterObserver()],
+    ...
+  ).routerDelegate,
+);
+```
+
+#### 📱 App Lifecycle
+
+```dart
+WidgetsBinding.instance.addObserver(SimpleOverlayAppLifecycleObserver());
 ```
 
 ---
 
-## 📦 Export logs
+### 🐞 Debug Floating Button
 
-Use the export button in the overlay’s top-right corner to share a JSON file of your logs.
+```dart
+Stack(
+  children: [
+    child!,
+    const DraggableDebuggerFAB(navigatorKey: rootNavigatorKey),
+  ],
+);
+```
+
+---
+
+## 💻 Console Logging
+
+Logs are also printed in your terminal with emojis and color by default.
+
+```bash
+[2025-06-24T19:15:01.000Z] 🔍 [DEBUG] [LoginBloc] Event dispatched
+[2025-06-24T19:15:02.000Z] 🔥 [ERROR] [LoginBloc] Invalid password
+```
+
+Disable if needed:
+
+```dart
+LogStorageService.enableConsole = false;
+```
+
+---
+
+## 📦 Export Logs
+
+Use the export button in the top-right corner of the overlay to:
+
+* 📤 Export logs as `.json`
+* 📋 Copy current log to clipboard
 
 ---
 

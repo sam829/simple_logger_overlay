@@ -1,5 +1,32 @@
 # Changelog
 
+## 0.1.4
+
+- ✳️ Added pretty terminal logging with ANSI colors + emoji:
+  - 🔍 DEBUG, ℹ️ INFO, 🟡 WARN, 🔥 ERROR
+  - Implemented via internal `printStyled(...)` formatter
+
+- ⚙️ Introduced global console logging toggle:
+  - `LogStorageService.enableConsole = false;`
+
+- 🧠 Refactored `LogStorageService` to singleton pattern for optimized reuse
+
+- ✅ Added developer-friendly static logging API:
+  ```dart
+  SimpleLoggerOverlay.log('Something happened', level: LogLevel.info);
+
+- 🌐 Added navigation + app lifecycle observers:
+
+    - SimpleOverlayGoRouterObserver
+
+    - SimpleOverlayAppLifecycleObserver
+
+- 🐞 Added DraggableDebuggerFAB:
+
+    - Floating debug-only access point to the overlay
+
+    - Can be placed via Stack() and moved around freely
+
 ## 0.1.3
 
 ### ✨ New Features
