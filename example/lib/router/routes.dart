@@ -12,7 +12,10 @@ import '../bloc_example/users_bloc.dart';
 
 part 'routes.g.dart';
 
+final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
+
 final router = GoRouter(
+  navigatorKey: rootNavigatorKey,
   routes: $appRoutes,
   observers: [SimpleOverlayGoRouterObserver()],
 );

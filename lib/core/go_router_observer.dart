@@ -19,6 +19,10 @@ class SimpleOverlayGoRouterObserver extends NavigatorObserver {
   void _log(String action, Route<dynamic>? route) {
     final routeName =
         route?.settings.name ?? route?.settings.arguments ?? route?.toString();
+
+    // ignore internal routes
+    if (routeName == 'LoggerOverlay') return;
+
     _storage.addSimpleLog(SimpleLog(
       timestamp: DateTime.now(),
       tag: 'GoRouter',

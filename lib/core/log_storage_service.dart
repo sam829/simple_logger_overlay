@@ -17,6 +17,12 @@ import 'isolate_log_writer.dart';
 /// the second file contains logs from the [NetworkLoggerInterceptor].
 ///
 class LogStorageService {
+  LogStorageService._internal(); // Private constructor
+
+  static final LogStorageService _instance = LogStorageService._internal();
+
+  factory LogStorageService() => _instance;
+
   /// Enables styled logging to console. Defaults to true.
   static bool enableConsole = true;
 

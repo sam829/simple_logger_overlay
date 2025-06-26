@@ -1,5 +1,6 @@
 import 'package:example/router/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:simple_logger_overlay/ui/widgets/draggable_floating_overlay.dart';
 
 class SimpleOverlayLoggerApp extends StatelessWidget {
   const SimpleOverlayLoggerApp({super.key});
@@ -13,6 +14,14 @@ class SimpleOverlayLoggerApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
       ),
       routerConfig: router,
+      builder: (context, child) {
+        return Stack(
+          children: [
+            child!,
+            DraggableDebuggerFAB(navigatorKey: rootNavigatorKey),
+          ],
+        );
+      },
     );
   }
 }
