@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.5
+
+- 🎨 Code style improvements:
+  - Applied `dart format .` to ensure consistent code formatting across the codebase
+
 ## 0.1.4
 
 - ✳️ Added pretty terminal logging with ANSI colors + emoji:
