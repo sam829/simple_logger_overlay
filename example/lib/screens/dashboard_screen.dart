@@ -1,3 +1,4 @@
+import 'package:example/router/routes.dart';
 import 'package:flutter/material.dart';
 
 class DashboardScreen extends StatelessWidget {
@@ -14,7 +15,9 @@ class DashboardScreen extends StatelessWidget {
         children: [
           const SizedBox(height: 16),
           ListTile(
-            onTap: () {},
+            onTap: () {
+              BlocUserListRoute().push(context);
+            },
             title: Text(
               'BLoC Example',
               style: Theme.of(context).textTheme.displaySmall,
