@@ -6,17 +6,17 @@ import '../../models/simple_log.dart';
 import 'log_card.dart';
 
 /// A widget that displays application logs in a tabbed interface.
-/// 
+///
 /// This widget provides a tabbed interface with two tabs:
 /// 1. Logs - Shows application logs ([SimpleLog] entries)
 /// 2. Network - Shows network request/response logs ([NetworkLog] entries)
-/// 
+///
 /// Features:
 /// - Search functionality across log messages and tags
 /// - Sort logs by timestamp (newest/oldest first)
 /// - Pull-to-refresh to reload logs
 /// - Responsive layout that works on different screen sizes
-/// 
+///
 /// Example usage:
 /// ```dart
 /// const TabbedLogger();
@@ -33,19 +33,19 @@ class _TabbedLoggerState extends State<TabbedLogger>
     with SingleTickerProviderStateMixin {
   /// Service for loading logs from persistent storage
   final _storage = LogStorageService();
-  
+
   /// Controls the tab selection and animation
   late final TabController _tabController;
-  
+
   /// List of application logs
   List<SimpleLog> _simpleLogs = [];
-  
+
   /// List of network logs
   List<NetworkLog> _networkLogs = [];
-  
+
   /// Current search query text
   String? _searchText;
-  
+
   /// Sort direction (true = newest first, false = oldest first)
   bool _sortDesc = true;
 
@@ -62,7 +62,7 @@ class _TabbedLoggerState extends State<TabbedLogger>
   }
 
   /// Loads logs from storage and updates the UI
-  /// 
+  ///
   /// This method is called on init and when the user pulls to refresh.
   /// It loads both simple logs and network logs in parallel.
   Future<void> _loadLogs() async {
@@ -132,7 +132,7 @@ class _TabbedLoggerState extends State<TabbedLogger>
   }
 
   /// Builds the search and sort control bar
-  /// 
+  ///
   /// Returns a row containing:
   /// - A search text field for filtering logs
   /// - A sort direction toggle button
@@ -176,7 +176,7 @@ class _TabbedLoggerState extends State<TabbedLogger>
   }
 
   /// Filters and sorts simple logs based on the current search query and sort direction
-  /// 
+  ///
   /// Returns:
   /// A list of [SimpleLog] entries that match the search criteria,
   /// sorted according to the current sort direction.
@@ -186,7 +186,7 @@ class _TabbedLoggerState extends State<TabbedLogger>
       if (_searchText == null || _searchText!.isEmpty) {
         return true; // No search text, include all logs
       }
-      
+
       final searchLower = _searchText!.toLowerCase();
       return log.message.toLowerCase().contains(searchLower) ||
           log.tag.toLowerCase().contains(searchLower);
@@ -201,7 +201,7 @@ class _TabbedLoggerState extends State<TabbedLogger>
   }
 
   /// Filters and sorts network logs based on the current search query and sort direction
-  /// 
+  ///
   /// Returns:
   /// A list of [NetworkLog] entries that match the search criteria,
   /// sorted according to the current sort direction.
@@ -211,7 +211,7 @@ class _TabbedLoggerState extends State<TabbedLogger>
       if (_searchText == null || _searchText!.isEmpty) {
         return true; // No search text, include all logs
       }
-      
+
       final searchLower = _searchText!.toLowerCase();
       return log.url.toLowerCase().contains(searchLower) ||
           log.method.toLowerCase().contains(searchLower);

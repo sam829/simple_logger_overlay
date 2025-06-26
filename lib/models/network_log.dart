@@ -2,7 +2,7 @@ import 'base_log.dart';
 
 /// Represents a network request/response log entry
 /// This class extends BaseLog and adds specific fields for network operations
-/// 
+///
 /// Properties:
 /// - method: HTTP method used (GET, POST, etc.)
 /// - url: The request URL
@@ -14,7 +14,7 @@ import 'base_log.dart';
 /// - isSuccess: Boolean indicating if the request was successful
 /// - timestamp: When the log was created
 /// - tag: Identifier for the log entry
-/// 
+///
 /// Example usage:
 /// ```dart
 /// NetworkLog(
@@ -53,7 +53,7 @@ class NetworkLog extends BaseLog {
   final bool isSuccess;
 
   /// Creates a new NetworkLog instance
-  /// 
+  ///
   /// All required parameters must be provided. Optional parameters
   /// (statusCode, responseHeaders, responseBody) can be null if not available.
   NetworkLog({
@@ -70,7 +70,7 @@ class NetworkLog extends BaseLog {
   });
 
   /// Converts the NetworkLog instance to a JSON Map
-  /// 
+  ///
   /// Returns a Map containing all the log information in a format
   /// that can be easily serialized to JSON.
   @override
@@ -89,13 +89,13 @@ class NetworkLog extends BaseLog {
       };
 
   /// Creates a NetworkLog instance from a JSON Map
-  /// 
+  ///
   /// This is the inverse operation of toJson(). It takes a Map containing
   /// serialized log information and creates a NetworkLog instance from it.
-  /// 
+  ///
   /// Parameters:
   /// - json: Map containing the serialized log data
-  /// 
+  ///
   /// Returns:
   /// A new NetworkLog instance populated with the deserialized data
   static NetworkLog fromJson(Map<String, dynamic> json) => NetworkLog(
