@@ -53,6 +53,13 @@
 </h1></div>
 
     
+<section class="desc markdown">
+  <p>A page that displays detailed information about a log entry.</p>
+<p>This widget can display either a <a href="../models_simple_log/SimpleLog-class.html">SimpleLog</a> or <a href="../models_network_log/NetworkLog-class.html">NetworkLog</a> in a user-friendly format.
+It provides a detailed view of all log properties and allows copying the raw log data.</p>
+<p>The page automatically adapts its layout based on the type of log being displayed.
+For network logs, it shows request/response details including headers and bodies.</p>
+</section>
 
 
     <section>
@@ -94,14 +101,14 @@
           <span class="name"><a href="../ui_log_detail_page/LogDetailPage/LogDetailPage.network.html">LogDetailPage.network</a></span><span class="signature">({<span class="parameter" id="network-param-key"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/foundation/Key-class.html">Key</a>?</span> <span class="parameter-name">key</span>, </span><span class="parameter" id="network-param-network"><span>required</span> <span class="type-annotation"><a href="../models_network_log/NetworkLog-class.html">NetworkLog</a>?</span> <span class="parameter-name">network</span></span>})</span>
         </dt>
         <dd>
-          
+          Creates a detail page for a <a href="../models_network_log/NetworkLog-class.html">NetworkLog</a> entry.
             <div class="constructor-modifier features">const</div>
         </dd>
         <dt id="LogDetailPage.simple" class="callable">
           <span class="name"><a href="../ui_log_detail_page/LogDetailPage/LogDetailPage.simple.html">LogDetailPage.simple</a></span><span class="signature">({<span class="parameter" id="simple-param-key"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/foundation/Key-class.html">Key</a>?</span> <span class="parameter-name">key</span>, </span><span class="parameter" id="simple-param-simple"><span>required</span> <span class="type-annotation"><a href="../models_simple_log/SimpleLog-class.html">SimpleLog</a>?</span> <span class="parameter-name">simple</span></span>})</span>
         </dt>
         <dd>
-          
+          Creates a detail page for a <a href="../models_simple_log/SimpleLog-class.html">SimpleLog</a> entry.
             <div class="constructor-modifier features">const</div>
         </dd>
     </dl>
@@ -159,7 +166,7 @@
 
 </dt>
 <dd>
-  
+  The network log entry to display, if any.
   <div class="features"><span class="feature">final</span></div>
 
 </dd>
@@ -199,7 +206,7 @@
 
 </dt>
 <dd>
-  
+  The simple log entry to display, if any.
   <div class="features"><span class="feature">final</span></div>
 
 </dd>
@@ -513,7 +520,7 @@ tools and by <a href="https://api.flutter.dev/flutter/foundation/DiagnosticsNode
 <footer>
   <span class="no-break">
     simple_logger_overlay
-      0.1.3
+      0.1.4
   </span>
   
 </footer>

@@ -53,6 +53,20 @@
 </h1></div>
 
     
+<section class="desc markdown">
+  <p>A utility class for writing log entries to files in JSON Lines format
+from isolates.</p>
+<p>This class provides a static method for writing log entries to files in
+JSON Lines format. It is designed to be used from isolates, where the
+<code>dart:io</code> library is not available, by being passed a <code>Map&lt;String, dynamic&gt;</code>
+containing the log data and the path to write to.</p>
+<p>The <code>writeLog</code> method writes the log entry to a file named
+<code>{type}_logs.jsonl</code> within the specified directory path. If <code>type</code> is not
+provided in the payload, it defaults to 'simple'. The payload may contain
+any other keys, which are written to the log file in JSON format.</p>
+<p>This class is not intended to be instantiated; use the static <code>writeLog</code>
+method instead.</p>
+</section>
 
 
 
@@ -169,7 +183,7 @@
 
 </dt>
 <dd>
-  
+  Deletes log files older than the specified number of days.
   
 
 </dd>
@@ -182,7 +196,7 @@
 
 </dt>
 <dd>
-  
+  Reads log entries from a file in JSON Lines format.
   
 
 </dd>
@@ -195,7 +209,7 @@
 
 </dt>
 <dd>
-  
+  Writes a log entry to a file in JSON Lines format.
   
 
 </dd>
@@ -227,7 +241,7 @@
 <footer>
   <span class="no-break">
     simple_logger_overlay
-      0.1.3
+      0.1.4
   </span>
   
 </footer>

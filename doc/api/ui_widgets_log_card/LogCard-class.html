@@ -53,6 +53,16 @@
 </h1></div>
 
     
+<section class="desc markdown">
+  <p>A card widget that displays a log entry in a visually appealing way.</p>
+<p>This widget can display either a <a href="../models_simple_log/SimpleLog-class.html">SimpleLog</a> or <a href="../models_network_log/NetworkLog-class.html">NetworkLog</a> entry.
+The appearance changes based on the log type and level/status:</p>
+<ul>
+<li>Simple logs show different colors based on their <a href="../models_simple_log/LogLevel.html">LogLevel</a></li>
+<li>Network logs show green for success and red for errors</li>
+</ul>
+<p>Tapping on a card navigates to a detailed view of the log entry.</p>
+</section>
 
 
     <section>
@@ -94,14 +104,14 @@
           <span class="name"><a href="../ui_widgets_log_card/LogCard/LogCard.network.html">LogCard.network</a></span><span class="signature">({<span class="parameter" id="network-param-key"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/foundation/Key-class.html">Key</a>?</span> <span class="parameter-name">key</span>, </span><span class="parameter" id="network-param-network"><span>required</span> <span class="type-annotation"><a href="../models_network_log/NetworkLog-class.html">NetworkLog</a>?</span> <span class="parameter-name">network</span></span>})</span>
         </dt>
         <dd>
-          
+          Creates a <a href="../ui_widgets_log_card/LogCard-class.html">LogCard</a> that displays a <a href="../models_network_log/NetworkLog-class.html">NetworkLog</a> entry.
             <div class="constructor-modifier features">const</div>
         </dd>
         <dt id="LogCard.simple" class="callable">
           <span class="name"><a href="../ui_widgets_log_card/LogCard/LogCard.simple.html">LogCard.simple</a></span><span class="signature">({<span class="parameter" id="simple-param-key"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/foundation/Key-class.html">Key</a>?</span> <span class="parameter-name">key</span>, </span><span class="parameter" id="simple-param-simple"><span>required</span> <span class="type-annotation"><a href="../models_simple_log/SimpleLog-class.html">SimpleLog</a>?</span> <span class="parameter-name">simple</span></span>})</span>
         </dt>
         <dd>
-          
+          Creates a <a href="../ui_widgets_log_card/LogCard-class.html">LogCard</a> that displays a <a href="../models_simple_log/SimpleLog-class.html">SimpleLog</a> entry.
             <div class="constructor-modifier features">const</div>
         </dd>
     </dl>
@@ -159,7 +169,7 @@
 
 </dt>
 <dd>
-  
+  The network log entry to display, if any.
   <div class="features"><span class="feature">final</span></div>
 
 </dd>
@@ -199,7 +209,7 @@
 
 </dt>
 <dd>
-  
+  The simple log entry to display, if any.
   <div class="features"><span class="feature">final</span></div>
 
 </dd>
@@ -513,7 +523,7 @@ tools and by <a href="https://api.flutter.dev/flutter/foundation/DiagnosticsNode
 <footer>
   <span class="no-break">
     simple_logger_overlay
-      0.1.3
+      0.1.4
   </span>
   
 </footer>

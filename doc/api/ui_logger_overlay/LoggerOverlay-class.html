@@ -53,6 +53,22 @@
 </h1></div>
 
     
+<section class="desc markdown">
+  <p>A full-screen overlay that displays application logs in a user-friendly interface.</p>
+<p>This widget serves as the main entry point for viewing logs in the application.
+It provides a tabbed interface for browsing different types of logs and includes
+functionality to export logs for sharing or debugging purposes.</p>
+<p>The overlay is designed to be displayed on top of the main application UI
+and can be toggled using a gesture or button press (handled by the parent).</p>
+<p>Example usage:</p>
+<pre class="language-dart"><code class="language-dart">Navigator.of(context).push(
+  MaterialPageRoute(
+    fullscreenDialog: true,
+    builder: (context) =&gt; const LoggerOverlay(),
+  ),
+);
+</code></pre>
+</section>
 
 
     <section>
@@ -94,7 +110,7 @@
           <span class="name"><a href="../ui_logger_overlay/LoggerOverlay/LoggerOverlay.html">LoggerOverlay.new</a></span><span class="signature">({<span class="parameter" id="-param-key"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/foundation/Key-class.html">Key</a>?</span> <span class="parameter-name">key</span></span>})</span>
         </dt>
         <dd>
-          
+          Creates a new <a href="../ui_logger_overlay/LoggerOverlay-class.html">LoggerOverlay</a> instance.
             <div class="constructor-modifier features">const</div>
         </dd>
     </dl>
@@ -482,7 +498,7 @@ tools and by <a href="https://api.flutter.dev/flutter/foundation/DiagnosticsNode
 <footer>
   <span class="no-break">
     simple_logger_overlay
-      0.1.3
+      0.1.4
   </span>
   
 </footer>

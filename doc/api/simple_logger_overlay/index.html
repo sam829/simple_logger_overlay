@@ -64,6 +64,14 @@
     <section class="summary offset-anchor" id="classes">
       <h2>Classes</h2>
       <dl>
+          <dt id="DraggableDebuggerFAB">
+  <span class="name "><a href="../ui_widgets_draggable_floating_overlay/DraggableDebuggerFAB-class.html">DraggableDebuggerFAB</a></span> 
+
+</dt>
+<dd>
+  
+</dd>
+
           <dt id="ExportService">
   <span class="name "><a href="../core_export_service/ExportService-class.html">ExportService</a></span> 
 
@@ -86,7 +94,7 @@ and opens a native share sheet using <code>share_plus</code>.
 
 </dt>
 <dd>
-  
+  A full-screen overlay that displays application logs in a user-friendly interface.
 </dd>
 
           <dt id="NetworkLog">
@@ -94,7 +102,8 @@ and opens a native share sheet using <code>share_plus</code>.
 
 </dt>
 <dd>
-  
+  Represents a network request/response log entry
+This class extends BaseLog and adds specific fields for network operations
 </dd>
 
           <dt id="SimpleLog">
@@ -102,7 +111,7 @@ and opens a native share sheet using <code>share_plus</code>.
 
 </dt>
 <dd>
-  A simple log entry, typically from <code>LoggerController.log()</code>.
+  A simple log entry representing a basic logging event.
 </dd>
 
           <dt id="SimpleLoggerOverlay">
@@ -113,12 +122,30 @@ and opens a native share sheet using <code>share_plus</code>.
   A Material 3-powered, developer-friendly logger overlay for Flutter.
 </dd>
 
+          <dt id="SimpleOverlayAppLifecycleObserver">
+  <span class="name "><a href="../core_app_lifecycle_logger/SimpleOverlayAppLifecycleObserver-class.html">SimpleOverlayAppLifecycleObserver</a></span> 
+
+</dt>
+<dd>
+  Logs Flutter app lifecycle changes to <code>simple_logger_overlay</code>.
+</dd>
+
           <dt id="SimpleOverlayBlocObserverLogger">
   <span class="name "><a href="../core_bloc_logger_observer/SimpleOverlayBlocObserverLogger-class.html">SimpleOverlayBlocObserverLogger</a></span> 
 
 </dt>
 <dd>
-  
+  A custom <a href="https://pub.dev/documentation/bloc/9.0.0/bloc/BlocObserver-class.html">BlocObserver</a> that logs BLoC events, state changes, and errors
+to the <code>simple_logger_overlay</code> system.
+</dd>
+
+          <dt id="SimpleOverlayGoRouterObserver">
+  <span class="name "><a href="../core_go_router_observer/SimpleOverlayGoRouterObserver-class.html">SimpleOverlayGoRouterObserver</a></span> 
+
+</dt>
+<dd>
+  A <a href="https://api.flutter.dev/flutter/widgets/NavigatorObserver-class.html">NavigatorObserver</a> for <code>go_router</code> that logs route transitions
+(push/pop/replace/remove) into <code>simple_logger_overlay</code>.
 </dd>
 
           <dt id="SimpleOverlayLoggerRiverpodObserver">
@@ -126,7 +153,8 @@ and opens a native share sheet using <code>share_plus</code>.
 
 </dt>
 <dd>
-  
+  A custom <a href="https://pub.dev/documentation/riverpod/2.6.1/riverpod/ProviderObserver-class.html">ProviderObserver</a> that logs Riverpod provider changes
+to the <code>simple_logger_overlay</code> system.
 </dd>
 
           <dt id="SimpleOverlayNetworkLoggerInterceptor">
@@ -148,7 +176,7 @@ and opens a native share sheet using <code>share_plus</code>.
 
 </dt>
 <dd>
-  
+  Represents the severity level of a log message.
 </dd>
 
       </dl>
@@ -170,7 +198,7 @@ and opens a native share sheet using <code>share_plus</code>.
 
 </dt>
 <dd>
-  
+  Patch <code>Get</code> to use the <code>simple_logger_overlay</code> storage for logs.
   
 
 </dd>
@@ -195,9 +223,11 @@ and opens a native share sheet using <code>share_plus</code>.
     <h5><span class="package-name">simple_logger_overlay</span> <span class="package-kind">package</span></h5>
     <ol>
       <li class="section-title">Libraries</li>
+      <li><a href="../core_app_lifecycle_logger/">core/app_lifecycle_logger</a></li>
       <li><a href="../core_bloc_logger_observer/">core/bloc_logger_observer</a></li>
       <li><a href="../core_export_service/">core/export_service</a></li>
       <li><a href="../core_getx_logger_patch/">core/getx_logger_patch</a></li>
+      <li><a href="../core_go_router_observer/">core/go_router_observer</a></li>
       <li><a href="../core_isolate_log_writer/">core/isolate_log_writer</a></li>
       <li><a href="../core_log_storage_service/">core/log_storage_service</a></li>
       <li><a href="../core_logger_controller/">core/logger_controller</a></li>
@@ -210,6 +240,7 @@ and opens a native share sheet using <code>share_plus</code>.
       <li><a href="../simple_logger_overlay/">simple_logger_overlay</a></li>
       <li><a href="../ui_log_detail_page/">ui/log_detail_page</a></li>
       <li><a href="../ui_logger_overlay/">ui/logger_overlay</a></li>
+      <li><a href="../ui_widgets_draggable_floating_overlay/">ui/widgets/draggable_floating_overlay</a></li>
       <li><a href="../ui_widgets_log_card/">ui/widgets/log_card</a></li>
       <li><a href="../ui_widgets_tabbed_logger/">ui/widgets/tabbed_logger</a></li>
 </ol>
@@ -222,7 +253,7 @@ and opens a native share sheet using <code>share_plus</code>.
 <footer>
   <span class="no-break">
     simple_logger_overlay
-      0.1.3
+      0.1.4
   </span>
   
 </footer>

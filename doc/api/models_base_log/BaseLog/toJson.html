@@ -61,6 +61,16 @@
 
     </section>
     
+<section class="desc markdown">
+  <p>Converts the log entry to a JSON-serializable map.</p>
+<p>This method must be implemented by all subclasses to provide
+proper serialization of the log data. The implementation should
+include all relevant fields from the subclass as well as the
+base <a href="../../models_base_log/BaseLog/timestamp.html">timestamp</a> and <a href="../../models_base_log/BaseLog/tag.html">tag</a> fields.</p>
+<p>Returns:
+A <code>Map&lt;String, dynamic&gt;</code> containing the log data in a format
+that can be serialized to JSON.</p>
+</section>
 
 
     
@@ -94,7 +104,7 @@
 <footer>
   <span class="no-break">
     simple_logger_overlay
-      0.1.3
+      0.1.4
   </span>
   
 </footer>

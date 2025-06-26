@@ -63,12 +63,23 @@
 
     </section>
     
+<section class="desc markdown">
+  <p>Deletes log files older than the specified number of days.</p>
+<p><code>dirPath</code> - The directory path where the log files are stored.
+<code>daysToKeep</code> - The number of days to retain log files. Files older than this
+will be purged.</p>
+<p>This function iterates through the files in the specified directory,
+checks their modification date, and deletes those that are older than
+the specified number of days. Only files with a <code>.jsonl</code> extension are
+considered.</p>
+</section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">static Future&lt;void&gt; purgeOldLogs(String dirPath, int daysToKeep) async {
+  <pre class="language-dart"><code class="language-dart">&#47;&#47; remove path&#47;type from actual log
+static Future&lt;void&gt; purgeOldLogs(String dirPath, int daysToKeep) async {
   final dir = Directory(dirPath);
   final now = DateTime.now();
 
@@ -110,7 +121,7 @@
 <footer>
   <span class="no-break">
     simple_logger_overlay
-      0.1.3
+      0.1.4
   </span>
   
 </footer>

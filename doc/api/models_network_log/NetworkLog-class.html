@@ -53,6 +53,34 @@
 </h1></div>
 
     
+<section class="desc markdown">
+  <p>Represents a network request/response log entry
+This class extends BaseLog and adds specific fields for network operations</p>
+<p>Properties:</p>
+<ul>
+<li>method: HTTP method used (GET, POST, etc.)</li>
+<li>url: The request URL</li>
+<li>requestHeaders: Map of request headers</li>
+<li>requestBody: Request payload/body</li>
+<li>statusCode: Response status code (optional)</li>
+<li>responseHeaders: Map of response headers (optional)</li>
+<li>responseBody: Response payload/body (optional)</li>
+<li>isSuccess: Boolean indicating if the request was successful</li>
+<li>timestamp: When the log was created</li>
+<li>tag: Identifier for the log entry</li>
+</ul>
+<p>Example usage:</p>
+<pre class="language-dart"><code class="language-dart">NetworkLog(
+  timestamp: DateTime.now(),
+  tag: 'API_CALL',
+  method: 'GET',
+  url: 'https://api.example.com/data',
+  requestHeaders: {'Content-Type': 'application/json'},
+  requestBody: '',
+  isSuccess: true
+);
+</code></pre>
+</section>
 
 
     <section>
@@ -86,7 +114,7 @@
           <span class="name"><a href="../models_network_log/NetworkLog/NetworkLog.html">NetworkLog.new</a></span><span class="signature">({<span class="parameter" id="-param-timestamp"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a></span> <span class="parameter-name">timestamp</span>, </span><span class="parameter" id="-param-tag"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">tag</span>, </span><span class="parameter" id="-param-method"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">method</span>, </span><span class="parameter" id="-param-url"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">url</span>, </span><span class="parameter" id="-param-requestHeaders"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span> <span class="parameter-name">requestHeaders</span>, </span><span class="parameter" id="-param-requestBody"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">requestBody</span>, </span><span class="parameter" id="-param-statusCode"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">statusCode</span>, </span><span class="parameter" id="-param-responseHeaders"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span>?</span> <span class="parameter-name">responseHeaders</span>, </span><span class="parameter" id="-param-responseBody"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">responseBody</span>, </span><span class="parameter" id="-param-isSuccess"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">isSuccess</span></span>})</span>
         </dt>
         <dd>
-          
+          Creates a new NetworkLog instance
         </dd>
     </dl>
   </section>
@@ -115,7 +143,7 @@
 
 </dt>
 <dd>
-  
+  Indicates if the network request was successful
   <div class="features"><span class="feature">final</span></div>
 
 </dd>
@@ -127,7 +155,7 @@
 
 </dt>
 <dd>
-  
+  HTTP method used for the request (GET, POST, etc.)
   <div class="features"><span class="feature">final</span></div>
 
 </dd>
@@ -139,7 +167,7 @@
 
 </dt>
 <dd>
-  
+  Request body/payload sent to the server
   <div class="features"><span class="feature">final</span></div>
 
 </dd>
@@ -151,7 +179,7 @@
 
 </dt>
 <dd>
-  
+  Map of headers sent with the request
   <div class="features"><span class="feature">final</span></div>
 
 </dd>
@@ -163,7 +191,7 @@
 
 </dt>
 <dd>
-  
+  Response body/payload received from the server (optional)
   <div class="features"><span class="feature">final</span></div>
 
 </dd>
@@ -175,7 +203,7 @@
 
 </dt>
 <dd>
-  
+  Map of headers received in the response (optional)
   <div class="features"><span class="feature">final</span></div>
 
 </dd>
@@ -199,7 +227,7 @@
 
 </dt>
 <dd>
-  
+  Response status code from the server (optional)
   <div class="features"><span class="feature">final</span></div>
 
 </dd>
@@ -211,7 +239,7 @@
 
 </dt>
 <dd class="inherited">
-  
+  A string identifier used to categorize or filter logs.
   <div class="features"><span class="feature">final</span><span class="feature">inherited</span></div>
 
 </dd>
@@ -223,7 +251,7 @@
 
 </dt>
 <dd class="inherited">
-  
+  The exact date and time when the log entry was created.
   <div class="features"><span class="feature">final</span><span class="feature">inherited</span></div>
 
 </dd>
@@ -235,7 +263,7 @@
 
 </dt>
 <dd>
-  
+  The URL that was requested
   <div class="features"><span class="feature">final</span></div>
 
 </dd>
@@ -270,7 +298,7 @@
 
 </dt>
 <dd>
-  
+  Converts the NetworkLog instance to a JSON Map
   <div class="features"><span class="feature">override</span></div>
 
 </dd>
@@ -324,7 +352,7 @@
 
 </dt>
 <dd>
-  
+  Creates a NetworkLog instance from a JSON Map
   
 
 </dd>
@@ -356,7 +384,7 @@
 <footer>
   <span class="no-break">
     simple_logger_overlay
-      0.1.3
+      0.1.4
   </span>
   
 </footer>

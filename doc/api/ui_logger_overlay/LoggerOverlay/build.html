@@ -109,31 +109,26 @@ and</li>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) {
+  &#47;&#47; Use the current theme&#39;s surface color for consistent theming
   final theme = Theme.of(context);
 
   return Scaffold(
+    &#47;&#47; Match the app&#39;s surface color for a consistent look
     backgroundColor: theme.colorScheme.surface,
     appBar: AppBar(
       title: const Text(&#39;Logger Overlay&#39;),
       backgroundColor: theme.colorScheme.surface,
       foregroundColor: theme.colorScheme.onSurface,
       actions: [
+        &#47;&#47; Share button to export logs
         IconButton(
           icon: const Icon(Icons.share),
-          onPressed: () async {
-            try {
-              final path = await ExportService().exportLogsToFile();
-              final result = await SharePlus.instance.share(
-                  ShareParams(files: [XFile(path)], text: &quot;Exported logs&quot;));
-
-              debugPrint(result.raw);
-            } catch (error) {
-              debugPrint(error.toString());
-            }
-          },
+          tooltip: &#39;Export logs&#39;,
+          onPressed: () =&gt; _exportAndShareLogs(context),
         ),
       ],
     ),
+    &#47;&#47; The main content is handled by the TabbedLogger widget
     body: const TabbedLogger(),
   );
 }</code></pre>
@@ -164,7 +159,7 @@ Widget build(BuildContext context) {
 <footer>
   <span class="no-break">
     simple_logger_overlay
-      0.1.3
+      0.1.4
   </span>
   
 </footer>

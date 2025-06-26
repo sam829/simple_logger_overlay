@@ -62,16 +62,33 @@
 
     </section>
     
+<section class="desc markdown">
+  <p>Creates a <a href="../../models_simple_log/SimpleLog-class.html">SimpleLog</a> instance from a JSON map.</p>
+<p>This is the inverse of <a href="../../models_simple_log/SimpleLog/toJson.html">toJson()</a> and is typically used when deserializing
+log entries from storage. The input map should contain all fields returned
+by <a href="../../models_simple_log/SimpleLog/toJson.html">toJson()</a>.</p>
+<p>Parameters:</p>
+<ul>
+<li>json: A map containing the serialized log data</li>
+</ul>
+<p>Returns:
+A new <a href="../../models_simple_log/SimpleLog-class.html">SimpleLog</a> instance with the deserialized data</p>
+<p>Throws:</p>
+<ul>
+<li>FormatException: If the timestamp is not in ISO 8601 format</li>
+<li>ArgumentError: If the level is not a valid <a href="../../models_simple_log/LogLevel.html">LogLevel</a> name</li>
+</ul>
+</section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">static SimpleLog fromJson(Map&lt;String, dynamic&gt; json) =&gt; SimpleLog(
-      timestamp: DateTime.parse(json[&#39;timestamp&#39;]),
-      tag: json[&#39;tag&#39;],
-      message: json[&#39;message&#39;],
-      level: LogLevel.values.byName(json[&#39;level&#39;]),
+      timestamp: DateTime.parse(json[&#39;timestamp&#39;] as String),
+      tag: json[&#39;tag&#39;] as String,
+      message: json[&#39;message&#39;] as String,
+      level: LogLevel.values.byName(json[&#39;level&#39;] as String),
     );</code></pre>
 </section>
 
@@ -100,7 +117,7 @@
 <footer>
   <span class="no-break">
     simple_logger_overlay
-      0.1.3
+      0.1.4
   </span>
   
 </footer>

@@ -44,21 +44,37 @@
       
 <section class="desc markdown">
   <h1 id="simple_logger_overlay-pub-versionhttpsimgshieldsiopubvsimple_logger_overlayhttpspubdevpackagessimple_logger_overlay">simple_logger_overlay <a href="https://pub.dev/packages/simple_logger_overlay"><img src="https://img.shields.io/pub/v/simple_logger_overlay" alt="Pub Version"></a></h1>
-<p>A lightweight, Dart 3 compatible Flutter logging package with an in-app log viewer overlay — inspired by let_log, rebuilt for modern apps. Built with 💙 by <a href="https://github.com/sam829">Saumya Macwan</a>.</p>
+<p>A lightweight, Dart 3-compatible Flutter logging package with a draggable in-app log viewer overlay — inspired by <code>let_log</code>, rebuilt for modern apps.<br>
+Built with 💙 by <a href="https://github.com/sam829">Saumya Macwan</a>.</p>
+<hr>
+<h3 id="-features">✨ Features</h3>
 <ul>
-<li>🧠 Non-blocking: Log I/O now runs in a background isolate</li>
-<li>🚀 Shake-to-open debug UI (configurable)</li>
-<li>🌐 Dio network logging with status coloring</li>
-<li>💬 BLoC, Riverpod, GetX, and <code>logger</code> package integration</li>
-<li>🧾 Pretty-printed JSON body view</li>
-<li>🎨 Dark/light theme-aware design with icon-based log cards</li>
-<li>🔍 Filter, search, and export logs as <code>.json</code></li>
+<li>🧠 <strong>Non-blocking:</strong> Log I/O runs in a background isolate</li>
+<li>🌈 <strong>Material 3 overlay</strong>, dark/light theme aware</li>
+<li>📄 <strong>Pretty-printed JSON views</strong> for network logs</li>
+<li>🌐 <strong>Dio interceptor</strong> for network logging with status coloring</li>
+<li>💬 Integrates with BLoC, Riverpod, GetX, and <code>logger</code></li>
+<li>🔍 Filter, sort, search logs</li>
+<li>📤 Export logs as <code>.json</code>, or copy to clipboard</li>
+<li>🧾 Detailed log view on card tap</li>
+<li>🚀 Shake-to-open overlay (debug-only)</li>
+<li>🐞 <strong>Draggable floating debug button</strong></li>
+<li>🔌 Optional: <code>GoRouterObserver</code>, <code>AppLifecycleObserver</code></li>
+<li>🖥️ Emoji + color-coded <strong>console logging</strong> (with toggle)</li>
+<li>🧰 Simple static API: <code>SimpleLoggerOverlay.log(...)</code></li>
 </ul>
 <hr>
-<h3 id="listing-page">Listing Page</h3>
-<p><img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/network_list.jpeg?raw=true" alt="network_list"></p>
-<h3 id="detail-page">Detail Page</h3>
-<p><img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/network_detail.jpeg?raw=true" alt="network_page"></p>
+<h3 id="-screenshots">📱 Screenshots</h3>
+<div align="center">
+  <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/network_list.jpeg?raw=true" alt="Image 1" width="200" style="display:inline-block; margin: 0 20px 20px 0;">
+  <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/network_detail.jpeg?raw=true" alt="Image 2" width="200" style="display:inline-block; margin: 0 20px 20px 0;">
+  <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/console.png?raw=true" alt="Image 1" width="200" style="display:inline-block; margin: 0 20px 20px 0;">
+  <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/export.png?raw=true" alt="Image 2" width="200" style="display:inline-block; margin: 0 20px 20px 0;">
+  <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/debug_overlay.png?raw=true" alt="Image 1" width="200" style="display:inline-block; margin: 0 20px 20px 0;">
+  <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/search.png?raw=true" alt="Image 2" width="200" style="display:inline-block; margin: 0 20px 20px 0;">
+  <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/simple_detail.png?raw=true" alt="Image 2" width="200" style="display:inline-block; margin: 0 20px 20px 0;">
+  <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/simple_list.png?raw=true" alt="Image 2" width="200" style="display:inline-block; margin: 0 20px 20px 0;">
+</div>
 <hr>
 <h2 id="-getting-started">🚀 Getting Started</h2>
 <pre class="language-dart"><code class="language-dart">import 'package:simple_logger_overlay/simple_logger_overlay.dart';
@@ -73,8 +89,14 @@ Widget build(BuildContext context) {
   );
 }
 </code></pre>
-<h3 id="optional-integrations">Optional integrations:</h3>
-<h4 id="bloc">BLoC</h4>
+<hr>
+<h3 id="-log-from-anywhere">🪵 Log from Anywhere</h3>
+<p>Log directly with the static API:</p>
+<pre class="language-dart"><code class="language-dart">SimpleLoggerOverlay.log("Something happened", level: LogLevel.info, tag: 'HomeScreen');
+</code></pre>
+<hr>
+<h3 id="-integrations">🧩 Integrations</h3>
+<h4 id="-bloc">🧠 BLoC</h4>
 <pre class="language-dart"><code class="language-dart">import 'package:simple_logger_overlay/core/bloc_logger_observer.dart';
 
 Future&lt;void&gt; main() async {
@@ -82,43 +104,68 @@ Future&lt;void&gt; main() async {
   Bloc.observer = SimpleOverlayBlocObserverLogger();
 }
 </code></pre>
-<h4 id="riverpod">Riverpod</h4>
+<h4 id="-riverpod">🌱 Riverpod</h4>
 <pre class="language-dart"><code class="language-dart">import 'package:simple_logger_overlay/core/riverpod_logger.dart';
 
 void main() {
   runApp(
     ProviderScope(
       observers: [SimpleOverlayLoggerRiverpodObserver()],
-      child: const LoggerDemo(),
+      child: const MyApp(),
     ),
   );
 }
 </code></pre>
-<h4 id="getx">GetX</h4>
+<h4 id="-getx">⚡ GetX</h4>
 <pre class="language-dart"><code class="language-dart">import 'package:simple_logger_overlay/core/getx_logger_patch.dart';
 
 void main() {
   simpleOverlayGetXLogObserver();
 }
 </code></pre>
-<h4 id="dio-interceptor">Dio Interceptor</h4>
+<h4 id="-dio-interceptor">🌐 Dio Interceptor</h4>
 <pre class="language-dart"><code class="language-dart">import 'package:dio/dio.dart';
 import 'package:simple_logger_overlay/core/network_logger_interceptor.dart';
 
-class ApiClient {
-  static final Dio dio = Dio(
-    BaseOptions(
-      baseUrl: 'https://jsonplaceholder.typicode.com/',
-      connectTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 10),
-    ),
-  )..interceptors.add(NetworkLoggerInterceptor());
-}
-
+final dio = Dio()
+  ..interceptors.add(NetworkLoggerInterceptor());
+</code></pre>
+<h4 id="-gorouter">🧭 GoRouter</h4>
+<pre class="language-dart"><code class="language-dart">MaterialApp.router(
+  routerDelegate: GoRouter(
+    observers: [SimpleOverlayGoRouterObserver()],
+    ...
+  ).routerDelegate,
+);
+</code></pre>
+<h4 id="-app-lifecycle">📱 App Lifecycle</h4>
+<pre class="language-dart"><code class="language-dart">WidgetsBinding.instance.addObserver(SimpleOverlayAppLifecycleObserver());
 </code></pre>
 <hr>
-<h2 id="-export-logs">📦 Export logs</h2>
-<p>Use the export button in the overlay’s top-right corner to share a JSON file of your logs.</p>
+<h3 id="-debug-floating-button">🐞 Debug Floating Button</h3>
+<pre class="language-dart"><code class="language-dart">Stack(
+  children: [
+    child!,
+    const DraggableDebuggerFAB(navigatorKey: rootNavigatorKey),
+  ],
+);
+</code></pre>
+<hr>
+<h2 id="-console-logging">💻 Console Logging</h2>
+<p>Logs are also printed in your terminal with emojis and color by default.</p>
+<pre class="language-bash"><code class="language-bash">[2025-06-24T19:15:01.000Z] 🔍 [DEBUG] [LoginBloc] Event dispatched
+[2025-06-24T19:15:02.000Z] 🔥 [ERROR] [LoginBloc] Invalid password
+</code></pre>
+<p>Disable if needed:</p>
+<pre class="language-dart"><code class="language-dart">LogStorageService.enableConsole = false;
+</code></pre>
+<hr>
+<h2 id="-export-logs">📦 Export Logs</h2>
+<p>Use the export button in the top-right corner of the overlay to:</p>
+<ul>
+<li>📤 Export logs as <code>.json</code></li>
+<li>📋 Copy current log to clipboard</li>
+</ul>
 <hr>
 <h2 id="-license">🛠️ License</h2>
 <p>MIT © 2025 <a href="https://github.com/sam829">Saumya Macwan</a></p>
@@ -128,6 +175,13 @@ class ApiClient {
       <section class="summary">
           <h2>Libraries</h2>
         <dl>
+          <dt id="app_lifecycle_logger">
+  <span class="name"><a href="core_app_lifecycle_logger/">core/app_lifecycle_logger</a></span> 
+
+</dt>
+<dd>
+</dd>
+
           <dt id="bloc_logger_observer">
   <span class="name"><a href="core_bloc_logger_observer/">core/bloc_logger_observer</a></span> 
 
@@ -144,6 +198,13 @@ class ApiClient {
 
           <dt id="getx_logger_patch">
   <span class="name"><a href="core_getx_logger_patch/">core/getx_logger_patch</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="go_router_observer">
+  <span class="name"><a href="core_go_router_observer/">core/go_router_observer</a></span> 
 
 </dt>
 <dd>
@@ -233,6 +294,13 @@ class ApiClient {
 <dd>
 </dd>
 
+          <dt id="draggable_floating_overlay">
+  <span class="name"><a href="ui_widgets_draggable_floating_overlay/">ui/widgets/draggable_floating_overlay</a></span> 
+
+</dt>
+<dd>
+</dd>
+
           <dt id="log_card">
   <span class="name"><a href="ui_widgets_log_card/">ui/widgets/log_card</a></span> 
 
@@ -264,9 +332,11 @@ class ApiClient {
     <h5 class="hidden-xs"><span class="package-name">simple_logger_overlay</span> <span class="package-kind">package</span></h5>
     <ol>
       <li class="section-title">Libraries</li>
+      <li><a href="core_app_lifecycle_logger/">core/app_lifecycle_logger</a></li>
       <li><a href="core_bloc_logger_observer/">core/bloc_logger_observer</a></li>
       <li><a href="core_export_service/">core/export_service</a></li>
       <li><a href="core_getx_logger_patch/">core/getx_logger_patch</a></li>
+      <li><a href="core_go_router_observer/">core/go_router_observer</a></li>
       <li><a href="core_isolate_log_writer/">core/isolate_log_writer</a></li>
       <li><a href="core_log_storage_service/">core/log_storage_service</a></li>
       <li><a href="core_logger_controller/">core/logger_controller</a></li>
@@ -279,6 +349,7 @@ class ApiClient {
       <li><a href="simple_logger_overlay/">simple_logger_overlay</a></li>
       <li><a href="ui_log_detail_page/">ui/log_detail_page</a></li>
       <li><a href="ui_logger_overlay/">ui/logger_overlay</a></li>
+      <li><a href="ui_widgets_draggable_floating_overlay/">ui/widgets/draggable_floating_overlay</a></li>
       <li><a href="ui_widgets_log_card/">ui/widgets/log_card</a></li>
       <li><a href="ui_widgets_tabbed_logger/">ui/widgets/tabbed_logger</a></li>
 </ol>
@@ -290,7 +361,7 @@ class ApiClient {
 <footer>
   <span class="no-break">
     simple_logger_overlay
-      0.1.3
+      0.1.4
   </span>
   
 </footer>
