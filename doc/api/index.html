@@ -43,7 +43,7 @@
   <div id="dartdoc-main-content" class="main-content">
       
 <section class="desc markdown">
-  <h1 id="simple_logger_overlay-pub-versionhttpsimgshieldsiopubvsimple_logger_overlayhttpspubdevpackagessimple_logger_overlay">simple_logger_overlay <a href="https://pub.dev/packages/simple_logger_overlay"><img src="https://img.shields.io/pub/v/simple_logger_overlay" alt="Pub Version"></a></h1>
+  <h1 id="simple_logger_overlay-pub-versionhttpsimgshieldsiopubvsimple_logger_overlayhttpspubdevpackagessimple_logger_overlay-github-profilehttpsimgshieldsiobadgegithub-181717stylefor-the-badgelogogithublogocolorwhitehttpsgithubcomsam829simple_logger_overlay-linkedin-profilehttpsimgshieldsiobadgelinkedin-0a66c2stylefor-the-badgelogolinkedinlogocolorwhitehttpswwwlinkedincominsaumya-macwan-b650b91a1">simple_logger_overlay <a href="https://pub.dev/packages/simple_logger_overlay"><img src="https://img.shields.io/pub/v/simple_logger_overlay" alt="Pub Version"></a> <a href="https://github.com/sam829/simple_logger_overlay"><img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&amp;logo=github&amp;logoColor=white" alt="GitHub Profile"></a> <a href="https://www.linkedin.com/in/saumya-macwan-b650b91a1"><img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&amp;logo=linkedin&amp;logoColor=white" alt="LinkedIn Profile"></a></h1>
 <p>A lightweight, Dart 3-compatible Flutter logging package with a draggable in-app log viewer overlay — inspired by <code>let_log</code>, rebuilt for modern apps.<br>
 Built with 💙 by <a href="https://github.com/sam829">Saumya Macwan</a>.</p>
 <hr>
@@ -65,99 +65,75 @@ Built with 💙 by <a href="https://github.com/sam829">Saumya Macwan</a>.</p>
 </ul>
 <hr>
 <h3 id="-screenshots">📱 Screenshots</h3>
-<div align="center">
-  <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/network_list.jpeg?raw=true" alt="Image 1" width="200" style="display:inline-block; margin: 0 20px 20px 0;">
-  <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/network_detail.jpeg?raw=true" alt="Image 2" width="200" style="display:inline-block; margin: 0 20px 20px 0;">
-  <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/console.png?raw=true" alt="Image 1" width="200" style="display:inline-block; margin: 0 20px 20px 0;">
-  <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/export.png?raw=true" alt="Image 2" width="200" style="display:inline-block; margin: 0 20px 20px 0;">
-  <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/debug_overlay.png?raw=true" alt="Image 1" width="200" style="display:inline-block; margin: 0 20px 20px 0;">
-  <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/search.png?raw=true" alt="Image 2" width="200" style="display:inline-block; margin: 0 20px 20px 0;">
-  <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/simple_detail.png?raw=true" alt="Image 2" width="200" style="display:inline-block; margin: 0 20px 20px 0;">
-  <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/simple_list.png?raw=true" alt="Image 2" width="200" style="display:inline-block; margin: 0 20px 20px 0;">
+<div align="center">  
+  <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/network_list.jpeg?raw=true" alt="Image 1" width="200" style="display:inline-block; margin: 0 20px 20px 0;">  
+  <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/network_detail.jpeg?raw=true" alt="Image 2" width="200" style="display:inline-block; margin: 0 20px 20px 0;">  
+  <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/console.png?raw=true" alt="Image 1" width="200" style="display:inline-block; margin: 0 20px 20px 0;">  
+  <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/export.png?raw=true" alt="Image 2" width="200" style="display:inline-block; margin: 0 20px 20px 0;">  
+  <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/debug_overlay.png?raw=true" alt="Image 1" width="200" style="display:inline-block; margin: 0 20px 20px 0;">  
+  <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/search.png?raw=true" alt="Image 2" width="200" style="display:inline-block; margin: 0 20px 20px 0;">  
+  <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/simple_detail.png?raw=true" alt="Image 2" width="200" style="display:inline-block; margin: 0 20px 20px 0;">  
+  <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/simple_list.png?raw=true" alt="Image 2" width="200" style="display:inline-block; margin: 0 20px 20px 0;">  
 </div>
 <hr>
 <h2 id="-getting-started">🚀 Getting Started</h2>
-<pre class="language-dart"><code class="language-dart">import 'package:simple_logger_overlay/simple_logger_overlay.dart';
-
-@override
-Widget build(BuildContext context) {
-  return FloatingActionButton(
-    onPressed: () {
-      SimpleLoggerOverlay.show(context);
-    },
-    child: const Icon(Icons.file_present),
-  );
-}
+<pre class="language-dart"><code class="language-dart">import 'package:simple_logger_overlay/simple_logger_overlay.dart';  
+  
+@override  
+Widget build(BuildContext context) {  
+ return FloatingActionButton( onPressed: () { SimpleLoggerOverlay.show(context); }, child: const Icon(Icons.file_present), );}  
 </code></pre>
 <hr>
 <h3 id="-log-from-anywhere">🪵 Log from Anywhere</h3>
 <p>Log directly with the static API:</p>
-<pre class="language-dart"><code class="language-dart">SimpleLoggerOverlay.log("Something happened", level: LogLevel.info, tag: 'HomeScreen');
+<pre class="language-dart"><code class="language-dart">SimpleLoggerOverlay.log("Something happened", level: LogLevel.info, tag: 'HomeScreen');  
 </code></pre>
 <hr>
 <h3 id="-integrations">🧩 Integrations</h3>
 <h4 id="-bloc">🧠 BLoC</h4>
-<pre class="language-dart"><code class="language-dart">import 'package:simple_logger_overlay/core/bloc_logger_observer.dart';
-
-Future&lt;void&gt; main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  Bloc.observer = SimpleOverlayBlocObserverLogger();
-}
+<pre class="language-dart"><code class="language-dart">import 'package:simple_logger_overlay/core/bloc_logger_observer.dart';  
+  
+Future&lt;void&gt; main() async {  
+ WidgetsFlutterBinding.ensureInitialized(); Bloc.observer = SimpleOverlayBlocObserverLogger();}  
 </code></pre>
 <h4 id="-riverpod">🌱 Riverpod</h4>
-<pre class="language-dart"><code class="language-dart">import 'package:simple_logger_overlay/core/riverpod_logger.dart';
-
-void main() {
-  runApp(
-    ProviderScope(
-      observers: [SimpleOverlayLoggerRiverpodObserver()],
-      child: const MyApp(),
-    ),
-  );
-}
+<pre class="language-dart"><code class="language-dart">import 'package:simple_logger_overlay/core/riverpod_logger.dart';  
+  
+void main() {  
+ runApp( ProviderScope( observers: [SimpleOverlayLoggerRiverpodObserver()], child: const MyApp(), ), );}  
 </code></pre>
 <h4 id="-getx">⚡ GetX</h4>
-<pre class="language-dart"><code class="language-dart">import 'package:simple_logger_overlay/core/getx_logger_patch.dart';
-
-void main() {
-  simpleOverlayGetXLogObserver();
-}
+<pre class="language-dart"><code class="language-dart">import 'package:simple_logger_overlay/core/getx_logger_patch.dart';  
+  
+void main() {  
+ simpleOverlayGetXLogObserver();}  
 </code></pre>
 <h4 id="-dio-interceptor">🌐 Dio Interceptor</h4>
-<pre class="language-dart"><code class="language-dart">import 'package:dio/dio.dart';
-import 'package:simple_logger_overlay/core/network_logger_interceptor.dart';
-
-final dio = Dio()
-  ..interceptors.add(SimpleOverlayNetworkLoggerInterceptor());
+<pre class="language-dart"><code class="language-dart">import 'package:dio/dio.dart';  
+import 'package:simple_logger_overlay/core/network_logger_interceptor.dart';  
+  
+final dio = Dio()  
+ ..interceptors.add(SimpleOverlayNetworkLoggerInterceptor());  
 </code></pre>
 <h4 id="-gorouter">🧭 GoRouter</h4>
-<pre class="language-dart"><code class="language-dart">MaterialApp.router(
-  routerDelegate: GoRouter(
-    observers: [SimpleOverlayGoRouterObserver()],
-    ...
-  ).routerDelegate,
-);
+<pre class="language-dart"><code class="language-dart">MaterialApp.router(  
+ routerDelegate: GoRouter( observers: [SimpleOverlayGoRouterObserver()], ... ).routerDelegate,);  
 </code></pre>
 <h4 id="-app-lifecycle">📱 App Lifecycle</h4>
-<pre class="language-dart"><code class="language-dart">WidgetsBinding.instance.addObserver(SimpleOverlayAppLifecycleObserver());
+<pre class="language-dart"><code class="language-dart">WidgetsBinding.instance.addObserver(SimpleOverlayAppLifecycleObserver());  
 </code></pre>
 <hr>
 <h3 id="-debug-floating-button">🐞 Debug Floating Button</h3>
-<pre class="language-dart"><code class="language-dart">Stack(
-  children: [
-    child!,
-    const SimpleOverlayDraggableDebuggerFAB(navigatorKey: rootNavigatorKey),
-  ],
-);
+<pre class="language-dart"><code class="language-dart">Stack(  
+ children: [ child!, const SimpleOverlayDraggableDebuggerFAB(navigatorKey: rootNavigatorKey), ],);  
 </code></pre>
 <hr>
 <h2 id="-console-logging">💻 Console Logging</h2>
 <p>Logs are also printed in your terminal with emojis and color by default.</p>
-<pre class="language-bash"><code class="language-bash">[2025-06-24T19:15:01.000Z] 🔍 [DEBUG] [LoginBloc] Event dispatched
-[2025-06-24T19:15:02.000Z] 🔥 [ERROR] [LoginBloc] Invalid password
+<pre class="language-bash"><code class="language-bash">[2025-06-24T19:15:01.000Z] 🔍 [DEBUG] [LoginBloc] Event dispatched[2025-06-24T19:15:02.000Z] 🔥 [ERROR] [LoginBloc] Invalid password  
 </code></pre>
 <p>Disable if needed:</p>
-<pre class="language-dart"><code class="language-dart">SimpleOverlayLogStorageService.enableConsole = false;
+<pre class="language-dart"><code class="language-dart">SimpleOverlayLogStorageService.enableConsole = false;  
 </code></pre>
 <hr>
 <h2 id="-export-logs">📦 Export Logs</h2>
@@ -168,7 +144,7 @@ final dio = Dio()
 </ul>
 <hr>
 <h2 id="-license">🛠️ License</h2>
-<p>MIT © 2025 <a href="https://github.com/sam829">Saumya Macwan</a></p>
+<p>MIT © 2025 Saumya Macwan <a href="https://github.com/sam829/simple_logger_overlay"><img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&amp;logo=github&amp;logoColor=white" alt="GitHub Profile"></a> <a href="https://www.linkedin.com/in/saumya-macwan-b650b91a1"><img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&amp;logo=linkedin&amp;logoColor=white" alt="LinkedIn Profile"></a></p>
 </section>
 
 
@@ -361,7 +337,7 @@ final dio = Dio()
 <footer>
   <span class="no-break">
     simple_logger_overlay
-      0.1.6
+      0.1.7
   </span>
   
 </footer>

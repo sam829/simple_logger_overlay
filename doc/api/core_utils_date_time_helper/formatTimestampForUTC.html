@@ -73,7 +73,7 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">String formatTimestampForUTC(DateTime dateTime) {
-  return DateFormat(&#39;yyyy-MM-ddTHH:mm:ss.SSS\&#39;Z\&#39;&#39;).format(dateTime);
+  return DateFormat(&#39;yyyy-MM-ddTHH:mm:ss.SSS\&#39;Z\&#39;&#39;).format(dateTime.toUtc());
 }</code></pre>
 </section>
 
@@ -101,7 +101,7 @@
 <footer>
   <span class="no-break">
     simple_logger_overlay
-      0.1.6
+      0.1.7
   </span>
   
 </footer>

@@ -32,7 +32,7 @@ String get getCurrentTimestampUTC => formatTimestampForUTC(DateTime.now());
 ///
 /// Returns a string in the format of `yyyy-MM-ddTHH:mm:ss.SSS'Z'`.
 String formatTimestampForUTC(DateTime dateTime) {
-  return DateFormat('yyyy-MM-ddTHH:mm:ss.SSS\'Z\'').format(dateTime);
+  return DateFormat('yyyy-MM-ddTHH:mm:ss.SSS\'Z\'').format(dateTime.toUtc());
 }
 
 /// Get the current timestamp in the local timezone format.

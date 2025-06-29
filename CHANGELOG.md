@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.7
+
+- 🐞 The `formatTimestampForUTC` function has been updated to correctly convert the input `DateTime` to UTC before formatting.
+  This ensures that the output string accurately represents the timestamp in UTC, as intended.
+
 ## 0.1.6
 
 - 🧠 Minor name refactorings for classes for uniformity.
