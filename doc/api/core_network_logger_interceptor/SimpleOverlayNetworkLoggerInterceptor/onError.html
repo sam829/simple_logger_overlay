@@ -82,7 +82,7 @@ void onError(DioException err, ErrorInterceptorHandler handler) async {
   final startTime = request.extra[&#39;startTime&#39;] as DateTime?;
   final timestamp = startTime ?? DateTime.now();
 
-  final log = NetworkLog(
+  final log = SimpleOverlayNetworkLog(
     timestamp: timestamp,
     tag: request.path,
     method: request.method,
@@ -127,7 +127,7 @@ void onError(DioException err, ErrorInterceptorHandler handler) async {
 <footer>
   <span class="no-break">
     simple_logger_overlay
-      0.1.4
+      0.1.6
   </span>
   
 </footer>

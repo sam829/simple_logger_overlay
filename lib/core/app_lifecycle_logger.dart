@@ -19,11 +19,12 @@ import 'log_storage_service.dart';
 /// WidgetsBinding.instance.addObserver(SimpleOverlayAppLifecycleObserver());
 /// ```
 class SimpleOverlayAppLifecycleObserver extends WidgetsBindingObserver {
-  final LogStorageService _storage = LogStorageService();
+  final SimpleOverlayLogStorageService _storage =
+      SimpleOverlayLogStorageService();
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    _storage.addSimpleLog(SimpleLog(
+    _storage.addSimpleLog(SimpleOverlayLog(
       timestamp: DateTime.now(),
       tag: 'AppLifecycle',
       level: LogLevel.info,

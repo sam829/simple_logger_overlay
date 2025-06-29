@@ -14,7 +14,8 @@ import 'log_storage_service.dart';
 /// )
 /// ```
 class SimpleOverlayGoRouterObserver extends NavigatorObserver {
-  final LogStorageService _storage = LogStorageService();
+  final SimpleOverlayLogStorageService _storage =
+      SimpleOverlayLogStorageService();
 
   void _log(String action, Route<dynamic>? route) {
     final routeName =
@@ -23,7 +24,7 @@ class SimpleOverlayGoRouterObserver extends NavigatorObserver {
     // ignore internal routes
     if (routeName == 'LoggerOverlay') return;
 
-    _storage.addSimpleLog(SimpleLog(
+    _storage.addSimpleLog(SimpleOverlayLog(
       timestamp: DateTime.now(),
       tag: 'GoRouter',
       level: LogLevel.info,

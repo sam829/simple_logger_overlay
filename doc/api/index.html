@@ -128,7 +128,7 @@ void main() {
 import 'package:simple_logger_overlay/core/network_logger_interceptor.dart';
 
 final dio = Dio()
-  ..interceptors.add(NetworkLoggerInterceptor());
+  ..interceptors.add(SimpleOverlayNetworkLoggerInterceptor());
 </code></pre>
 <h4 id="-gorouter">🧭 GoRouter</h4>
 <pre class="language-dart"><code class="language-dart">MaterialApp.router(
@@ -146,7 +146,7 @@ final dio = Dio()
 <pre class="language-dart"><code class="language-dart">Stack(
   children: [
     child!,
-    const DraggableDebuggerFAB(navigatorKey: rootNavigatorKey),
+    const SimpleOverlayDraggableDebuggerFAB(navigatorKey: rootNavigatorKey),
   ],
 );
 </code></pre>
@@ -157,7 +157,7 @@ final dio = Dio()
 [2025-06-24T19:15:02.000Z] 🔥 [ERROR] [LoginBloc] Invalid password
 </code></pre>
 <p>Disable if needed:</p>
-<pre class="language-dart"><code class="language-dart">LogStorageService.enableConsole = false;
+<pre class="language-dart"><code class="language-dart">SimpleOverlayLogStorageService.enableConsole = false;
 </code></pre>
 <hr>
 <h2 id="-export-logs">📦 Export Logs</h2>
@@ -361,7 +361,7 @@ final dio = Dio()
 <footer>
   <span class="no-break">
     simple_logger_overlay
-      0.1.4
+      0.1.6
   </span>
   
 </footer>

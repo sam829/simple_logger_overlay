@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.6
+
+- 🧠 Minor name refactorings for classes for uniformity.
+
+- 🐞 Added navigator support to shake controller for better accessibility
+
 ## 0.1.5
 
 - 🎨 Code style improvements:

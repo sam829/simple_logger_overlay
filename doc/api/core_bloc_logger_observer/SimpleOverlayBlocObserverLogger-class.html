@@ -56,8 +56,8 @@
 <section class="desc markdown">
   <p>A custom <a href="https://pub.dev/documentation/bloc/9.0.0/bloc/BlocObserver-class.html">BlocObserver</a> that logs BLoC events, state changes, and errors
 to the <code>simple_logger_overlay</code> system.</p>
-<p>This observer writes logs into persistent storage using <a href="../core_log_storage_service/LogStorageService-class.html">LogStorageService</a>,
-and formats them as <a href="../models_simple_log/SimpleLog-class.html">SimpleLog</a> entries for display in the overlay.</p>
+<p>This observer writes logs into persistent storage using <a href="../core_log_storage_service/SimpleOverlayLogStorageService-class.html">SimpleOverlayLogStorageService</a>,
+and formats them as <a href="../models_simple_log/SimpleOverlayLog-class.html">SimpleOverlayLog</a> entries for display in the overlay.</p>
 <p>Usage:</p>
 <pre class="language-dart"><code class="language-dart">Bloc.observer = SimpleOverlayBlocObserverLogger();
 </code></pre>
@@ -159,7 +159,7 @@ and formats them as <a href="../models_simple_log/SimpleLog-class.html">SimpleLo
 
 </dt>
 <dd>
-  Logs every state <code>change</code> as an <code>info</code>-level <a href="../models_simple_log/SimpleLog-class.html">SimpleLog</a>.
+  Logs every state <code>change</code> as an <code>info</code>-level <a href="../models_simple_log/SimpleOverlayLog-class.html">SimpleOverlayLog</a>.
   <div class="features"><span class="feature">override</span></div>
 
 </dd>
@@ -204,7 +204,7 @@ instance is created.
 
 </dt>
 <dd>
-  Logs all <code>error</code>s and <code>stackTrace</code>s as <code>error</code>-level <a href="../models_simple_log/SimpleLog-class.html">SimpleLog</a>s.
+  Logs all <code>error</code>s and <code>stackTrace</code>s as <code>error</code>-level <a href="../models_simple_log/SimpleOverlayLog-class.html">SimpleOverlayLog</a>s.
   <div class="features"><span class="feature">override</span></div>
 
 </dd>
@@ -217,7 +217,7 @@ instance is created.
 
 </dt>
 <dd>
-  Logs every dispatched BLoC <code>event</code> as a <code>debug</code>-level <a href="../models_simple_log/SimpleLog-class.html">SimpleLog</a>.
+  Logs every dispatched BLoC <code>event</code> as a <code>debug</code>-level <a href="../models_simple_log/SimpleOverlayLog-class.html">SimpleOverlayLog</a>.
   <div class="features"><span class="feature">override</span></div>
 
 </dd>
@@ -302,7 +302,7 @@ and a new state is <code>emitted</code> from a corresponding <a href="https://pu
 <footer>
   <span class="no-break">
     simple_logger_overlay
-      0.1.4
+      0.1.6
   </span>
   
 </footer>

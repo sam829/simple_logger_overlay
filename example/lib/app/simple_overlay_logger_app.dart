@@ -19,7 +19,7 @@ class SimpleOverlayLoggerApp extends StatelessWidget {
         return Stack(
           children: [
             child!,
-            DraggableDebuggerFAB(navigatorKey: rootNavigatorKey),
+            SimpleOverlayDraggableDebuggerFAB(navigatorKey: rootNavigatorKey),
           ],
         );
       },

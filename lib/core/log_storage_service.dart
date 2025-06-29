@@ -2,6 +2,7 @@ import 'dart:isolate' show Isolate;
 
 import 'package:path_provider/path_provider.dart'
     show getApplicationSupportDirectory;
+import 'package:simple_logger_overlay/core/utils/date_time_helper.dart';
 
 import '../models/network_log.dart';
 import '../models/simple_log.dart';
@@ -16,17 +17,18 @@ import 'isolate_log_writer.dart';
 /// The first file contains logs from the [LoggerController.log] method, while
 /// the second file contains logs from the [NetworkLoggerInterceptor].
 ///
-class LogStorageService {
-  LogStorageService._internal(); // Private constructor
+class SimpleOverlayLogStorageService {
+  SimpleOverlayLogStorageService._internal(); // Private constructor
 
-  static final LogStorageService _instance = LogStorageService._internal();
+  static final SimpleOverlayLogStorageService _instance =
+      SimpleOverlayLogStorageService._internal();
 
-  factory LogStorageService() => _instance;
+  factory SimpleOverlayLogStorageService() => _instance;
 
   /// Enables styled logging to console. Defaults to true.
   static bool enableConsole = true;
 
-  /// Writes a [SimpleLog] to the persistent log file.
+  /// Writes a [SimpleOverlayLog] to the persistent log file.
   ///
   /// The log is written to a file named `simple_logs.jsonl` within the
   /// application support directory. The log is written in JSON Lines format.
@@ -42,7 +44,7 @@ class LogStorageService {
   /// * `level`: The log level of the log event, one of "debug", "info", "warn",
   ///   or "error".
   /// * `message`: The log message itself, a string.
-  Future<void> addSimpleLog(SimpleLog log) async {
+  Future<void> addSimpleLog(SimpleOverlayLog log) async {
     _printStyled(log.level.name, log.tag, log.message);
 
     final dir = await getApplicationSupportDirectory();
@@ -52,10 +54,10 @@ class LogStorageService {
       'type': 'simple',
       ...log.toJson(),
     };
-    await Isolate.run(() => IsolateLogWriter.writeLog(payload));
+    await Isolate.run(() => SimpleOverlayIsolateLogWriter.writeLog(payload));
   }
 
-  /// Writes a [NetworkLog] to the persistent log file.
+  /// Writes a [SimpleOverlayNetworkLog] to the persistent log file.
   ///
   /// The log is written to a file named `network_logs.jsonl` within the
   /// application support directory. The log is written in JSON Lines format.
@@ -76,7 +78,7 @@ class LogStorageService {
   /// * `responseHeaders`: A map of the response headers.
   /// * `responseBody`: The body of the response, if any.
   /// * `isSuccess`: A boolean indicating if the network request was successful.
-  Future<void> addNetworkLog(NetworkLog log) async {
+  Future<void> addNetworkLog(SimpleOverlayNetworkLog log) async {
     final tag = '${log.method} ${log.url}';
     final msg =
         'Status: ${log.statusCode} | ${log.isSuccess ? 'Success' : 'Error'}';
@@ -90,7 +92,7 @@ class LogStorageService {
       'type': 'network',
       ...log.toJson(),
     };
-    await Isolate.run(() => IsolateLogWriter.writeLog(payload));
+    await Isolate.run(() => SimpleOverlayIsolateLogWriter.writeLog(payload));
   }
 
   /// Reads all simple logs from persistent storage.
@@ -101,12 +103,12 @@ class LogStorageService {
   /// The logs are read asynchronously in a separate isolate to avoid blocking
   /// the main isolate.
   ///
-  /// The logs are returned as a list of [SimpleLog] objects.
-  Future<List<SimpleLog>> getSimpleLogs() async {
+  /// The logs are returned as a list of [SimpleOverlayLog] objects.
+  Future<List<SimpleOverlayLog>> getSimpleLogs() async {
     final dir = await getApplicationSupportDirectory();
-    final rawLogs =
-        await Isolate.run(() => IsolateLogWriter.readLogs(dir.path, 'simple'));
-    return rawLogs.map((e) => SimpleLog.fromJson(e)).toList();
+    final rawLogs = await Isolate.run(
+        () => SimpleOverlayIsolateLogWriter.readLogs(dir.path, 'simple'));
+    return rawLogs.map((e) => SimpleOverlayLog.fromJson(e)).toList();
   }
 
   /// Reads all network logs from persistent storage.
@@ -117,12 +119,12 @@ class LogStorageService {
   /// The logs are read asynchronously in a separate isolate to avoid blocking
   /// the main isolate.
   ///
-  /// The logs are returned as a list of [NetworkLog] objects.
-  Future<List<NetworkLog>> getNetworkLogs() async {
+  /// The logs are returned as a list of [SimpleOverlayNetworkLog] objects.
+  Future<List<SimpleOverlayNetworkLog>> getNetworkLogs() async {
     final dir = await getApplicationSupportDirectory();
-    final rawLogs =
-        await Isolate.run(() => IsolateLogWriter.readLogs(dir.path, 'network'));
-    return rawLogs.map((e) => NetworkLog.fromJson(e)).toList();
+    final rawLogs = await Isolate.run(
+        () => SimpleOverlayIsolateLogWriter.readLogs(dir.path, 'network'));
+    return rawLogs.map((e) => SimpleOverlayNetworkLog.fromJson(e)).toList();
   }
 
   /// Deletes all logs older than 2 days from persistent storage.
@@ -134,13 +136,12 @@ class LogStorageService {
   Future<void> purgeOldLogs() async {
     final dir = await getApplicationSupportDirectory();
     final path = dir.path;
-    await Isolate.run(() => IsolateLogWriter.purgeOldLogs(path, 2));
+    await Isolate.run(
+        () => SimpleOverlayIsolateLogWriter.purgeOldLogs(path, 2));
   }
 
   void _printStyled(String level, String tag, String message) {
-    if (!LogStorageService.enableConsole) return;
-
-    final timestamp = DateTime.now().toIso8601String();
+    if (!SimpleOverlayLogStorageService.enableConsole) return;
 
     // ANSI color codes
     const reset = '\x1B[0m';
@@ -181,7 +182,8 @@ class LogStorageService {
         label = level.toUpperCase();
     }
 
-    final formatted = '[$timestamp] $emoji [$label] [$tag] $message';
+    final formatted =
+        '[$getCurrentTimestampUTC] [$getCurrentTimestampWithOffset] $emoji [$label] [$tag] $message';
     print('$color$formatted$reset');
   }
 }

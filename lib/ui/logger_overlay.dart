@@ -22,9 +22,9 @@ import 'widgets/tabbed_logger.dart';
 ///   ),
 /// );
 /// ```
-class LoggerOverlay extends StatelessWidget {
-  /// Creates a new [LoggerOverlay] instance.
-  const LoggerOverlay({super.key});
+class SimpleOverlayLoggerScreen extends StatelessWidget {
+  /// Creates a new [SimpleOverlayLoggerScreen] instance.
+  const SimpleOverlayLoggerScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -48,14 +48,14 @@ class LoggerOverlay extends StatelessWidget {
         ],
       ),
       // The main content is handled by the TabbedLogger widget
-      body: const TabbedLogger(),
+      body: const SimpleOverlayTabbedLogger(),
     );
   }
 
   /// Exports the current logs to a file and shares them using the platform's share dialog.
   ///
   /// This method:
-  /// 1. Exports logs to a temporary file using [ExportService]
+  /// 1. Exports logs to a temporary file using [SimpleOverlayExportService]
   /// 2. Opens the platform's share dialog with the exported file
   /// 3. Handles any errors that occur during the process
   ///
@@ -65,7 +65,7 @@ class LoggerOverlay extends StatelessWidget {
   Future<void> _exportAndShareLogs(BuildContext context) async {
     try {
       // Export logs to a temporary file
-      final path = await ExportService().exportLogsToFile();
+      final path = await SimpleOverlayExportService().exportLogsToFile();
 
       // Share the exported file using the platform's share dialog
       final result = await SharePlus.instance.share(

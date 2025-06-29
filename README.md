@@ -111,7 +111,7 @@ import 'package:dio/dio.dart';
 import 'package:simple_logger_overlay/core/network_logger_interceptor.dart';
 
 final dio = Dio()
-  ..interceptors.add(NetworkLoggerInterceptor());
+  ..interceptors.add(SimpleOverlayNetworkLoggerInterceptor());
 ```
 
 #### 🧭 GoRouter
@@ -139,7 +139,7 @@ WidgetsBinding.instance.addObserver(SimpleOverlayAppLifecycleObserver());
 Stack(
   children: [
     child!,
-    const DraggableDebuggerFAB(navigatorKey: rootNavigatorKey),
+    const SimpleOverlayDraggableDebuggerFAB(navigatorKey: rootNavigatorKey),
   ],
 );
 ```
@@ -158,7 +158,7 @@ Logs are also printed in your terminal with emojis and color by default.
 Disable if needed:
 
 ```dart
-LogStorageService.enableConsole = false;
+SimpleOverlayLogStorageService.enableConsole = false;
 ```
 
 ---

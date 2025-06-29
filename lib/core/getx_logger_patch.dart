@@ -13,10 +13,10 @@ import 'log_storage_service.dart';
 /// Example:
 ///
 void simpleOverlayGetXLogObserver() {
-  final storage = LogStorageService();
+  final storage = SimpleOverlayLogStorageService();
   Get.config(
     logWriterCallback: (text, {bool isError = false}) {
-      storage.addSimpleLog(SimpleLog(
+      storage.addSimpleLog(SimpleOverlayLog(
         timestamp: DateTime.now(),
         tag: 'GetX',
         level: isError ? LogLevel.error : LogLevel.debug,

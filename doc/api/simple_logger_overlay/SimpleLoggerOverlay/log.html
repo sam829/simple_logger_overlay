@@ -82,13 +82,13 @@
   String tag = &#39;App&#39;,
   LogLevel level = LogLevel.info,
 }) async {
-  final log = SimpleLog(
+  final log = SimpleOverlayLog(
     timestamp: DateTime.now(),
     tag: tag,
     level: level,
     message: message,
   );
-  await LogStorageService().addSimpleLog(log);
+  await SimpleOverlayLogStorageService().addSimpleLog(log);
 }</code></pre>
 </section>
 
@@ -117,7 +117,7 @@
 <footer>
   <span class="no-break">
     simple_logger_overlay
-      0.1.4
+      0.1.6
   </span>
   
 </footer>

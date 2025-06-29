@@ -7,8 +7,8 @@ import 'log_storage_service.dart';
 
 /// Service that exports all logs (simple + network) as JSON
 /// and opens a native share sheet using `share_plus`.
-class ExportService {
-  final _storage = LogStorageService();
+class SimpleOverlayExportService {
+  final _storage = SimpleOverlayLogStorageService();
 
   /// Exports both simple and network logs to JSON and triggers native share dialog.
   Future<String> exportLogsToFile() async {

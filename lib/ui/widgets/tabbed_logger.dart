@@ -8,8 +8,8 @@ import 'log_card.dart';
 /// A widget that displays application logs in a tabbed interface.
 ///
 /// This widget provides a tabbed interface with two tabs:
-/// 1. Logs - Shows application logs ([SimpleLog] entries)
-/// 2. Network - Shows network request/response logs ([NetworkLog] entries)
+/// 1. Logs - Shows application logs ([SimpleOverlayLog] entries)
+/// 2. Network - Shows network request/response logs ([SimpleOverlayNetworkLog] entries)
 ///
 /// Features:
 /// - Search functionality across log messages and tags
@@ -21,27 +21,28 @@ import 'log_card.dart';
 /// ```dart
 /// const TabbedLogger();
 /// ```
-class TabbedLogger extends StatefulWidget {
-  /// Creates a new [TabbedLogger] instance.
-  const TabbedLogger({super.key});
+class SimpleOverlayTabbedLogger extends StatefulWidget {
+  /// Creates a new [SimpleOverlayTabbedLogger] instance.
+  const SimpleOverlayTabbedLogger({super.key});
 
   @override
-  State<TabbedLogger> createState() => _TabbedLoggerState();
+  State<SimpleOverlayTabbedLogger> createState() =>
+      _SimpleOverlayTabbedLoggerState();
 }
 
-class _TabbedLoggerState extends State<TabbedLogger>
+class _SimpleOverlayTabbedLoggerState extends State<SimpleOverlayTabbedLogger>
     with SingleTickerProviderStateMixin {
   /// Service for loading logs from persistent storage
-  final _storage = LogStorageService();
+  final _storage = SimpleOverlayLogStorageService();
 
   /// Controls the tab selection and animation
   late final TabController _tabController;
 
   /// List of application logs
-  List<SimpleLog> _simpleLogs = [];
+  List<SimpleOverlayLog> _simpleLogs = [];
 
   /// List of network logs
-  List<NetworkLog> _networkLogs = [];
+  List<SimpleOverlayNetworkLog> _networkLogs = [];
 
   /// Current search query text
   String? _searchText;
@@ -112,16 +113,16 @@ class _TabbedLoggerState extends State<TabbedLogger>
                 onRefresh: _loadLogs,
                 child: ListView.builder(
                   itemCount: _filteredSimpleLogs().length,
-                  itemBuilder: (_, index) =>
-                      LogCard.simple(simple: _filteredSimpleLogs()[index]),
+                  itemBuilder: (_, index) => SimpleOverlayLogCard.simple(
+                      simple: _filteredSimpleLogs()[index]),
                 ),
               ),
               RefreshIndicator(
                 onRefresh: _loadLogs,
                 child: ListView.builder(
                   itemCount: _filteredNetworkLogs().length,
-                  itemBuilder: (_, index) =>
-                      LogCard.network(network: _filteredNetworkLogs()[index]),
+                  itemBuilder: (_, index) => SimpleOverlayLogCard.network(
+                      network: _filteredNetworkLogs()[index]),
                 ),
               ),
             ],
@@ -178,9 +179,9 @@ class _TabbedLoggerState extends State<TabbedLogger>
   /// Filters and sorts simple logs based on the current search query and sort direction
   ///
   /// Returns:
-  /// A list of [SimpleLog] entries that match the search criteria,
+  /// A list of [SimpleOverlayLog] entries that match the search criteria,
   /// sorted according to the current sort direction.
-  List<SimpleLog> _filteredSimpleLogs() {
+  List<SimpleOverlayLog> _filteredSimpleLogs() {
     // Filter logs based on search text (if any)
     final filtered = _simpleLogs.where((log) {
       if (_searchText == null || _searchText!.isEmpty) {
@@ -203,9 +204,9 @@ class _TabbedLoggerState extends State<TabbedLogger>
   /// Filters and sorts network logs based on the current search query and sort direction
   ///
   /// Returns:
-  /// A list of [NetworkLog] entries that match the search criteria,
+  /// A list of [SimpleOverlayNetworkLog] entries that match the search criteria,
   /// sorted according to the current sort direction.
-  List<NetworkLog> _filteredNetworkLogs() {
+  List<SimpleOverlayNetworkLog> _filteredNetworkLogs() {
     // Filter logs based on search text (if any)
     final filtered = _networkLogs.where((log) {
       if (_searchText == null || _searchText!.isEmpty) {

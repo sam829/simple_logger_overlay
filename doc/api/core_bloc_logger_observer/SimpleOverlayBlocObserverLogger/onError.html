@@ -70,7 +70,7 @@
     </section>
     
 <section class="desc markdown">
-  <p>Logs all <code>error</code>s and <code>stackTrace</code>s as <code>error</code>-level <a href="../../models_simple_log/SimpleLog-class.html">SimpleLog</a>s.</p>
+  <p>Logs all <code>error</code>s and <code>stackTrace</code>s as <code>error</code>-level <a href="../../models_simple_log/SimpleOverlayLog-class.html">SimpleOverlayLog</a>s.</p>
 </section>
 
 
@@ -79,7 +79,7 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
-  _storage.addSimpleLog(SimpleLog(
+  _storage.addSimpleLog(SimpleOverlayLog(
     timestamp: DateTime.now(),
     tag: bloc.runtimeType.toString(),
     level: LogLevel.error,
@@ -114,7 +114,7 @@ void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
 <footer>
   <span class="no-break">
     simple_logger_overlay
-      0.1.4
+      0.1.6
   </span>
   
 </footer>

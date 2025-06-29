@@ -32,7 +32,7 @@ export 'ui/widgets/draggable_floating_overlay.dart';
 /// - logger package
 ///
 /// Also includes shake-to-open, JSON export, filtering, and search.
-/// Allows quick and easy logging without needing to create [SimpleLog] manually.
+/// Allows quick and easy logging without needing to create [SimpleOverlayLog] manually.
 ///
 /// Example:
 /// ```dart
@@ -42,7 +42,7 @@ class SimpleLoggerOverlay {
   static void show(BuildContext context,
       {GlobalKey<NavigatorState>? navigatorKey}) {
     final page = MaterialPageRoute(
-      builder: (_) => const LoggerOverlay(),
+      builder: (_) => const SimpleOverlayLoggerScreen(),
       settings: RouteSettings(name: 'LoggerOverlay'),
     );
 
@@ -64,12 +64,12 @@ class SimpleLoggerOverlay {
     String tag = 'App',
     LogLevel level = LogLevel.info,
   }) async {
-    final log = SimpleLog(
+    final log = SimpleOverlayLog(
       timestamp: DateTime.now(),
       tag: tag,
       level: level,
       message: message,
     );
-    await LogStorageService().addSimpleLog(log);
+    await SimpleOverlayLogStorageService().addSimpleLog(log);
   }
 }

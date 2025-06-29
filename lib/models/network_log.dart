@@ -27,7 +27,7 @@ import 'base_log.dart';
 ///   isSuccess: true
 /// );
 /// ```
-class NetworkLog extends BaseLog {
+class SimpleOverlayNetworkLog extends SimpleOverlayBaseLog {
   /// HTTP method used for the request (GET, POST, etc.)
   final String method;
 
@@ -56,7 +56,7 @@ class NetworkLog extends BaseLog {
   ///
   /// All required parameters must be provided. Optional parameters
   /// (statusCode, responseHeaders, responseBody) can be null if not available.
-  NetworkLog({
+  SimpleOverlayNetworkLog({
     required super.timestamp,
     required super.tag,
     required this.method,
@@ -98,7 +98,8 @@ class NetworkLog extends BaseLog {
   ///
   /// Returns:
   /// A new NetworkLog instance populated with the deserialized data
-  static NetworkLog fromJson(Map<String, dynamic> json) => NetworkLog(
+  static SimpleOverlayNetworkLog fromJson(Map<String, dynamic> json) =>
+      SimpleOverlayNetworkLog(
         timestamp: DateTime.parse(json['timestamp']),
         tag: json['tag'],
         method: json['method'],

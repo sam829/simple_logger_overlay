@@ -10,7 +10,7 @@ enum LogLevel { debug, info, error }
 
 /// A simple log entry representing a basic logging event.
 ///
-/// This class extends [BaseLog] to provide a simple logging structure
+/// This class extends [SimpleOverlayBaseLog] to provide a simple logging structure
 /// that includes a message and a severity level. It's typically used
 /// for general application logging through `LoggerController.log()`.
 ///
@@ -23,7 +23,7 @@ enum LogLevel { debug, info, error }
 ///   level: LogLevel.info,
 /// );
 /// ```
-class SimpleLog extends BaseLog {
+class SimpleOverlayLog extends SimpleOverlayBaseLog {
   /// The main content of the log message.
   ///
   /// This should be a human-readable description of the event being logged.
@@ -39,14 +39,14 @@ class SimpleLog extends BaseLog {
   /// for filtering log messages by severity. See [LogLevel] for available levels.
   final LogLevel level;
 
-  /// Creates a new [SimpleLog] instance.
+  /// Creates a new [SimpleOverlayLog] instance.
   ///
   /// All parameters are required:
   /// - [timestamp]: When the event occurred
   /// - [tag]: Category or component identifier (e.g., 'AUTH', 'NETWORK', 'UI')
   /// - [message]: The log message content
   /// - [level]: The severity level of the log entry
-  const SimpleLog({
+  const SimpleOverlayLog({
     required super.timestamp,
     required super.tag,
     required this.message,
@@ -55,7 +55,7 @@ class SimpleLog extends BaseLog {
 
   /// Converts the log entry to a JSON-serializable map.
   ///
-  /// The resulting map includes all fields from [BaseLog] plus the [message],
+  /// The resulting map includes all fields from [SimpleOverlayBaseLog] plus the [message],
   /// [level], and a 'type' field set to 'simple' for identification.
   ///
   /// Returns:
@@ -74,7 +74,7 @@ class SimpleLog extends BaseLog {
         'type': 'simple',
       };
 
-  /// Creates a [SimpleLog] instance from a JSON map.
+  /// Creates a [SimpleOverlayLog] instance from a JSON map.
   ///
   /// This is the inverse of [toJson()] and is typically used when deserializing
   /// log entries from storage. The input map should contain all fields returned
@@ -84,12 +84,13 @@ class SimpleLog extends BaseLog {
   /// - json: A map containing the serialized log data
   ///
   /// Returns:
-  /// A new [SimpleLog] instance with the deserialized data
+  /// A new [SimpleOverlayLog] instance with the deserialized data
   ///
   /// Throws:
   /// - FormatException: If the timestamp is not in ISO 8601 format
   /// - ArgumentError: If the level is not a valid [LogLevel] name
-  static SimpleLog fromJson(Map<String, dynamic> json) => SimpleLog(
+  static SimpleOverlayLog fromJson(Map<String, dynamic> json) =>
+      SimpleOverlayLog(
         timestamp: DateTime.parse(json['timestamp'] as String),
         tag: json['tag'] as String,
         message: json['message'] as String,

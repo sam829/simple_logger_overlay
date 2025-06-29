@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:simple_logger_overlay/simple_logger_overlay.dart';
 
-class DraggableDebuggerFAB extends StatefulWidget {
-  const DraggableDebuggerFAB({super.key, this.navigatorKey});
+class SimpleOverlayDraggableDebuggerFAB extends StatefulWidget {
+  const SimpleOverlayDraggableDebuggerFAB({super.key, this.navigatorKey});
 
   final GlobalKey<NavigatorState>? navigatorKey;
 
   @override
-  State<DraggableDebuggerFAB> createState() => _DraggableDebuggerFABState();
+  State<SimpleOverlayDraggableDebuggerFAB> createState() =>
+      _SimpleOverlayDraggableDebuggerFABState();
 }
 
-class _DraggableDebuggerFABState extends State<DraggableDebuggerFAB> {
+class _SimpleOverlayDraggableDebuggerFABState
+    extends State<SimpleOverlayDraggableDebuggerFAB> {
   Offset offset = const Offset(20, 100);
 
   @override

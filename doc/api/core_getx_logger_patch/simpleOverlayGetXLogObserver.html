@@ -74,10 +74,10 @@ as 'GetX'. This is useful for debugging errors in your GetX app.</p>
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">void simpleOverlayGetXLogObserver() {
-  final storage = LogStorageService();
+  final storage = SimpleOverlayLogStorageService();
   Get.config(
     logWriterCallback: (text, {bool isError = false}) {
-      storage.addSimpleLog(SimpleLog(
+      storage.addSimpleLog(SimpleOverlayLog(
         timestamp: DateTime.now(),
         tag: &#39;GetX&#39;,
         level: isError ? LogLevel.error : LogLevel.debug,
@@ -112,7 +112,7 @@ as 'GetX'. This is useful for debugging errors in your GetX app.</p>
 <footer>
   <span class="no-break">
     simple_logger_overlay
-      0.1.4
+      0.1.6
   </span>
   
 </footer>

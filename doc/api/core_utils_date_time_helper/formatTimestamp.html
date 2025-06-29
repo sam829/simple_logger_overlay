@@ -74,7 +74,7 @@ i.e. 2025-06-05T12:33:32 will be readable as 5th June 2025, 12:33 PM</p>
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">String formatTimestamp(DateTime dateTime) {
-  return DateFormat(&#39;dd MMM yyyy, hh:mm a&#39;).format(dateTime);
+  return DateFormat(&#39;dd MMM yyyy, hh:mm:ssss a&#39;).format(dateTime);
 }</code></pre>
 </section>
 
@@ -102,7 +102,7 @@ i.e. 2025-06-05T12:33:32 will be readable as 5th June 2025, 12:33 PM</p>
 <footer>
   <span class="no-break">
     simple_logger_overlay
-      0.1.4
+      0.1.6
   </span>
   
 </footer>

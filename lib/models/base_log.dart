@@ -29,7 +29,7 @@
 ///   };
 /// }
 /// ```
-abstract class BaseLog {
+abstract class SimpleOverlayBaseLog {
   /// The exact date and time when the log entry was created.
   ///
   /// This is typically set to `DateTime.now()` when creating a log entry.
@@ -41,11 +41,11 @@ abstract class BaseLog {
   /// filtering and searching through logs based on categories.
   final String tag;
 
-  /// Creates a new [BaseLog] instance.
+  /// Creates a new [SimpleOverlayBaseLog] instance.
   ///
   /// Both [timestamp] and [tag] are required parameters as they are
   /// fundamental to all log entries.
-  const BaseLog({
+  const SimpleOverlayBaseLog({
     required this.timestamp,
     required this.tag,
   });

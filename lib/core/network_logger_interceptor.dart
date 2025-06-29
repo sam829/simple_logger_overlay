@@ -15,7 +15,8 @@ import 'log_storage_service.dart';
 /// dio.interceptors.add(SimpleOverlayNetworkLoggerInterceptor());
 /// ```
 class SimpleOverlayNetworkLoggerInterceptor extends Interceptor {
-  final LogStorageService _storageService = LogStorageService();
+  final SimpleOverlayLogStorageService _storageService =
+      SimpleOverlayLogStorageService();
 
   @override
   void onRequest(
@@ -30,7 +31,7 @@ class SimpleOverlayNetworkLoggerInterceptor extends Interceptor {
     final startTime = request.extra['startTime'] as DateTime?;
     final timestamp = startTime ?? DateTime.now();
 
-    final log = NetworkLog(
+    final log = SimpleOverlayNetworkLog(
       timestamp: timestamp,
       tag: request.path,
       method: request.method,
@@ -55,7 +56,7 @@ class SimpleOverlayNetworkLoggerInterceptor extends Interceptor {
     final startTime = request.extra['startTime'] as DateTime?;
     final timestamp = startTime ?? DateTime.now();
 
-    final log = NetworkLog(
+    final log = SimpleOverlayNetworkLog(
       timestamp: timestamp,
       tag: request.path,
       method: request.method,

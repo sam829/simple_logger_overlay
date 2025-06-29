@@ -9,32 +9,32 @@ import '../models/simple_log.dart';
 
 /// A page that displays detailed information about a log entry.
 ///
-/// This widget can display either a [SimpleLog] or [NetworkLog] in a user-friendly format.
+/// This widget can display either a [SimpleOverlayLog] or [SimpleOverlayNetworkLog] in a user-friendly format.
 /// It provides a detailed view of all log properties and allows copying the raw log data.
 ///
 /// The page automatically adapts its layout based on the type of log being displayed.
 /// For network logs, it shows request/response details including headers and bodies.
-class LogDetailPage extends StatelessWidget {
+class SimpleOverlayLogDetailPage extends StatelessWidget {
   /// The simple log entry to display, if any.
   ///
   /// Only one of [simple] or [network] should be non-null.
-  final SimpleLog? simple;
+  final SimpleOverlayLog? simple;
 
   /// The network log entry to display, if any.
   ///
   /// Only one of [simple] or [network] should be non-null.
-  final NetworkLog? network;
+  final SimpleOverlayNetworkLog? network;
 
-  /// Creates a detail page for a [SimpleLog] entry.
+  /// Creates a detail page for a [SimpleOverlayLog] entry.
   ///
   /// The [simple] parameter must not be null.
-  const LogDetailPage.simple({super.key, required this.simple})
+  const SimpleOverlayLogDetailPage.simple({super.key, required this.simple})
       : network = null;
 
-  /// Creates a detail page for a [NetworkLog] entry.
+  /// Creates a detail page for a [SimpleOverlayNetworkLog] entry.
   ///
   /// The [network] parameter must not be null.
-  const LogDetailPage.network({super.key, required this.network})
+  const SimpleOverlayLogDetailPage.network({super.key, required this.network})
       : simple = null;
 
   /// Creates a JSON string representation of the current log entry.

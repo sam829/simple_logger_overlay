@@ -7,32 +7,34 @@ import '../log_detail_page.dart';
 
 /// A card widget that displays a log entry in a visually appealing way.
 ///
-/// This widget can display either a [SimpleLog] or [NetworkLog] entry.
+/// This widget can display either a [SimpleOverlayLog] or [SimpleOverlayNetworkLog] entry.
 /// The appearance changes based on the log type and level/status:
 /// - Simple logs show different colors based on their [LogLevel]
 /// - Network logs show green for success and red for errors
 ///
 /// Tapping on a card navigates to a detailed view of the log entry.
-class LogCard extends StatelessWidget {
+class SimpleOverlayLogCard extends StatelessWidget {
   /// The simple log entry to display, if any.
   ///
   /// Only one of [simple] or [network] should be non-null.
-  final SimpleLog? simple;
+  final SimpleOverlayLog? simple;
 
   /// The network log entry to display, if any.
   ///
   /// Only one of [simple] or [network] should be non-null.
-  final NetworkLog? network;
+  final SimpleOverlayNetworkLog? network;
 
-  /// Creates a [LogCard] that displays a [SimpleLog] entry.
+  /// Creates a [SimpleOverlayLogCard] that displays a [SimpleOverlayLog] entry.
   ///
   /// The [simple] parameter must not be null.
-  const LogCard.simple({super.key, required this.simple}) : network = null;
+  const SimpleOverlayLogCard.simple({super.key, required this.simple})
+      : network = null;
 
-  /// Creates a [LogCard] that displays a [NetworkLog] entry.
+  /// Creates a [SimpleOverlayLogCard] that displays a [SimpleOverlayNetworkLog] entry.
   ///
   /// The [network] parameter must not be null.
-  const LogCard.network({super.key, required this.network}) : simple = null;
+  const SimpleOverlayLogCard.network({super.key, required this.network})
+      : simple = null;
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +66,7 @@ class LogCard extends StatelessWidget {
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => LogDetailPage.simple(
+              builder: (_) => SimpleOverlayLogDetailPage.simple(
                 simple: simple,
               ),
             ),
@@ -90,7 +92,8 @@ class LogCard extends StatelessWidget {
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => LogDetailPage.network(network: network!),
+              builder: (_) =>
+                  SimpleOverlayLogDetailPage.network(network: network!),
             ),
           ),
         ),

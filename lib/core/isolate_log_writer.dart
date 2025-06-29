@@ -16,7 +16,7 @@ import 'dart:io' show File, FileMode, Directory;
 ///
 /// This class is not intended to be instantiated; use the static `writeLog`
 /// method instead.
-class IsolateLogWriter {
+class SimpleOverlayIsolateLogWriter {
   /// Writes a log entry to a file in JSON Lines format.
   ///
   /// The log entry is appended to a file named `{type}_logs.jsonl` within the specified

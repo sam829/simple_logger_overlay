@@ -86,7 +86,7 @@ application lifecycle changes.</li>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 void didChangeAppLifecycleState(AppLifecycleState state) {
-  _storage.addSimpleLog(SimpleLog(
+  _storage.addSimpleLog(SimpleOverlayLog(
     timestamp: DateTime.now(),
     tag: &#39;AppLifecycle&#39;,
     level: LogLevel.info,
@@ -120,7 +120,7 @@ void didChangeAppLifecycleState(AppLifecycleState state) {
 <footer>
   <span class="no-break">
     simple_logger_overlay
-      0.1.4
+      0.1.6
   </span>
   
 </footer>
