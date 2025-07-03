@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.9
+
+- go_router causing issue on version `15.3.2`, retracted to `15.1.3`
+
 ## 0.1.8
 
 - ✳️ Adjusted `intl` package version to `>=0.19.0 <0.21.0`, for backward compatibility
