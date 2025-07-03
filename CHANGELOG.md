@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.8
+
+- ✳️ Adjusted `intl` package version to `>=0.19.0 <0.21.0`, for backward compatibility
+
 ## 0.1.7
 
 - 🐞 The `formatTimestampForUTC` function has been updated to correctly convert the input `DateTime` to UTC before formatting.
