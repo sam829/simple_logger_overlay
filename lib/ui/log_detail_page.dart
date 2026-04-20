@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:flutter_html/flutter_html.dart';
 
+import '../core/simple_logger_overlay_config.dart';
 import '../core/simple_overlay_localizations.dart';
 import '../core/utils/date_time_helper.dart';
 import '../models/network_log.dart';
@@ -331,7 +332,7 @@ class SimpleOverlayLogDetailContent extends StatelessWidget {
           child: SelectableText(
             content,
             style: theme.textTheme.bodyMedium?.copyWith(
-              fontFamily: monospace ? 'monospace' : null,
+              fontFamily: monospace ? SimpleLoggerOverlayConfig.monospaceFontFamily : null,
               color: cs.onSurface,
             ),
           ),

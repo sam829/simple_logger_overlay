@@ -8,6 +8,10 @@ import '../../models/network_log.dart';
 import '../../models/simple_log.dart';
 import 'log_card.dart';
 
+// M3 emphasized decelerate — best for elements entering the screen
+const _kEntryEasing = Cubic(0.05, 0.7, 0.1, 1.0);
+const _kEntryDuration = Duration(milliseconds: 350);
+
 class SimpleOverlayTabbedLogger extends StatefulWidget {
   const SimpleOverlayTabbedLogger({super.key});
 
@@ -29,9 +33,9 @@ class _SimpleOverlayTabbedLoggerState extends State<SimpleOverlayTabbedLogger>
   bool _sortDesc = true;
   final TextEditingController _searchController = TextEditingController();
 
-  // Filter state: empty set = show all levels
+  // empty = all levels shown
   final Set<LogLevel> _levelFilter = {};
-  // null = all, true = success only, false = error only
+  // null = all, true = success, false = error
   bool? _networkSuccessFilter;
 
   StreamSubscription<SimpleOverlayLog>? _simpleSubscription;
@@ -50,7 +54,6 @@ class _SimpleOverlayTabbedLoggerState extends State<SimpleOverlayTabbedLogger>
       if (!mounted) return;
       setState(() => _simpleLogs.insert(0, log));
     });
-
     _networkSubscription = _storage.networkLogStream.listen((log) {
       if (!mounted) return;
       setState(() => _networkLogs.insert(0, log));
@@ -62,9 +65,7 @@ class _SimpleOverlayTabbedLoggerState extends State<SimpleOverlayTabbedLogger>
       _storage.getSimpleLogs(),
       _storage.getNetworkLogs(),
     ).wait;
-
     if (!mounted) return;
-
     setState(() {
       _simpleLogs
         ..clear()
@@ -85,50 +86,66 @@ class _SimpleOverlayTabbedLoggerState extends State<SimpleOverlayTabbedLogger>
   }
 
   List<SimpleOverlayLog> get _displayedSimpleLogs {
-    var logs = _simpleLogs.where((log) {
+    final logs = _simpleLogs.where((log) {
       if (_levelFilter.isNotEmpty && !_levelFilter.contains(log.level)) {
         return false;
       }
       if (_searchText != null && _searchText!.isNotEmpty) {
         final q = _searchText!.toLowerCase();
-        if (!log.message.toLowerCase().contains(q) &&
-            !log.tag.toLowerCase().contains(q)) {
-          return false;
-        }
+        return log.message.toLowerCase().contains(q) ||
+            log.tag.toLowerCase().contains(q);
       }
       return true;
-    }).toList();
-
-    logs.sort((a, b) => _sortDesc
-        ? b.timestamp.compareTo(a.timestamp)
-        : a.timestamp.compareTo(b.timestamp));
+    }).toList()
+      ..sort((a, b) => _sortDesc
+          ? b.timestamp.compareTo(a.timestamp)
+          : a.timestamp.compareTo(b.timestamp));
     return logs;
   }
 
   List<SimpleOverlayNetworkLog> get _displayedNetworkLogs {
-    var logs = _networkLogs.where((log) {
+    final logs = _networkLogs.where((log) {
       if (_networkSuccessFilter != null &&
           log.isSuccess != _networkSuccessFilter) {
         return false;
       }
       if (_searchText != null && _searchText!.isNotEmpty) {
         final q = _searchText!.toLowerCase();
-        if (!log.url.toLowerCase().contains(q) &&
-            !log.method.toLowerCase().contains(q)) {
-          return false;
-        }
+        return log.url.toLowerCase().contains(q) ||
+            log.method.toLowerCase().contains(q);
       }
       return true;
-    }).toList();
-
-    logs.sort((a, b) => _sortDesc
-        ? b.timestamp.compareTo(a.timestamp)
-        : a.timestamp.compareTo(b.timestamp));
+    }).toList()
+      ..sort((a, b) => _sortDesc
+          ? b.timestamp.compareTo(a.timestamp)
+          : a.timestamp.compareTo(b.timestamp));
     return logs;
   }
 
   bool get _hasActiveFilters =>
       _levelFilter.isNotEmpty || _networkSuccessFilter != null;
+
+  void _openFilterSheet() {
+    showModalBottomSheet(
+      context: context,
+      useSafeArea: true,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => _FilterSheet(
+        isSimpleTab: _tabController.index == 0,
+        levelFilter: Set.of(_levelFilter),
+        networkSuccessFilter: _networkSuccessFilter,
+        onApply: (levels, networkSuccess) {
+          setState(() {
+            _levelFilter
+              ..clear()
+              ..addAll(levels);
+            _networkSuccessFilter = networkSuccess;
+          });
+        },
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -137,13 +154,15 @@ class _SimpleOverlayTabbedLoggerState extends State<SimpleOverlayTabbedLogger>
     return Column(
       children: [
         _buildSearchBar(l10n),
-        _buildFilterRow(),
-        TabBar.secondary(
-          controller: _tabController,
-          tabs: [
-            Tab(text: l10n.logsTab(_simpleLogs.length)),
-            Tab(text: l10n.networkTab(_networkLogs.length)),
-          ],
+        AnimatedBuilder(
+          animation: _tabController,
+          builder: (_, __) => TabBar.secondary(
+            controller: _tabController,
+            tabs: [
+              Tab(text: l10n.logsTab(_simpleLogs.length)),
+              Tab(text: l10n.networkTab(_networkLogs.length)),
+            ],
+          ),
         ),
         Expanded(
           child: TabBarView(
@@ -159,8 +178,9 @@ class _SimpleOverlayTabbedLoggerState extends State<SimpleOverlayTabbedLogger>
   }
 
   Widget _buildSearchBar(SimpleOverlayLocalizations l10n) {
+    final cs = Theme.of(context).colorScheme;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
+      padding: const EdgeInsets.fromLTRB(12, 8, 12, 4),
       child: Row(
         children: [
           Expanded(
@@ -185,9 +205,9 @@ class _SimpleOverlayTabbedLoggerState extends State<SimpleOverlayTabbedLogger>
                   EdgeInsets.symmetric(horizontal: 12)),
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 6),
           Tooltip(
-            message: _sortDesc ? l10n.sortNewest : l10n.sortOldest,
+            message: _sortDesc ? 'Newest first' : 'Oldest first',
             child: IconButton.outlined(
               icon: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 200),
@@ -202,92 +222,22 @@ class _SimpleOverlayTabbedLoggerState extends State<SimpleOverlayTabbedLogger>
               onPressed: () => setState(() => _sortDesc = !_sortDesc),
             ),
           ),
+          const SizedBox(width: 4),
+          Badge(
+            isLabelVisible: _hasActiveFilters,
+            backgroundColor: cs.primary,
+            child: IconButton.outlined(
+              icon: Icon(
+                Icons.filter_list,
+                size: 18,
+                color: _hasActiveFilters ? cs.primary : null,
+              ),
+              onPressed: _openFilterSheet,
+            ),
+          ),
         ],
       ),
     );
-  }
-
-  Widget _buildFilterRow() {
-    return AnimatedBuilder(
-      animation: _tabController,
-      builder: (_, __) {
-        final onSimple = _tabController.index == 0;
-        return SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          padding: const EdgeInsets.fromLTRB(12, 6, 12, 4),
-          child: Row(
-            children: [
-              if (onSimple) ..._simpleLevelChips(),
-              if (!onSimple) ..._networkStatusChips(),
-              if (_hasActiveFilters) ...[
-                const SizedBox(width: 8),
-                ActionChip(
-                  label: const Text('Clear'),
-                  avatar: const Icon(Icons.close, size: 14),
-                  onPressed: () => setState(() {
-                    _levelFilter.clear();
-                    _networkSuccessFilter = null;
-                  }),
-                ),
-              ],
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  List<Widget> _simpleLevelChips() {
-    return LogLevel.values.map((level) {
-      final selected = _levelFilter.contains(level);
-      final (label, icon) = switch (level) {
-        LogLevel.debug => ('Debug', Icons.bug_report_outlined),
-        LogLevel.info => ('Info', Icons.info_outline),
-        LogLevel.error => ('Error', Icons.error_outline),
-      };
-      return Padding(
-        padding: const EdgeInsets.only(right: 6),
-        child: FilterChip(
-          label: Text(label),
-          avatar: Icon(icon, size: 14),
-          selected: selected,
-          onSelected: (val) => setState(() {
-            if (val) {
-              _levelFilter.add(level);
-            } else {
-              _levelFilter.remove(level);
-            }
-          }),
-          visualDensity: VisualDensity.compact,
-        ),
-      );
-    }).toList();
-  }
-
-  List<Widget> _networkStatusChips() {
-    return [
-      Padding(
-        padding: const EdgeInsets.only(right: 6),
-        child: FilterChip(
-          label: const Text('Success'),
-          avatar: const Icon(Icons.check_circle_outline, size: 14),
-          selected: _networkSuccessFilter == true,
-          onSelected: (val) => setState(() {
-            _networkSuccessFilter = val ? true : null;
-          }),
-          visualDensity: VisualDensity.compact,
-        ),
-      ),
-      FilterChip(
-        label: const Text('Error'),
-        avatar: const Icon(Icons.cancel_outlined, size: 14),
-        selected: _networkSuccessFilter == false,
-        onSelected: (val) => setState(() {
-          _networkSuccessFilter = val ? false : null;
-        }),
-        visualDensity: VisualDensity.compact,
-      ),
-    ];
   }
 
   Widget _buildLogList(SimpleOverlayLocalizations l10n) {
@@ -297,7 +247,6 @@ class _SimpleOverlayTabbedLoggerState extends State<SimpleOverlayTabbedLogger>
       return _emptyState(
           Icons.receipt_long_outlined, l10n.noLogsTitle, l10n.noLogsSubtitle);
     }
-
     if (logs.isEmpty) {
       return _emptyState(
         Icons.filter_list_off,
@@ -313,13 +262,10 @@ class _SimpleOverlayTabbedLoggerState extends State<SimpleOverlayTabbedLogger>
       child: ListView.builder(
         padding: const EdgeInsets.only(top: 4, bottom: 16),
         itemCount: logs.length,
-        itemBuilder: (_, i) {
-          final log = logs[i];
-          return _animatedCard(
-            key: ValueKey(log.timestamp.microsecondsSinceEpoch),
-            child: SimpleOverlayLogCard.simple(simple: log),
-          );
-        },
+        itemBuilder: (_, i) => _animatedCard(
+          key: ValueKey(logs[i].timestamp.microsecondsSinceEpoch),
+          child: SimpleOverlayLogCard.simple(simple: logs[i]),
+        ),
       ),
     );
   }
@@ -331,7 +277,6 @@ class _SimpleOverlayTabbedLoggerState extends State<SimpleOverlayTabbedLogger>
       return _emptyState(Icons.wifi_off_outlined, l10n.noNetworkTitle,
           l10n.noNetworkSubtitle);
     }
-
     if (logs.isEmpty) {
       return _emptyState(
         Icons.filter_list_off,
@@ -347,13 +292,10 @@ class _SimpleOverlayTabbedLoggerState extends State<SimpleOverlayTabbedLogger>
       child: ListView.builder(
         padding: const EdgeInsets.only(top: 4, bottom: 16),
         itemCount: logs.length,
-        itemBuilder: (_, i) {
-          final log = logs[i];
-          return _animatedCard(
-            key: ValueKey(log.timestamp.microsecondsSinceEpoch),
-            child: SimpleOverlayLogCard.network(network: log),
-          );
-        },
+        itemBuilder: (_, i) => _animatedCard(
+          key: ValueKey(logs[i].timestamp.microsecondsSinceEpoch),
+          child: SimpleOverlayLogCard.network(network: logs[i]),
+        ),
       ),
     );
   }
@@ -362,12 +304,12 @@ class _SimpleOverlayTabbedLoggerState extends State<SimpleOverlayTabbedLogger>
     return TweenAnimationBuilder<double>(
       key: key,
       tween: Tween(begin: 0.0, end: 1.0),
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeOutCubic,
+      duration: _kEntryDuration,
+      curve: _kEntryEasing,
       builder: (_, value, c) => Opacity(
-        opacity: value,
+        opacity: value.clamp(0.0, 1.0),
         child: Transform.translate(
-          offset: Offset(0, (1 - value) * 16),
+          offset: Offset(0, (1 - value) * 20),
           child: c,
         ),
       ),
@@ -392,9 +334,228 @@ class _SimpleOverlayTabbedLoggerState extends State<SimpleOverlayTabbedLogger>
             const SizedBox(height: 4),
             Text(subtitle,
                 textAlign: TextAlign.center,
-                style:
-                    theme.textTheme.bodySmall?.copyWith(color: cs.outline)),
+                style: theme.textTheme.bodySmall?.copyWith(color: cs.outline)),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Filter bottom sheet
+// ---------------------------------------------------------------------------
+
+class _FilterSheet extends StatefulWidget {
+  const _FilterSheet({
+    required this.isSimpleTab,
+    required this.levelFilter,
+    required this.networkSuccessFilter,
+    required this.onApply,
+  });
+
+  final bool isSimpleTab;
+  final Set<LogLevel> levelFilter;
+  final bool? networkSuccessFilter;
+  final void Function(Set<LogLevel> levels, bool? networkSuccess) onApply;
+
+  @override
+  State<_FilterSheet> createState() => _FilterSheetState();
+}
+
+class _FilterSheetState extends State<_FilterSheet> {
+  late Set<LogLevel> _levels;
+  late bool? _networkSuccess;
+
+  @override
+  void initState() {
+    super.initState();
+    _levels = Set.of(widget.levelFilter);
+    _networkSuccess = widget.networkSuccessFilter;
+  }
+
+  void _apply() {
+    widget.onApply(_levels, _networkSuccess);
+    Navigator.of(context).pop();
+  }
+
+  void _clear() {
+    setState(() {
+      _levels.clear();
+      _networkSuccess = null;
+    });
+    widget.onApply({}, null);
+    Navigator.of(context).pop();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final hasActive = _levels.isNotEmpty || _networkSuccess != null;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: cs.surfaceContainerLow,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+      ),
+      padding: const EdgeInsets.fromLTRB(24, 12, 24, 32),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: Container(
+              width: 32,
+              height: 4,
+              decoration: BoxDecoration(
+                color: cs.onSurfaceVariant.withValues(alpha: 0.3),
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              Text('Filter',
+                  style: theme.textTheme.titleLarge
+                      ?.copyWith(color: cs.onSurface)),
+              const Spacer(),
+              if (hasActive)
+                TextButton(
+                  onPressed: _clear,
+                  child: const Text('Clear all'),
+                ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          if (widget.isSimpleTab) ...[
+            Text('Log Level',
+                style: theme.textTheme.labelLarge
+                    ?.copyWith(color: cs.onSurfaceVariant)),
+            const SizedBox(height: 12),
+            _levelOption(context, LogLevel.debug, 'Debug',
+                Icons.bug_report_outlined, cs.tertiary),
+            _levelOption(context, LogLevel.info, 'Info', Icons.info_outline,
+                cs.primary),
+            _levelOption(context, LogLevel.error, 'Error', Icons.error_outline,
+                cs.error),
+          ] else ...[
+            Text('Request Status',
+                style: theme.textTheme.labelLarge
+                    ?.copyWith(color: cs.onSurfaceVariant)),
+            const SizedBox(height: 12),
+            _networkOption(
+                context, true, 'Success', Icons.check_circle_outline, cs.primary),
+            _networkOption(
+                context, false, 'Error', Icons.cancel_outlined, cs.error),
+          ],
+          const SizedBox(height: 24),
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton(
+              onPressed: _apply,
+              child: const Text('Apply'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _levelOption(BuildContext context, LogLevel level, String label,
+      IconData icon, Color accent) {
+    final cs = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final selected = _levels.contains(level);
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: () => setState(() {
+          if (selected) {
+            _levels.remove(level);
+          } else {
+            _levels.add(level);
+          }
+        }),
+        child: Container(
+          margin: const EdgeInsets.only(bottom: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          decoration: BoxDecoration(
+            color: selected
+                ? accent.withValues(alpha: 0.12)
+                : cs.surfaceContainerHighest,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: selected ? accent.withValues(alpha: 0.5) : Colors.transparent,
+              width: 1.5,
+            ),
+          ),
+          child: Row(
+            children: [
+              Icon(icon, size: 20, color: selected ? accent : cs.onSurfaceVariant),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Text(label,
+                    style: theme.textTheme.bodyLarge?.copyWith(
+                      color: selected ? accent : cs.onSurface,
+                      fontWeight:
+                          selected ? FontWeight.w600 : FontWeight.w400,
+                    )),
+              ),
+              if (selected)
+                Icon(Icons.check_rounded, size: 18, color: accent),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _networkOption(BuildContext context, bool successValue, String label,
+      IconData icon, Color accent) {
+    final cs = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final selected = _networkSuccess == successValue;
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: () => setState(() {
+          _networkSuccess = selected ? null : successValue;
+        }),
+        child: Container(
+          margin: const EdgeInsets.only(bottom: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          decoration: BoxDecoration(
+            color: selected
+                ? accent.withValues(alpha: 0.12)
+                : cs.surfaceContainerHighest,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: selected ? accent.withValues(alpha: 0.5) : Colors.transparent,
+              width: 1.5,
+            ),
+          ),
+          child: Row(
+            children: [
+              Icon(icon, size: 20, color: selected ? accent : cs.onSurfaceVariant),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Text(label,
+                    style: theme.textTheme.bodyLarge?.copyWith(
+                      color: selected ? accent : cs.onSurface,
+                      fontWeight:
+                          selected ? FontWeight.w600 : FontWeight.w400,
+                    )),
+              ),
+              if (selected)
+                Icon(Icons.check_rounded, size: 18, color: accent),
+            ],
+          ),
         ),
       ),
     );
