@@ -30,6 +30,7 @@ class SimpleOverlayLogCard extends StatelessWidget {
 
   Widget _buildSimpleCard(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
+    final brightness = Theme.of(context).brightness;
 
     final (bg, fg, icon) = switch (simple!.level) {
       LogLevel.debug => (
@@ -62,13 +63,10 @@ class SimpleOverlayLogCard extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(16)),
         ),
         openShape: const RoundedRectangleBorder(),
-        openBuilder: (ctx, _) {
-          final b = Theme.of(ctx).brightness;
-          return Theme(
-            data: SimpleLoggerOverlayConfig.instance.buildTheme(b),
-            child: SimpleOverlayLogDetailPage.simple(simple: simple),
-          );
-        },
+        openBuilder: (_, __) => Theme(
+          data: SimpleLoggerOverlayConfig.instance.buildTheme(brightness),
+          child: SimpleOverlayLogDetailPage.simple(simple: simple),
+        ),
         closedBuilder: (_, openContainer) => InkWell(
           onTap: openContainer,
           child: Padding(
@@ -115,6 +113,7 @@ class SimpleOverlayLogCard extends StatelessWidget {
 
   Widget _buildNetworkCard(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
+    final brightness = Theme.of(context).brightness;
     final isSuccess = network!.isSuccess;
 
     final bg = isSuccess ? cs.secondaryContainer : cs.errorContainer;
@@ -134,13 +133,10 @@ class SimpleOverlayLogCard extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(16)),
         ),
         openShape: const RoundedRectangleBorder(),
-        openBuilder: (ctx, _) {
-          final b = Theme.of(ctx).brightness;
-          return Theme(
-            data: SimpleLoggerOverlayConfig.instance.buildTheme(b),
-            child: SimpleOverlayLogDetailPage.network(network: network!),
-          );
-        },
+        openBuilder: (_, __) => Theme(
+          data: SimpleLoggerOverlayConfig.instance.buildTheme(brightness),
+          child: SimpleOverlayLogDetailPage.network(network: network!),
+        ),
         closedBuilder: (_, openContainer) => InkWell(
           onTap: openContainer,
           child: Padding(

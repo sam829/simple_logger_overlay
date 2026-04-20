@@ -390,7 +390,7 @@ packages:
     source: hosted
     version: "3.0.1"
   google_fonts:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: google_fonts
       sha256: db9df7a5898d894eeda4c78143f35c30a243558be439518972366880b80bf88e
