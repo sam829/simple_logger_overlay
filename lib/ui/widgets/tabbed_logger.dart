@@ -12,6 +12,10 @@ import 'log_card.dart';
 const _kEntryEasing = Cubic(0.05, 0.7, 0.1, 1.0);
 const _kEntryDuration = Duration(milliseconds: 350);
 
+// Spring overshoot for high-severity entries (error logs, failed requests)
+const _kErrorEasing = Cubic(0.34, 1.4, 0.64, 1.0);
+const _kErrorDuration = Duration(milliseconds: 300);
+
 class SimpleOverlayTabbedLogger extends StatefulWidget {
   const SimpleOverlayTabbedLogger({super.key});
 
@@ -131,6 +135,7 @@ class _SimpleOverlayTabbedLoggerState extends State<SimpleOverlayTabbedLogger>
       useSafeArea: true,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
+      barrierColor: Colors.black.withValues(alpha: 0.32),
       builder: (_) => _FilterSheet(
         isSimpleTab: _tabController.index == 0,
         levelFilter: Set.of(_levelFilter),
@@ -223,17 +228,36 @@ class _SimpleOverlayTabbedLoggerState extends State<SimpleOverlayTabbedLogger>
             ),
           ),
           const SizedBox(width: 4),
-          Badge(
-            isLabelVisible: _hasActiveFilters,
-            backgroundColor: cs.primary,
-            child: IconButton.outlined(
-              icon: Icon(
-                Icons.filter_list,
-                size: 18,
-                color: _hasActiveFilters ? cs.primary : null,
+          // Animated badge dot — scales in/out with spring overshoot
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              IconButton.outlined(
+                icon: Icon(
+                  Icons.filter_list,
+                  size: 18,
+                  color: _hasActiveFilters ? cs.primary : null,
+                ),
+                onPressed: _openFilterSheet,
               ),
-              onPressed: _openFilterSheet,
-            ),
+              Positioned(
+                right: 6,
+                top: 6,
+                child: AnimatedScale(
+                  scale: _hasActiveFilters ? 1.0 : 0.0,
+                  duration: const Duration(milliseconds: 220),
+                  curve: Curves.easeOutBack,
+                  child: Container(
+                    width: 8,
+                    height: 8,
+                    decoration: BoxDecoration(
+                      color: cs.primary,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -264,6 +288,7 @@ class _SimpleOverlayTabbedLoggerState extends State<SimpleOverlayTabbedLogger>
         itemCount: logs.length,
         itemBuilder: (_, i) => _animatedCard(
           key: ValueKey(logs[i].timestamp.microsecondsSinceEpoch),
+          isError: logs[i].level == LogLevel.error,
           child: SimpleOverlayLogCard.simple(simple: logs[i]),
         ),
       ),
@@ -294,22 +319,30 @@ class _SimpleOverlayTabbedLoggerState extends State<SimpleOverlayTabbedLogger>
         itemCount: logs.length,
         itemBuilder: (_, i) => _animatedCard(
           key: ValueKey(logs[i].timestamp.microsecondsSinceEpoch),
+          isError: !logs[i].isSuccess,
           child: SimpleOverlayLogCard.network(network: logs[i]),
         ),
       ),
     );
   }
 
-  Widget _animatedCard({required Key key, required Widget child}) {
+  Widget _animatedCard({
+    required Key key,
+    required Widget child,
+    bool isError = false,
+  }) {
     return TweenAnimationBuilder<double>(
       key: key,
       tween: Tween(begin: 0.0, end: 1.0),
-      duration: _kEntryDuration,
-      curve: _kEntryEasing,
+      duration: isError ? _kErrorDuration : _kEntryDuration,
+      curve: isError ? _kErrorEasing : _kEntryEasing,
       builder: (_, value, c) => Opacity(
+        // Clamp opacity so spring overshoot doesn't cause flicker
         opacity: value.clamp(0.0, 1.0),
         child: Transform.translate(
-          offset: Offset(0, (1 - value) * 20),
+          // Overshoot curve makes value > 1.0 briefly → element bounces
+          // slightly past its final position then settles (only for errors)
+          offset: Offset(0, (1 - value) * (isError ? 14.0 : 20.0)),
           child: c,
         ),
       ),
@@ -434,21 +467,68 @@ class _FilterSheetState extends State<_FilterSheet> {
                 style: theme.textTheme.labelLarge
                     ?.copyWith(color: cs.onSurfaceVariant)),
             const SizedBox(height: 12),
-            _levelOption(context, LogLevel.debug, 'Debug',
-                Icons.bug_report_outlined, cs.tertiary),
-            _levelOption(context, LogLevel.info, 'Info', Icons.info_outline,
-                cs.primary),
-            _levelOption(context, LogLevel.error, 'Error', Icons.error_outline,
-                cs.error),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                _levelChip(
+                  cs: cs,
+                  level: LogLevel.debug,
+                  label: 'Debug',
+                  icon: Icons.bug_report_outlined,
+                  selectedBg: cs.tertiaryContainer,
+                  selectedFg: cs.onTertiaryContainer,
+                  accentBorder: cs.tertiary,
+                ),
+                _levelChip(
+                  cs: cs,
+                  level: LogLevel.info,
+                  label: 'Info',
+                  icon: Icons.info_outline,
+                  selectedBg: cs.primaryContainer,
+                  selectedFg: cs.onPrimaryContainer,
+                  accentBorder: cs.primary,
+                ),
+                _levelChip(
+                  cs: cs,
+                  level: LogLevel.error,
+                  label: 'Error',
+                  icon: Icons.error_outline,
+                  selectedBg: cs.errorContainer,
+                  selectedFg: cs.onErrorContainer,
+                  accentBorder: cs.error,
+                ),
+              ],
+            ),
           ] else ...[
             Text('Request Status',
                 style: theme.textTheme.labelLarge
                     ?.copyWith(color: cs.onSurfaceVariant)),
             const SizedBox(height: 12),
-            _networkOption(
-                context, true, 'Success', Icons.check_circle_outline, cs.primary),
-            _networkOption(
-                context, false, 'Error', Icons.cancel_outlined, cs.error),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                _networkChip(
+                  cs: cs,
+                  value: true,
+                  label: 'Success',
+                  icon: Icons.check_circle_outline,
+                  selectedBg: cs.secondaryContainer,
+                  selectedFg: cs.onSecondaryContainer,
+                  accentBorder: cs.secondary,
+                ),
+                _networkChip(
+                  cs: cs,
+                  value: false,
+                  label: 'Error',
+                  icon: Icons.cancel_outlined,
+                  selectedBg: cs.errorContainer,
+                  selectedFg: cs.onErrorContainer,
+                  accentBorder: cs.error,
+                ),
+              ],
+            ),
           ],
           const SizedBox(height: 24),
           SizedBox(
@@ -463,101 +543,65 @@ class _FilterSheetState extends State<_FilterSheet> {
     );
   }
 
-  Widget _levelOption(BuildContext context, LogLevel level, String label,
-      IconData icon, Color accent) {
-    final cs = Theme.of(context).colorScheme;
-    final theme = Theme.of(context);
+  Widget _levelChip({
+    required ColorScheme cs,
+    required LogLevel level,
+    required String label,
+    required IconData icon,
+    required Color selectedBg,
+    required Color selectedFg,
+    required Color accentBorder,
+  }) {
     final selected = _levels.contains(level);
-
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onTap: () => setState(() {
-          if (selected) {
-            _levels.remove(level);
-          } else {
-            _levels.add(level);
-          }
-        }),
-        child: Container(
-          margin: const EdgeInsets.only(bottom: 8),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-          decoration: BoxDecoration(
-            color: selected
-                ? accent.withValues(alpha: 0.12)
-                : cs.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: selected ? accent.withValues(alpha: 0.5) : Colors.transparent,
-              width: 1.5,
-            ),
-          ),
-          child: Row(
-            children: [
-              Icon(icon, size: 20, color: selected ? accent : cs.onSurfaceVariant),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Text(label,
-                    style: theme.textTheme.bodyLarge?.copyWith(
-                      color: selected ? accent : cs.onSurface,
-                      fontWeight:
-                          selected ? FontWeight.w600 : FontWeight.w400,
-                    )),
-              ),
-              if (selected)
-                Icon(Icons.check_rounded, size: 18, color: accent),
-            ],
-          ),
+    return FilterChip(
+      label: Text(
+        label,
+        style: TextStyle(
+          color: selected ? selectedFg : cs.onSurface,
+          fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
         ),
       ),
+      avatar: Icon(icon, size: 16, color: selected ? selectedFg : cs.onSurfaceVariant),
+      selected: selected,
+      selectedColor: selectedBg,
+      checkmarkColor: selectedFg,
+      showCheckmark: false,
+      side: selected
+          ? BorderSide(color: accentBorder.withValues(alpha: 0.45), width: 1.5)
+          : BorderSide(color: cs.outlineVariant, width: 1.0),
+      onSelected: (v) => setState(
+          () => v ? _levels.add(level) : _levels.remove(level)),
     );
   }
 
-  Widget _networkOption(BuildContext context, bool successValue, String label,
-      IconData icon, Color accent) {
-    final cs = Theme.of(context).colorScheme;
-    final theme = Theme.of(context);
-    final selected = _networkSuccess == successValue;
-
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onTap: () => setState(() {
-          _networkSuccess = selected ? null : successValue;
-        }),
-        child: Container(
-          margin: const EdgeInsets.only(bottom: 8),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-          decoration: BoxDecoration(
-            color: selected
-                ? accent.withValues(alpha: 0.12)
-                : cs.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: selected ? accent.withValues(alpha: 0.5) : Colors.transparent,
-              width: 1.5,
-            ),
-          ),
-          child: Row(
-            children: [
-              Icon(icon, size: 20, color: selected ? accent : cs.onSurfaceVariant),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Text(label,
-                    style: theme.textTheme.bodyLarge?.copyWith(
-                      color: selected ? accent : cs.onSurface,
-                      fontWeight:
-                          selected ? FontWeight.w600 : FontWeight.w400,
-                    )),
-              ),
-              if (selected)
-                Icon(Icons.check_rounded, size: 18, color: accent),
-            ],
-          ),
+  Widget _networkChip({
+    required ColorScheme cs,
+    required bool value,
+    required String label,
+    required IconData icon,
+    required Color selectedBg,
+    required Color selectedFg,
+    required Color accentBorder,
+  }) {
+    final selected = _networkSuccess == value;
+    return FilterChip(
+      label: Text(
+        label,
+        style: TextStyle(
+          color: selected ? selectedFg : cs.onSurface,
+          fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
         ),
       ),
+      avatar: Icon(icon, size: 16, color: selected ? selectedFg : cs.onSurfaceVariant),
+      selected: selected,
+      selectedColor: selectedBg,
+      checkmarkColor: selectedFg,
+      showCheckmark: false,
+      side: selected
+          ? BorderSide(color: accentBorder.withValues(alpha: 0.45), width: 1.5)
+          : BorderSide(color: cs.outlineVariant, width: 1.0),
+      onSelected: (_) =>
+          setState(() => _networkSuccess = selected ? null : value),
     );
   }
 }
