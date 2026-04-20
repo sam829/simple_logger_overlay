@@ -29,6 +29,11 @@ class _SimpleOverlayTabbedLoggerState extends State<SimpleOverlayTabbedLogger>
   bool _sortDesc = true;
   final TextEditingController _searchController = TextEditingController();
 
+  // Filter state: empty set = show all levels
+  final Set<LogLevel> _levelFilter = {};
+  // null = all, true = success only, false = error only
+  bool? _networkSuccessFilter;
+
   StreamSubscription<SimpleOverlayLog>? _simpleSubscription;
   StreamSubscription<SimpleOverlayNetworkLog>? _networkSubscription;
 
@@ -79,31 +84,51 @@ class _SimpleOverlayTabbedLoggerState extends State<SimpleOverlayTabbedLogger>
     super.dispose();
   }
 
-  bool get _isFiltering => _searchText != null && _searchText!.isNotEmpty;
-
-  List<SimpleOverlayLog> get _filteredSimpleLogs {
-    final filtered = _simpleLogs.where((log) {
-      final q = _searchText!.toLowerCase();
-      return log.message.toLowerCase().contains(q) ||
-          log.tag.toLowerCase().contains(q);
+  List<SimpleOverlayLog> get _displayedSimpleLogs {
+    var logs = _simpleLogs.where((log) {
+      if (_levelFilter.isNotEmpty && !_levelFilter.contains(log.level)) {
+        return false;
+      }
+      if (_searchText != null && _searchText!.isNotEmpty) {
+        final q = _searchText!.toLowerCase();
+        if (!log.message.toLowerCase().contains(q) &&
+            !log.tag.toLowerCase().contains(q)) {
+          return false;
+        }
+      }
+      return true;
     }).toList();
-    filtered.sort((a, b) => _sortDesc
+
+    logs.sort((a, b) => _sortDesc
         ? b.timestamp.compareTo(a.timestamp)
         : a.timestamp.compareTo(b.timestamp));
-    return filtered;
+    return logs;
   }
 
-  List<SimpleOverlayNetworkLog> get _filteredNetworkLogs {
-    final filtered = _networkLogs.where((log) {
-      final q = _searchText!.toLowerCase();
-      return log.url.toLowerCase().contains(q) ||
-          log.method.toLowerCase().contains(q);
+  List<SimpleOverlayNetworkLog> get _displayedNetworkLogs {
+    var logs = _networkLogs.where((log) {
+      if (_networkSuccessFilter != null &&
+          log.isSuccess != _networkSuccessFilter) {
+        return false;
+      }
+      if (_searchText != null && _searchText!.isNotEmpty) {
+        final q = _searchText!.toLowerCase();
+        if (!log.url.toLowerCase().contains(q) &&
+            !log.method.toLowerCase().contains(q)) {
+          return false;
+        }
+      }
+      return true;
     }).toList();
-    filtered.sort((a, b) => _sortDesc
+
+    logs.sort((a, b) => _sortDesc
         ? b.timestamp.compareTo(a.timestamp)
         : a.timestamp.compareTo(b.timestamp));
-    return filtered;
+    return logs;
   }
+
+  bool get _hasActiveFilters =>
+      _levelFilter.isNotEmpty || _networkSuccessFilter != null;
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +137,7 @@ class _SimpleOverlayTabbedLoggerState extends State<SimpleOverlayTabbedLogger>
     return Column(
       children: [
         _buildSearchBar(l10n),
-        const SizedBox(height: 4),
+        _buildFilterRow(),
         TabBar.secondary(
           controller: _tabController,
           tabs: [
@@ -182,16 +207,105 @@ class _SimpleOverlayTabbedLoggerState extends State<SimpleOverlayTabbedLogger>
     );
   }
 
-  Widget _buildLogList(SimpleOverlayLocalizations l10n) {
-    final logs = _isFiltering ? _filteredSimpleLogs : _simpleLogs;
+  Widget _buildFilterRow() {
+    return AnimatedBuilder(
+      animation: _tabController,
+      builder: (_, __) {
+        final onSimple = _tabController.index == 0;
+        return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          padding: const EdgeInsets.fromLTRB(12, 6, 12, 4),
+          child: Row(
+            children: [
+              if (onSimple) ..._simpleLevelChips(),
+              if (!onSimple) ..._networkStatusChips(),
+              if (_hasActiveFilters) ...[
+                const SizedBox(width: 8),
+                ActionChip(
+                  label: const Text('Clear'),
+                  avatar: const Icon(Icons.close, size: 14),
+                  onPressed: () => setState(() {
+                    _levelFilter.clear();
+                    _networkSuccessFilter = null;
+                  }),
+                ),
+              ],
+            ],
+          ),
+        );
+      },
+    );
+  }
 
-    if (logs.isEmpty) {
-      if (_isFiltering) {
-        return _emptyState(Icons.search_off, l10n.noResultsTitle,
-            l10n.noResultsSubtitle(_searchText!));
-      }
+  List<Widget> _simpleLevelChips() {
+    return LogLevel.values.map((level) {
+      final selected = _levelFilter.contains(level);
+      final (label, icon) = switch (level) {
+        LogLevel.debug => ('Debug', Icons.bug_report_outlined),
+        LogLevel.info => ('Info', Icons.info_outline),
+        LogLevel.error => ('Error', Icons.error_outline),
+      };
+      return Padding(
+        padding: const EdgeInsets.only(right: 6),
+        child: FilterChip(
+          label: Text(label),
+          avatar: Icon(icon, size: 14),
+          selected: selected,
+          onSelected: (val) => setState(() {
+            if (val) {
+              _levelFilter.add(level);
+            } else {
+              _levelFilter.remove(level);
+            }
+          }),
+          visualDensity: VisualDensity.compact,
+        ),
+      );
+    }).toList();
+  }
+
+  List<Widget> _networkStatusChips() {
+    return [
+      Padding(
+        padding: const EdgeInsets.only(right: 6),
+        child: FilterChip(
+          label: const Text('Success'),
+          avatar: const Icon(Icons.check_circle_outline, size: 14),
+          selected: _networkSuccessFilter == true,
+          onSelected: (val) => setState(() {
+            _networkSuccessFilter = val ? true : null;
+          }),
+          visualDensity: VisualDensity.compact,
+        ),
+      ),
+      FilterChip(
+        label: const Text('Error'),
+        avatar: const Icon(Icons.cancel_outlined, size: 14),
+        selected: _networkSuccessFilter == false,
+        onSelected: (val) => setState(() {
+          _networkSuccessFilter = val ? false : null;
+        }),
+        visualDensity: VisualDensity.compact,
+      ),
+    ];
+  }
+
+  Widget _buildLogList(SimpleOverlayLocalizations l10n) {
+    final logs = _displayedSimpleLogs;
+
+    if (_simpleLogs.isEmpty) {
       return _emptyState(
           Icons.receipt_long_outlined, l10n.noLogsTitle, l10n.noLogsSubtitle);
+    }
+
+    if (logs.isEmpty) {
+      return _emptyState(
+        Icons.filter_list_off,
+        l10n.noResultsTitle,
+        _searchText != null
+            ? l10n.noResultsSubtitle(_searchText!)
+            : 'No logs match the selected filters',
+      );
     }
 
     return RefreshIndicator(
@@ -211,15 +325,21 @@ class _SimpleOverlayTabbedLoggerState extends State<SimpleOverlayTabbedLogger>
   }
 
   Widget _buildNetworkList(SimpleOverlayLocalizations l10n) {
-    final logs = _isFiltering ? _filteredNetworkLogs : _networkLogs;
+    final logs = _displayedNetworkLogs;
 
-    if (logs.isEmpty) {
-      if (_isFiltering) {
-        return _emptyState(Icons.search_off, l10n.noResultsTitle,
-            l10n.noNetworkResultsSubtitle(_searchText!));
-      }
+    if (_networkLogs.isEmpty) {
       return _emptyState(Icons.wifi_off_outlined, l10n.noNetworkTitle,
           l10n.noNetworkSubtitle);
+    }
+
+    if (logs.isEmpty) {
+      return _emptyState(
+        Icons.filter_list_off,
+        l10n.noResultsTitle,
+        _searchText != null
+            ? l10n.noNetworkResultsSubtitle(_searchText!)
+            : 'No requests match the selected filters',
+      );
     }
 
     return RefreshIndicator(
