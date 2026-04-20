@@ -19,7 +19,7 @@ Requires Flutter ≥ 3.19 (`SearchBar`, `SegmentedButton`, `SliverAppBar.large`)
 ## Dashboard Sections
 
 ### Log Levels
-Tap **Debug / Info / Error** to fire a single log. Open the overlay and watch the card slide in with M3 emphasized-decelerate easing, then tap it to see the container-transform transition to the detail page.
+Tap **Debug / Info / Error** to fire a single log. Open the overlay and watch the card slide in with M3 emphasized-decelerate easing, then tap it to see the container-transform transition to the detail page. Error-level logs use a spring overshoot curve — they bounce slightly past their final position before settling.
 
 ### Burst & Stress
 | Tile | Tests |
@@ -30,6 +30,9 @@ Tap **Debug / Info / Error** to fire a single log. Open the overlay and watch th
 ### Integrations — BLoC Example
 Navigates to a screen that fetches users from `jsonplaceholder` via Dio.
 Logs BLoC state transitions and the raw network request/response — shows JSON pretty-printing, per-field copy, and (if the response were HTML) the inline HTML renderer.
+
+### Filter Sheet
+Tap the filter icon in the overlay search bar. The badge dot animates in/out with an `easeOutBack` spring when filters are active. The sheet itself uses M3 `FilterChip` widgets (level: Debug/Info/Error; network: Success/Error) with proper state-layer coloring and a Material You modal scrim.
 
 ### Open Overlay
 Direct `FilledButton` calling `SimpleLoggerOverlay.show(...)`.

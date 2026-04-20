@@ -47,11 +47,12 @@ You're debugging a production-style Flutter app. You need to:
 
 | | Feature | Details |
 |---|---|---|
-| 🪄 | **Material You UI** | Full M3 color tokens, container-transform card transitions, spring-physics FAB |
+| 🪄 | **Material You UI** | Full M3 color tokens · container-transform card transitions · spring-physics FAB |
+| ✨ | **M3 Expressive motion** | Error logs enter with spring overshoot · FAB shadow swells on pulse · animated filter badge dot |
 | ⚡ | **Live streaming** | New logs animate in as they arrive — no pull-to-refresh |
 | 🌐 | **Network inspector** | Dio interceptor · pretty JSON · HTML renderer · per-field copy |
 | 🎨 | **Themeable** | Seed color API · Dynamic Color (Android 12+) · auto dark/light |
-| 🔍 | **Search & filter** | Full-text · level filter · status filter · sort order |
+| 🔍 | **Search & filter** | Full-text · M3 `FilterChip` level/status filter · sort order · M3 modal scrim |
 | 🔒 | **Non-blocking** | Log I/O runs in a background isolate — zero main-thread overhead |
 | 🌍 | **Localizable** | Extend one class to translate every overlay string |
 | 📤 | **Export** | Save logs as `.json` · copy any field to clipboard |
@@ -66,7 +67,7 @@ You're debugging a production-style Flutter app. You need to:
 
 ```yaml
 dependencies:
-  simple_logger_overlay: ^0.2.2
+  simple_logger_overlay: ^0.2.1
 ```
 
 ### 2 — Initialize
