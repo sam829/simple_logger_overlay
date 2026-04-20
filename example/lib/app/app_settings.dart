@@ -9,6 +9,10 @@ class AppSettings extends ChangeNotifier {
   /// null = follow device locale
   Locale? locale;
 
+  /// Use Android 12+ / Material You wallpaper-derived dynamic color scheme.
+  /// When true, [seedColor] is ignored; color picker is disabled.
+  bool isDynamicTheme = false;
+
   void setThemeMode(ThemeMode mode) {
     themeMode = mode;
     notifyListeners();
@@ -21,6 +25,11 @@ class AppSettings extends ChangeNotifier {
 
   void setLocale(Locale? l) {
     locale = l;
+    notifyListeners();
+  }
+
+  void setDynamicTheme(bool value) {
+    isDynamicTheme = value;
     notifyListeners();
   }
 }
