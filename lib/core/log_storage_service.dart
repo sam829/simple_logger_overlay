@@ -1,6 +1,7 @@
 import 'dart:async' show StreamController;
 import 'dart:isolate' show Isolate;
 
+import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:path_provider/path_provider.dart'
     show getApplicationSupportDirectory;
 import 'package:simple_logger_overlay/core/utils/date_time_helper.dart';
@@ -196,6 +197,6 @@ class SimpleOverlayLogStorageService {
 
     final formatted =
         '[$getCurrentTimestampUTC] [$getCurrentTimestampWithOffset] $emoji [$label] [$tag] $message';
-    print('$color$formatted$reset');
+    debugPrint('$color$formatted$reset');
   }
 }
