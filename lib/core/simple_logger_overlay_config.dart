@@ -19,18 +19,40 @@ class SimpleLoggerOverlayConfig {
   /// Defaults to sage-mint green — neutral and easy on developer eyes.
   Color seedColor = const Color(0xFF52B788);
 
-  /// Configure overlay appearance. Call once at app startup.
-  static void configure({Color? seedColor}) {
+  ColorScheme? _lightScheme;
+  ColorScheme? _darkScheme;
+
+  /// Configure overlay appearance. Call once at app startup or when settings change.
+  ///
+  /// Pass [lightScheme] / [darkScheme] to use a full pre-built color scheme
+  /// (e.g. from `dynamic_color`). Set [clearSchemes] to `true` to revert to
+  /// seed-based theming.
+  static void configure({
+    Color? seedColor,
+    ColorScheme? lightScheme,
+    ColorScheme? darkScheme,
+    bool clearSchemes = false,
+  }) {
     if (seedColor != null) _instance.seedColor = seedColor;
+    if (clearSchemes) {
+      _instance._lightScheme = null;
+      _instance._darkScheme = null;
+    } else {
+      if (lightScheme != null) _instance._lightScheme = lightScheme;
+      if (darkScheme != null) _instance._darkScheme = darkScheme;
+    }
   }
 
   /// Builds an overlay-specific [ThemeData].
   /// Inherits [brightness] from the host app for automatic dark/light support.
   ThemeData buildTheme(Brightness brightness) {
-    final colorScheme = ColorScheme.fromSeed(
-      seedColor: seedColor,
-      brightness: brightness,
-    );
+    final schemeOverride =
+        brightness == Brightness.light ? _lightScheme : _darkScheme;
+    final colorScheme = schemeOverride ??
+        ColorScheme.fromSeed(
+          seedColor: seedColor,
+          brightness: brightness,
+        );
 
     final base = GoogleFonts.interTextTheme();
 

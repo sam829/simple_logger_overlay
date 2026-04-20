@@ -92,5 +92,5 @@ class _SimpleOverlayLocalizationsDelegate
       Future.value(const SimpleOverlayLocalizations());
 
   @override
-  bool shouldReload(_SimpleOverlayLocalizationsDelegate old) => false;
+  bool shouldReload(_SimpleOverlayLocalizationsDelegate old) => true;
 }
