@@ -8,6 +8,7 @@ import 'core/log_storage_service.dart';
 import 'models/simple_log.dart';
 
 export 'core/app_lifecycle_logger.dart';
+export 'core/simple_logger_overlay_config.dart';
 export 'core/simple_overlay_localizations.dart';
 export 'core/bloc_logger_observer.dart';
 export 'core/export_service.dart';

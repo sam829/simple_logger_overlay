@@ -2,6 +2,7 @@ import 'dart:convert' show json, JsonEncoder, jsonEncode;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
+import 'package:flutter_html/flutter_html.dart';
 
 import '../core/simple_overlay_localizations.dart';
 import '../core/utils/date_time_helper.dart';
@@ -28,7 +29,6 @@ class SimpleOverlayLogDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isSimpleLog = simple != null;
-
     final l10n = SimpleOverlayLocalizations.of(context);
 
     return Scaffold(
@@ -44,12 +44,9 @@ class SimpleOverlayLogDetailPage extends StatelessWidget {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: isSimpleLog
-            ? SimpleOverlayLogDetailContent.simple(simple: simple)
-            : SimpleOverlayLogDetailContent.network(network: network!),
-      ),
+      body: isSimpleLog
+          ? SimpleOverlayLogDetailContent.simple(simple: simple)
+          : SimpleOverlayLogDetailContent.network(network: network!),
     );
   }
 
@@ -62,18 +59,16 @@ class SimpleOverlayLogDetailPage extends StatelessWidget {
   }
 }
 
-/// Embeddable content — used both in [SimpleOverlayLogDetailPage] and bottom sheets.
+/// Embeddable content widget — used in [SimpleOverlayLogDetailPage].
 class SimpleOverlayLogDetailContent extends StatelessWidget {
   final SimpleOverlayLog? simple;
   final SimpleOverlayNetworkLog? network;
-  final ScrollController? scrollController;
 
-  const SimpleOverlayLogDetailContent.simple(
-      {super.key, required this.simple, this.scrollController})
+  const SimpleOverlayLogDetailContent.simple({super.key, required this.simple})
       : network = null;
 
   const SimpleOverlayLogDetailContent.network(
-      {super.key, required this.network, this.scrollController})
+      {super.key, required this.network})
       : simple = null;
 
   @override
@@ -93,13 +88,13 @@ class SimpleOverlayLogDetailContent extends StatelessWidget {
     };
 
     return ListView(
-      controller: scrollController,
       padding: const EdgeInsets.all(16),
       children: [
         _levelBadge(context, simple!.level.name.toUpperCase(), levelColor),
         const SizedBox(height: 16),
         _section(context, l10n.labelTag, simple!.tag),
-        _section(context, l10n.labelTimestamp, formatTimestamp(simple!.timestamp)),
+        _section(context, l10n.labelTimestamp,
+            formatTimestamp(simple!.timestamp)),
         _section(context, l10n.labelMessage, simple!.message, monospace: true),
       ],
     );
@@ -111,7 +106,6 @@ class SimpleOverlayLogDetailContent extends StatelessWidget {
     final isSuccess = network!.isSuccess;
 
     return ListView(
-      controller: scrollController,
       padding: const EdgeInsets.all(16),
       children: [
         Row(
@@ -128,24 +122,25 @@ class SimpleOverlayLogDetailContent extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         _section(context, l10n.labelUrl, network!.url),
-        _section(context, l10n.labelTimestamp, formatTimestamp(network!.timestamp)),
+        _section(context, l10n.labelTimestamp,
+            formatTimestamp(network!.timestamp)),
         _section(
           context,
           l10n.labelRequestHeaders,
-          _prettyPrintJsonFromMap(network!.requestHeaders),
+          _prettyJson(_mapToString(network!.requestHeaders)),
           monospace: true,
         ),
         _section(
           context,
           l10n.labelRequestBody,
-          _prettyPrintJsonFromString(network!.requestBody),
+          _prettyJson(network!.requestBody),
           monospace: true,
         ),
         if (network!.responseHeaders != null)
           _section(
             context,
             l10n.labelResponseHeaders,
-            _prettyPrintJsonFromMap(network!.responseHeaders ?? {}),
+            _prettyJson(_mapToString(network!.responseHeaders ?? {})),
             monospace: true,
           ),
         if (network!.responseBody != null)
@@ -162,7 +157,7 @@ class SimpleOverlayLogDetailContent extends StatelessWidget {
         return _section(
           context,
           l10n.labelResponseBody,
-          _prettyPrintJsonFromString(body),
+          _prettyJson(body),
           monospace: true,
         );
       case _ContentType.html:
@@ -173,9 +168,10 @@ class SimpleOverlayLogDetailContent extends StatelessWidget {
   }
 
   Widget _htmlSection(
-      BuildContext context, SimpleOverlayLocalizations l10n, String html) {
+      BuildContext context, SimpleOverlayLocalizations l10n, String htmlBody) {
     final cs = Theme.of(context).colorScheme;
     final theme = Theme.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -207,7 +203,8 @@ class SimpleOverlayLogDetailContent extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.copy_outlined, size: 18),
               tooltip: 'Copy',
-              onPressed: () => _copyToClipboard(context, html),
+              visualDensity: VisualDensity.compact,
+              onPressed: () => _copyToClipboard(context, htmlBody),
             ),
           ],
         ),
@@ -215,17 +212,22 @@ class SimpleOverlayLogDetailContent extends StatelessWidget {
         Container(
           width: double.infinity,
           margin: const EdgeInsets.only(bottom: 16),
-          padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
             color: cs.surfaceContainerHighest,
             borderRadius: BorderRadius.circular(12),
           ),
-          child: SelectableText(
-            html,
-            style: theme.textTheme.bodySmall?.copyWith(
-              fontFamily: 'monospace',
-              color: cs.onSurface,
-            ),
+          clipBehavior: Clip.antiAlias,
+          child: Html(
+            data: htmlBody,
+            style: {
+              'body': Style(
+                fontSize: FontSize(14),
+                color: cs.onSurface,
+                backgroundColor: cs.surfaceContainerHighest,
+                margin: Margins.zero,
+                padding: HtmlPaddings.all(12),
+              ),
+            },
           ),
         ),
       ],
@@ -348,16 +350,7 @@ class SimpleOverlayLogDetailContent extends StatelessWidget {
     );
   }
 
-  String _prettyPrintJsonFromMap(Map<String, String> input) {
-    try {
-      const encoder = JsonEncoder.withIndent('  ');
-      return encoder.convert(input);
-    } catch (_) {
-      return input.toString();
-    }
-  }
-
-  String _prettyPrintJsonFromString(String input) {
+  String _prettyJson(String input) {
     if (input.isEmpty) return input;
     try {
       final decoded = json.decode(input);
@@ -368,17 +361,24 @@ class SimpleOverlayLogDetailContent extends StatelessWidget {
     }
   }
 
+  String _mapToString(Map<String, String> input) {
+    try {
+      const encoder = JsonEncoder.withIndent('  ');
+      return encoder.convert(input);
+    } catch (_) {
+      return input.toString();
+    }
+  }
+
   _ContentType _detectContentType(String input) {
     if (input.isEmpty) return _ContentType.plain;
     final trimmed = input.trimLeft();
-    // JSON detection
     if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
       try {
         json.decode(input);
         return _ContentType.json;
       } catch (_) {}
     }
-    // HTML detection
     final lower = trimmed.toLowerCase();
     if (lower.startsWith('<!doctype html') ||
         lower.startsWith('<html') ||

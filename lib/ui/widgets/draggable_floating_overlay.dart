@@ -105,42 +105,48 @@ class _SimpleOverlayDraggableDebuggerFABState
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final brightness = Theme.of(context).brightness;
+    final overlayTheme =
+        SimpleLoggerOverlayConfig.instance.buildTheme(brightness);
+    final cs = overlayTheme.colorScheme;
 
     return Positioned(
       left: _offset.dx,
       top: _offset.dy,
-      child: GestureDetector(
-        onPanStart: (_) => setState(() => _isDragging = true),
-        onPanUpdate: (details) {
-          setState(() => _offset += details.delta);
-        },
-        onPanEnd: (_) {
-          setState(() => _isDragging = false);
-          _snapToEdge();
-        },
-        onTapDown: (_) => setState(() => _pressed = true),
-        onTapUp: (_) => setState(() => _pressed = false),
-        onTapCancel: () => setState(() => _pressed = false),
-        onTap: () {
-          SimpleLoggerOverlay.show(context, navigatorKey: widget.navigatorKey);
-        },
-        child: AnimatedScale(
-          scale: _pressed ? 0.88 : 1.0,
-          duration: const Duration(milliseconds: 120),
-          curve: Curves.easeOut,
-          child: ScaleTransition(
-            scale: _pulseAnimation,
-            child: Material(
-              elevation: _isDragging ? 12 : 6,
-              shadowColor: theme.colorScheme.primary.withValues(alpha: 0.4),
-              shape: const CircleBorder(),
-              color: theme.colorScheme.primaryContainer,
-              child: Padding(
-                padding: const EdgeInsets.all(14.0),
-                child: Icon(
-                  Icons.bug_report_outlined,
-                  color: theme.colorScheme.onPrimaryContainer,
+      child: Theme(
+        data: overlayTheme,
+        child: GestureDetector(
+          onPanStart: (_) => setState(() => _isDragging = true),
+          onPanUpdate: (details) {
+            setState(() => _offset += details.delta);
+          },
+          onPanEnd: (_) {
+            setState(() => _isDragging = false);
+            _snapToEdge();
+          },
+          onTapDown: (_) => setState(() => _pressed = true),
+          onTapUp: (_) => setState(() => _pressed = false),
+          onTapCancel: () => setState(() => _pressed = false),
+          onTap: () {
+            SimpleLoggerOverlay.show(context, navigatorKey: widget.navigatorKey);
+          },
+          child: AnimatedScale(
+            scale: _pressed ? 0.88 : 1.0,
+            duration: const Duration(milliseconds: 120),
+            curve: Curves.easeOut,
+            child: ScaleTransition(
+              scale: _pulseAnimation,
+              child: Material(
+                elevation: _isDragging ? 12 : 6,
+                shadowColor: cs.primary.withValues(alpha: 0.4),
+                shape: const CircleBorder(),
+                color: cs.primaryContainer,
+                child: Padding(
+                  padding: const EdgeInsets.all(14.0),
+                  child: Icon(
+                    Icons.bug_report_outlined,
+                    color: cs.onPrimaryContainer,
+                  ),
                 ),
               ),
             ),

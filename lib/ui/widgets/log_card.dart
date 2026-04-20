@@ -1,5 +1,5 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-import 'package:simple_logger_overlay/core/simple_overlay_localizations.dart';
 import 'package:simple_logger_overlay/core/utils/date_time_helper.dart';
 
 import '../../models/network_log.dart';
@@ -55,7 +55,7 @@ class SimpleOverlayLogCard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
-        onTap: () => _showDetailSheet(context),
+        onTap: () => _openDetailPage(context),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(
@@ -113,7 +113,7 @@ class SimpleOverlayLogCard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
-        onTap: () => _showDetailSheet(context),
+        onTap: () => _openDetailPage(context),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(
@@ -180,100 +180,24 @@ class SimpleOverlayLogCard extends StatelessWidget {
     );
   }
 
-  void _showDetailSheet(BuildContext context) {
-    final isNetwork = network != null;
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      useSafeArea: true,
-      backgroundColor: Colors.transparent,
-      builder: (ctx) => DraggableScrollableSheet(
-        initialChildSize: isNetwork ? 0.65 : 0.5,
-        minChildSize: 0.3,
-        maxChildSize: 1.0,
-        expand: false,
-        builder: (ctx, scrollController) {
-          final cs = Theme.of(ctx).colorScheme;
-          return Container(
-            decoration: BoxDecoration(
-              color: cs.surfaceContainerLow,
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(28),
-              ),
-            ),
-            child: Column(
-              children: [
-                const SizedBox(height: 12),
-                Center(
-                  child: Container(
-                    width: 32,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: cs.onSurfaceVariant.withValues(alpha: 0.4),
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
-                ),
-                _buildSheetHeader(ctx),
-                Expanded(
-                  child: simple != null
-                      ? SimpleOverlayLogDetailContent.simple(
-                          simple: simple,
-                          scrollController: scrollController,
-                        )
-                      : SimpleOverlayLogDetailContent.network(
-                          network: network!,
-                          scrollController: scrollController,
-                        ),
-                ),
-              ],
-            ),
-          );
-        },
+  void _openDetailPage(BuildContext context) {
+    final page = simple != null
+        ? SimpleOverlayLogDetailPage.simple(simple: simple)
+        : SimpleOverlayLogDetailPage.network(network: network!);
+
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        transitionDuration: const Duration(milliseconds: 400),
+        reverseTransitionDuration: const Duration(milliseconds: 350),
+        pageBuilder: (_, __, ___) => page,
+        transitionsBuilder: (_, animation, secondaryAnimation, child) =>
+            SharedAxisTransition(
+          animation: animation,
+          secondaryAnimation: secondaryAnimation,
+          transitionType: SharedAxisTransitionType.horizontal,
+          child: child,
+        ),
       ),
     );
-  }
-
-  Widget _buildSheetHeader(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
-    final theme = Theme.of(context);
-    final l10n = SimpleOverlayLocalizations.of(context);
-    final title =
-        simple != null ? l10n.logDetailTitle : l10n.networkLogDetailTitle;
-    final logText = simple != null ? jsonEncodeLog() : null;
-
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 8, 8, 0),
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(
-              title,
-              style: theme.textTheme.titleMedium
-                  ?.copyWith(color: cs.onSurface, fontWeight: FontWeight.w600),
-            ),
-          ),
-          if (logText != null)
-            IconButton(
-              icon: const Icon(Icons.copy_outlined),
-              tooltip: 'Copy log',
-              onPressed: () {
-                // handled by content widget copy button
-              },
-            ),
-          IconButton(
-            icon: const Icon(Icons.close),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-        ],
-      ),
-    );
-  }
-
-  String jsonEncodeLog() {
-    if (simple != null) {
-      return simple!.toJson().toString();
-    }
-    return '';
   }
 }
