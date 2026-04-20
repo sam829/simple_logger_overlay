@@ -3,53 +3,24 @@ import 'dart:convert' show json, JsonEncoder, jsonEncode;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 
+import '../core/simple_overlay_localizations.dart';
 import '../core/utils/date_time_helper.dart';
 import '../models/network_log.dart';
 import '../models/simple_log.dart';
 
-/// A page that displays detailed information about a log entry.
-///
-/// This widget can display either a [SimpleOverlayLog] or [SimpleOverlayNetworkLog] in a user-friendly format.
-/// It provides a detailed view of all log properties and allows copying the raw log data.
-///
-/// The page automatically adapts its layout based on the type of log being displayed.
-/// For network logs, it shows request/response details including headers and bodies.
 class SimpleOverlayLogDetailPage extends StatelessWidget {
-  /// The simple log entry to display, if any.
-  ///
-  /// Only one of [simple] or [network] should be non-null.
   final SimpleOverlayLog? simple;
-
-  /// The network log entry to display, if any.
-  ///
-  /// Only one of [simple] or [network] should be non-null.
   final SimpleOverlayNetworkLog? network;
 
-  /// Creates a detail page for a [SimpleOverlayLog] entry.
-  ///
-  /// The [simple] parameter must not be null.
   const SimpleOverlayLogDetailPage.simple({super.key, required this.simple})
       : network = null;
 
-  /// Creates a detail page for a [SimpleOverlayNetworkLog] entry.
-  ///
-  /// The [network] parameter must not be null.
   const SimpleOverlayLogDetailPage.network({super.key, required this.network})
       : simple = null;
 
-  /// Creates a JSON string representation of the current log entry.
-  ///
-  /// This is used when copying the log to clipboard. The output is a pretty-printed
-  /// JSON string that includes all log properties.
-  ///
-  /// Returns:
-  /// A JSON string representation of the log, or an empty string if no log is available.
   String _buildCopyableLogText() {
-    if (simple != null) {
-      return jsonEncode(simple!.toJson());
-    } else if (network != null) {
-      return jsonEncode(network!.toJson());
-    }
+    if (simple != null) return jsonEncode(simple!.toJson());
+    if (network != null) return jsonEncode(network!.toJson());
     return '';
   }
 
@@ -58,112 +29,187 @@ class SimpleOverlayLogDetailPage extends StatelessWidget {
     final theme = Theme.of(context);
     final isSimpleLog = simple != null;
 
+    final l10n = SimpleOverlayLocalizations.of(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(isSimpleLog ? 'Log Detail' : 'Network Log Detail'),
+        title: Text(
+            isSimpleLog ? l10n.logDetailTitle : l10n.networkLogDetailTitle),
         backgroundColor: theme.colorScheme.surface,
         actions: [
-          // Copy button to copy the raw JSON of the log
           IconButton(
             icon: const Icon(Icons.copy),
-            tooltip: "Copy Log to Clipboard",
-            onPressed: () {
-              final content = _buildCopyableLogText();
-              Clipboard.setData(ClipboardData(text: content));
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Log copied to clipboard")),
-              );
-            },
+            tooltip: l10n.copyTooltip,
+            onPressed: () => _copyLog(context),
           ),
         ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: isSimpleLog
-            ? _buildSimpleLogDetail(context)
-            : _buildNetworkLogDetail(context),
+            ? SimpleOverlayLogDetailContent.simple(simple: simple)
+            : SimpleOverlayLogDetailContent.network(network: network!),
       ),
     );
   }
 
-  /// Builds the detail view for a simple log entry.
-  ///
-  /// Displays the log's tag, level, timestamp, and message in a scrollable list.
-  /// The message is shown in a monospace font for better readability of any
-  /// code or structured data it might contain.
+  void _copyLog(BuildContext context) {
+    Clipboard.setData(ClipboardData(text: _buildCopyableLogText()));
+    final l10n = SimpleOverlayLocalizations.of(context);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(l10n.copiedMessage)),
+    );
+  }
+}
+
+/// Embeddable content — used both in [SimpleOverlayLogDetailPage] and bottom sheets.
+class SimpleOverlayLogDetailContent extends StatelessWidget {
+  final SimpleOverlayLog? simple;
+  final SimpleOverlayNetworkLog? network;
+  final ScrollController? scrollController;
+
+  const SimpleOverlayLogDetailContent.simple(
+      {super.key, required this.simple, this.scrollController})
+      : network = null;
+
+  const SimpleOverlayLogDetailContent.network(
+      {super.key, required this.network, this.scrollController})
+      : simple = null;
+
+  @override
+  Widget build(BuildContext context) {
+    if (simple != null) return _buildSimpleLogDetail(context);
+    if (network != null) return _buildNetworkLogDetail(context);
+    return const SizedBox();
+  }
+
   Widget _buildSimpleLogDetail(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    final l10n = SimpleOverlayLocalizations.of(context);
+    final levelColor = switch (simple!.level) {
+      LogLevel.debug => cs.tertiary,
+      LogLevel.info => cs.primary,
+      LogLevel.error => cs.error,
+    };
+
     return ListView(
+      controller: scrollController,
+      padding: const EdgeInsets.all(16),
       children: [
-        _section("Tag", simple!.tag),
-        _section("Level", simple!.level.name),
-        _section("Timestamp", formatTimestamp(simple!.timestamp)),
-        _section("Message", simple!.message, monospace: true),
+        _levelBadge(context, simple!.level.name.toUpperCase(), levelColor),
+        const SizedBox(height: 16),
+        _section(context, l10n.labelTag, simple!.tag),
+        _section(context, l10n.labelTimestamp, formatTimestamp(simple!.timestamp)),
+        _section(context, l10n.labelMessage, simple!.message, monospace: true),
       ],
     );
   }
 
-  /// Builds the detail view for a network log entry.
-  ///
-  /// Displays the network request/response details including:
-  /// - Method, URL, and status code
-  /// - Timestamp
-  /// - Request headers and body (if available)
-  /// - Response headers and body (if available)
-  ///
-  /// All JSON data is pretty-printed for better readability.
   Widget _buildNetworkLogDetail(BuildContext context) {
-    return ListView(
-      children: [
-        _section("Method", network!.method),
-        _section("URL", network!.url),
-        _section("Status Code", '${network!.statusCode ?? 'ERROR'}'),
-        _section("Timestamp", formatTimestamp(network!.timestamp)),
+    final cs = Theme.of(context).colorScheme;
+    final l10n = SimpleOverlayLocalizations.of(context);
+    final isSuccess = network!.isSuccess;
 
-        // Request details
+    return ListView(
+      controller: scrollController,
+      padding: const EdgeInsets.all(16),
+      children: [
+        Row(
+          children: [
+            _statusChip(
+              context,
+              '${network!.statusCode ?? 'ERR'}',
+              isSuccess ? cs.secondaryContainer : cs.errorContainer,
+              isSuccess ? cs.onSecondaryContainer : cs.onErrorContainer,
+            ),
+            const SizedBox(width: 8),
+            _methodChip(context, network!.method),
+          ],
+        ),
+        const SizedBox(height: 16),
+        _section(context, l10n.labelUrl, network!.url),
+        _section(context, l10n.labelTimestamp, formatTimestamp(network!.timestamp)),
         _section(
-          "Request Headers",
+          context,
+          l10n.labelRequestHeaders,
           _prettyPrintJsonFromMap(network!.requestHeaders),
           monospace: true,
         ),
         _section(
-          "Request Body",
+          context,
+          l10n.labelRequestBody,
           _prettyPrintJsonFromString(network!.requestBody),
           monospace: true,
         ),
-
-        // Response details (only if available)
         if (network!.responseHeaders != null)
           _section(
-            "Response Headers",
+            context,
+            l10n.labelResponseHeaders,
             _prettyPrintJsonFromMap(network!.responseHeaders ?? {}),
             monospace: true,
           ),
         if (network!.responseBody != null)
-          _section(
-            "Response Body",
-            _prettyPrintJsonFromString(network!.responseBody!),
-            monospace: true,
-          ),
+          _responseBodySection(context, l10n, network!.responseBody!),
       ],
     );
   }
 
-  /// Creates a section widget with a title and content.
-  ///
-  /// Used to consistently format different sections of the log detail view.
-  /// The content is displayed in a light gray container with rounded corners.
-  ///
-  /// Parameters:
-  /// - [title]: The section heading
-  /// - [content]: The content to display
-  /// - [monospace]: Whether to use a monospace font (useful for code/JSON)
-  Widget _section(String title, String content, {bool monospace = false}) {
+  Widget _responseBodySection(
+      BuildContext context, SimpleOverlayLocalizations l10n, String body) {
+    final contentType = _detectContentType(body);
+    switch (contentType) {
+      case _ContentType.json:
+        return _section(
+          context,
+          l10n.labelResponseBody,
+          _prettyPrintJsonFromString(body),
+          monospace: true,
+        );
+      case _ContentType.html:
+        return _htmlSection(context, l10n, body);
+      case _ContentType.plain:
+        return _section(context, l10n.labelResponseBody, body);
+    }
+  }
+
+  Widget _htmlSection(
+      BuildContext context, SimpleOverlayLocalizations l10n, String html) {
+    final cs = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          title,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        Row(
+          children: [
+            Text(
+              l10n.labelResponseBody,
+              style: theme.textTheme.labelLarge?.copyWith(
+                color: cs.onSurfaceVariant,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              decoration: BoxDecoration(
+                color: cs.tertiaryContainer,
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Text(
+                'HTML',
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: cs.onTertiaryContainer,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+            const Spacer(),
+            IconButton(
+              icon: const Icon(Icons.copy_outlined, size: 18),
+              tooltip: 'Copy',
+              onPressed: () => _copyToClipboard(context, html),
+            ),
+          ],
         ),
         const SizedBox(height: 4),
         Container(
@@ -171,14 +217,120 @@ class SimpleOverlayLogDetailPage extends StatelessWidget {
           margin: const EdgeInsets.only(bottom: 16),
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: Colors.grey.shade200,
-            borderRadius: BorderRadius.circular(8),
+            color: cs.surfaceContainerHighest,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: SelectableText(
+            html,
+            style: theme.textTheme.bodySmall?.copyWith(
+              fontFamily: 'monospace',
+              color: cs.onSurface,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _levelBadge(
+      BuildContext context, String label, Color backgroundColor) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+        decoration: BoxDecoration(
+          color: backgroundColor.withValues(alpha: 0.15),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: backgroundColor.withValues(alpha: 0.4)),
+        ),
+        child: Text(
+          label,
+          style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                color: backgroundColor,
+                fontWeight: FontWeight.w600,
+              ),
+        ),
+      ),
+    );
+  }
+
+  Widget _statusChip(
+      BuildContext context, String label, Color bg, Color fg) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: bg,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Text(
+        label,
+        style: Theme.of(context)
+            .textTheme
+            .labelLarge
+            ?.copyWith(color: fg, fontWeight: FontWeight.w700),
+      ),
+    );
+  }
+
+  Widget _methodChip(BuildContext context, String method) {
+    final cs = Theme.of(context).colorScheme;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: cs.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Text(
+        method,
+        style: Theme.of(context)
+            .textTheme
+            .labelLarge
+            ?.copyWith(color: cs.onSurface, fontWeight: FontWeight.w600),
+      ),
+    );
+  }
+
+  Widget _section(BuildContext context, String title, String content,
+      {bool monospace = false}) {
+    final cs = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                title,
+                style: theme.textTheme.labelLarge?.copyWith(
+                  color: cs.onSurfaceVariant,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            IconButton(
+              icon: const Icon(Icons.copy_outlined, size: 18),
+              tooltip: 'Copy',
+              padding: EdgeInsets.zero,
+              visualDensity: VisualDensity.compact,
+              onPressed: () => _copyToClipboard(context, content),
+            ),
+          ],
+        ),
+        const SizedBox(height: 4),
+        Container(
+          width: double.infinity,
+          margin: const EdgeInsets.only(bottom: 16),
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: cs.surfaceContainerHighest,
+            borderRadius: BorderRadius.circular(12),
           ),
           child: SelectableText(
             content,
-            style: TextStyle(
+            style: theme.textTheme.bodyMedium?.copyWith(
               fontFamily: monospace ? 'monospace' : null,
-              fontSize: 14,
+              color: cs.onSurface,
             ),
           ),
         )
@@ -186,42 +338,55 @@ class SimpleOverlayLogDetailPage extends StatelessWidget {
     );
   }
 
-  /// Converts a map to a pretty-printed JSON string.
-  ///
-  /// If the conversion fails, falls back to the default string representation.
-  ///
-  /// Parameters:
-  /// - [input]: The map to convert to JSON
-  ///
-  /// Returns:
-  /// A formatted JSON string, or the string representation of the input if conversion fails.
+  void _copyToClipboard(BuildContext context, String text) {
+    Clipboard.setData(ClipboardData(text: text));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Copied'),
+        duration: Duration(seconds: 1),
+      ),
+    );
+  }
+
   String _prettyPrintJsonFromMap(Map<String, String> input) {
     try {
       const encoder = JsonEncoder.withIndent('  ');
       return encoder.convert(input);
-    } catch (e) {
-      return input.toString(); // fallback to raw if not JSON
+    } catch (_) {
+      return input.toString();
     }
   }
 
-  /// Converts a JSON string to a pretty-printed format.
-  ///
-  /// If the input is not valid JSON, returns it unchanged.
-  ///
-  /// Parameters:
-  /// - [input]: The JSON string to format
-  ///
-  /// Returns:
-  /// A formatted JSON string, or the original string if it's not valid JSON.
   String _prettyPrintJsonFromString(String input) {
     if (input.isEmpty) return input;
-
     try {
       final decoded = json.decode(input);
       const encoder = JsonEncoder.withIndent('  ');
       return encoder.convert(decoded);
-    } catch (e) {
-      return input; // fallback to raw if not JSON
+    } catch (_) {
+      return input;
     }
   }
+
+  _ContentType _detectContentType(String input) {
+    if (input.isEmpty) return _ContentType.plain;
+    final trimmed = input.trimLeft();
+    // JSON detection
+    if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
+      try {
+        json.decode(input);
+        return _ContentType.json;
+      } catch (_) {}
+    }
+    // HTML detection
+    final lower = trimmed.toLowerCase();
+    if (lower.startsWith('<!doctype html') ||
+        lower.startsWith('<html') ||
+        (lower.contains('<body') && lower.contains('<head'))) {
+      return _ContentType.html;
+    }
+    return _ContentType.plain;
+  }
 }
+
+enum _ContentType { json, html, plain }

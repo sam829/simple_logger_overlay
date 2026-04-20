@@ -1,3 +1,4 @@
+import 'dart:async' show StreamController;
 import 'dart:isolate' show Isolate;
 
 import 'package:path_provider/path_provider.dart'
@@ -28,6 +29,15 @@ class SimpleOverlayLogStorageService {
   /// Enables styled logging to console. Defaults to true.
   static bool enableConsole = true;
 
+  final _simpleLogController =
+      StreamController<SimpleOverlayLog>.broadcast();
+  final _networkLogController =
+      StreamController<SimpleOverlayNetworkLog>.broadcast();
+
+  Stream<SimpleOverlayLog> get simpleLogStream => _simpleLogController.stream;
+  Stream<SimpleOverlayNetworkLog> get networkLogStream =>
+      _networkLogController.stream;
+
   /// Writes a [SimpleOverlayLog] to the persistent log file.
   ///
   /// The log is written to a file named `simple_logs.jsonl` within the
@@ -55,6 +65,7 @@ class SimpleOverlayLogStorageService {
       ...log.toJson(),
     };
     await Isolate.run(() => SimpleOverlayIsolateLogWriter.writeLog(payload));
+    _simpleLogController.add(log);
   }
 
   /// Writes a [SimpleOverlayNetworkLog] to the persistent log file.
@@ -93,6 +104,7 @@ class SimpleOverlayLogStorageService {
       ...log.toJson(),
     };
     await Isolate.run(() => SimpleOverlayIsolateLogWriter.writeLog(payload));
+    _networkLogController.add(log);
   }
 
   /// Reads all simple logs from persistent storage.

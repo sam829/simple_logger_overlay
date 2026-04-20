@@ -22,6 +22,7 @@ dependencies:
   path_provider: ^2.1.5
   shake: ^3.0.0
   share_plus: ^11.0.0
+  animations: ^2.0.11
 
 dev_dependencies:
   flutter_test:
