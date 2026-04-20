@@ -29,8 +29,10 @@ class SimpleOverlayLogCard extends StatelessWidget {
   }
 
   Widget _buildSimpleCard(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
-    final brightness = Theme.of(context).brightness;
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+    final brightness = theme.brightness;
+    final textTheme = theme.textTheme;
 
     final (bg, fg, icon) = switch (simple!.level) {
       LogLevel.debug => (
@@ -56,7 +58,7 @@ class SimpleOverlayLogCard extends StatelessWidget {
         transitionType: ContainerTransitionType.fade,
         transitionDuration: const Duration(milliseconds: 450),
         closedColor: bg,
-        openColor: Theme.of(context).colorScheme.surface,
+        openColor: cs.surface,
         closedElevation: 0,
         openElevation: 0,
         closedShape: const RoundedRectangleBorder(
@@ -82,20 +84,15 @@ class SimpleOverlayLogCard extends StatelessWidget {
                     children: [
                       Text(
                         simple!.message,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(
-                                color: fg, fontWeight: FontWeight.w500),
+                        style: textTheme.bodyMedium?.copyWith(
+                            color: fg, fontWeight: FontWeight.w500),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 2),
                       Text(
                         '${simple!.tag} · ${formatTimestamp(simple!.timestamp)}',
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelSmall
+                        style: textTheme.labelSmall
                             ?.copyWith(color: fg.withValues(alpha: 0.7)),
                       ),
                     ],
@@ -112,8 +109,10 @@ class SimpleOverlayLogCard extends StatelessWidget {
   }
 
   Widget _buildNetworkCard(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
-    final brightness = Theme.of(context).brightness;
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+    final brightness = theme.brightness;
+    final textTheme = theme.textTheme;
     final isSuccess = network!.isSuccess;
 
     final bg = isSuccess ? cs.secondaryContainer : cs.errorContainer;
@@ -153,11 +152,10 @@ class SimpleOverlayLogCard extends StatelessWidget {
                   ),
                   child: Text(
                     network!.method,
-                    style:
-                        Theme.of(context).textTheme.labelSmall?.copyWith(
-                              color: fg,
-                              fontWeight: FontWeight.w700,
-                            ),
+                    style: textTheme.labelSmall?.copyWith(
+                      color: fg,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
                 const SizedBox(width: 10),
@@ -167,22 +165,16 @@ class SimpleOverlayLogCard extends StatelessWidget {
                     children: [
                       Text(
                         network!.url,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(
-                                color: fg, fontWeight: FontWeight.w500),
+                        style: textTheme.bodyMedium?.copyWith(
+                            color: fg, fontWeight: FontWeight.w500),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 2),
                       Text(
                         formatTimestamp(network!.timestamp),
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelSmall
-                            ?.copyWith(
-                                color: fg.withValues(alpha: 0.7)),
+                        style: textTheme.labelSmall
+                            ?.copyWith(color: fg.withValues(alpha: 0.7)),
                       ),
                     ],
                   ),
@@ -196,11 +188,10 @@ class SimpleOverlayLogCard extends StatelessWidget {
                   ),
                   child: Text(
                     '${statusCode ?? 'ERR'}',
-                    style:
-                        Theme.of(context).textTheme.labelMedium?.copyWith(
-                              color: fg,
-                              fontWeight: FontWeight.w700,
-                            ),
+                    style: textTheme.labelMedium?.copyWith(
+                      color: fg,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
               ],
