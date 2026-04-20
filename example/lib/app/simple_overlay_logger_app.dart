@@ -51,10 +51,10 @@ class _SimpleOverlayLoggerAppState extends State<SimpleOverlayLoggerApp> {
         }
 
         final lightTheme = useDynamic
-            ? _buildThemeFromScheme(lightDynamic!)
+            ? _buildThemeFromScheme(lightDynamic)
             : _buildTheme(Brightness.light, appSettings.seedColor);
         final darkTheme = useDynamic
-            ? _buildThemeFromScheme(darkDynamic ?? lightDynamic!)
+            ? _buildThemeFromScheme(darkDynamic ?? lightDynamic)
             : _buildTheme(Brightness.dark, appSettings.seedColor);
 
         return MaterialApp.router(

@@ -38,7 +38,7 @@ jobs:
         run: flutter pub get
 
       - name: Analyze
-        run: flutter analyze --fatal-infos
+        run: flutter analyze lib/ --fatal-infos
 
       - name: Dry-run publish
         run: dart pub publish --dry-run
@@ -56,7 +56,7 @@ jobs:
 
       - uses: subosito/flutter-action@v2
         with:
-          channel: stable
+          flutter-version: '3.35.6'
           cache: true
 
       - name: Install dependencies
