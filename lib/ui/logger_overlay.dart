@@ -2,72 +2,57 @@ import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../core/export_service.dart';
+import '../core/log_storage_service.dart';
+import '../core/simple_logger_overlay_config.dart';
+import '../core/simple_overlay_localizations.dart';
 import 'widgets/tabbed_logger.dart';
 
-/// A full-screen overlay that displays application logs in a user-friendly interface.
-///
-/// This widget serves as the main entry point for viewing logs in the application.
-/// It provides a tabbed interface for browsing different types of logs and includes
-/// functionality to export logs for sharing or debugging purposes.
-///
-/// The overlay is designed to be displayed on top of the main application UI
-/// and can be toggled using a gesture or button press (handled by the parent).
-///
-/// Example usage:
-/// ```dart
-/// Navigator.of(context).push(
-///   MaterialPageRoute(
-///     fullscreenDialog: true,
-///     builder: (context) => const LoggerOverlay(),
-///   ),
-/// );
-/// ```
-class SimpleOverlayLoggerScreen extends StatelessWidget {
-  /// Creates a new [SimpleOverlayLoggerScreen] instance.
+class SimpleOverlayLoggerScreen extends StatefulWidget {
   const SimpleOverlayLoggerScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // Use the current theme's surface color for consistent theming
-    final theme = Theme.of(context);
+  State<SimpleOverlayLoggerScreen> createState() =>
+      _SimpleOverlayLoggerScreenState();
+}
 
-    return Scaffold(
-      // Match the app's surface color for a consistent look
-      backgroundColor: theme.colorScheme.surface,
-      appBar: AppBar(
-        title: const Text('Logger Overlay'),
-        backgroundColor: theme.colorScheme.surface,
-        foregroundColor: theme.colorScheme.onSurface,
-        actions: [
-          // Share button to export logs
-          IconButton(
-            icon: const Icon(Icons.share),
-            tooltip: 'Export logs',
-            onPressed: () => _exportAndShareLogs(context),
-          ),
-        ],
+class _SimpleOverlayLoggerScreenState extends State<SimpleOverlayLoggerScreen> {
+  int _logCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCount();
+  }
+
+  Future<void> _loadCount() async {
+    final storage = SimpleOverlayLogStorageService();
+    final (simple, network) = await (
+      storage.getSimpleLogs(),
+      storage.getNetworkLogs(),
+    ).wait;
+    if (mounted) {
+      setState(() => _logCount = simple.length + network.length);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final brightness = Theme.of(context).brightness;
+    final overlayTheme =
+        SimpleLoggerOverlayConfig.instance.buildTheme(brightness);
+
+    return Theme(
+      data: overlayTheme,
+      child: _LoggerScaffold(
+        logCount: _logCount,
+        onExport: () => _exportAndShareLogs(context),
       ),
-      // The main content is handled by the TabbedLogger widget
-      body: const SimpleOverlayTabbedLogger(),
     );
   }
 
-  /// Exports the current logs to a file and shares them using the platform's share dialog.
-  ///
-  /// This method:
-  /// 1. Exports logs to a temporary file using [SimpleOverlayExportService]
-  /// 2. Opens the platform's share dialog with the exported file
-  /// 3. Handles any errors that occur during the process
-  ///
-  /// Errors are logged to the console but not shown to the user to avoid disrupting
-  /// their workflow. In a production app, you might want to show a snackbar or dialog
-  /// if the export fails.
   Future<void> _exportAndShareLogs(BuildContext context) async {
     try {
-      // Export logs to a temporary file
       final path = await SimpleOverlayExportService().exportLogsToFile();
-
-      // Share the exported file using the platform's share dialog
       final result = await SharePlus.instance.share(
         ShareParams(
           files: [XFile(path)],
@@ -75,18 +60,53 @@ class SimpleOverlayLoggerScreen extends StatelessWidget {
           subject: "Exported Logs",
         ),
       );
-
-      // Log the result of the share operation (useful for debugging)
       debugPrint('Share result: ${result.raw}');
     } catch (error, stackTrace) {
-      // Log any errors that occur during export or sharing
       debugPrint('Error exporting logs: $error');
       debugPrint('Stack trace: $stackTrace');
-
-      // In a production app, you might want to show an error message to the user
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   const SnackBar(content: Text('Failed to export logs')),
-      // );
     }
+  }
+}
+
+class _LoggerScaffold extends StatelessWidget {
+  const _LoggerScaffold({required this.logCount, required this.onExport});
+
+  final int logCount;
+  final VoidCallback onExport;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final l10n = SimpleOverlayLocalizations.of(context);
+
+    return Scaffold(
+      backgroundColor: theme.colorScheme.surface,
+      appBar: AppBar(
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(l10n.title),
+            if (logCount > 0)
+              Text(
+                l10n.entriesCount(logCount),
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+          ],
+        ),
+        backgroundColor: theme.colorScheme.surface,
+        foregroundColor: theme.colorScheme.onSurface,
+        actions: [
+          IconButton.filledTonal(
+            icon: const Icon(Icons.share_outlined),
+            tooltip: l10n.exportTooltip,
+            onPressed: onExport,
+          ),
+          const SizedBox(width: 8),
+        ],
+      ),
+      body: const SimpleOverlayTabbedLogger(),
+    );
   }
 }

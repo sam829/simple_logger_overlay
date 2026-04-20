@@ -85,8 +85,15 @@ class SimpleOverlayIsolateLogWriter {
     if (!await file.exists()) return [];
 
     final lines = await file.readAsLines();
-    return lines
-        .map((line) => jsonDecode(line) as Map<String, dynamic>)
-        .toList();
+    final results = <Map<String, dynamic>>[];
+    for (final line in lines) {
+      if (line.trim().isEmpty) continue;
+      try {
+        results.add(jsonDecode(line) as Map<String, dynamic>);
+      } catch (_) {
+        // skip malformed lines (e.g. partial writes from interrupted sessions)
+      }
+    }
+    return results;
   }
 }

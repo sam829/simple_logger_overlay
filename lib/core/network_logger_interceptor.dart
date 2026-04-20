@@ -1,14 +1,11 @@
+import 'dart:convert' show jsonEncode;
+
 import 'package:dio/dio.dart';
 
 import '../models/network_log.dart';
 import 'log_storage_service.dart';
 
 /// Dio interceptor that captures and stores network requests/responses.
-///
-/// Automatically logs:
-/// - request headers/body
-/// - response headers/body
-/// - success/failure color
 ///
 /// Attach to your Dio instance:
 /// ```dart
@@ -38,11 +35,11 @@ class SimpleOverlayNetworkLoggerInterceptor extends Interceptor {
       url: request.uri.toString(),
       requestHeaders: Map<String, String>.from(
           request.headers.map((k, v) => MapEntry(k, v.toString()))),
-      requestBody: request.data.toString(),
+      requestBody: _bodyToString(request.data),
       statusCode: response.statusCode,
       responseHeaders:
           response.headers.map.map((k, v) => MapEntry(k, v.join(','))),
-      responseBody: response.data.toString(),
+      responseBody: _bodyToString(response.data),
       isSuccess: response.statusCode != null && response.statusCode! < 400,
     );
 
@@ -63,15 +60,27 @@ class SimpleOverlayNetworkLoggerInterceptor extends Interceptor {
       url: request.uri.toString(),
       requestHeaders: Map<String, String>.from(
           request.headers.map((k, v) => MapEntry(k, v.toString()))),
-      requestBody: request.data.toString(),
+      requestBody: _bodyToString(request.data),
       statusCode: err.response?.statusCode,
       responseHeaders:
           err.response?.headers.map.map((k, v) => MapEntry(k, v.join(','))),
-      responseBody: err.response?.data.toString(),
+      responseBody: _bodyToString(err.response?.data),
       isSuccess: false,
     );
 
     await _storageService.addNetworkLog(log);
     handler.next(err);
+  }
+
+  /// Dio auto-decodes JSON responses to Map/List. Storing as .toString() produces
+  /// Dart Map literals (not valid JSON). Re-encode to proper JSON string.
+  static String _bodyToString(dynamic data) {
+    if (data == null) return '';
+    if (data is String) return data;
+    try {
+      return jsonEncode(data);
+    } catch (_) {
+      return data.toString();
+    }
   }
 }
