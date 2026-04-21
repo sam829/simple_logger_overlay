@@ -15,10 +15,10 @@ class SimpleOverlayLogDetailPage extends StatelessWidget {
   final SimpleOverlayNetworkLog? network;
 
   const SimpleOverlayLogDetailPage.simple({super.key, required this.simple})
-      : network = null;
+    : network = null;
 
   const SimpleOverlayLogDetailPage.network({super.key, required this.network})
-      : simple = null;
+    : simple = null;
 
   String _buildCopyableLogText() {
     if (simple != null) return jsonEncode(simple!.toJson());
@@ -35,7 +35,8 @@ class SimpleOverlayLogDetailPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            isSimpleLog ? l10n.logDetailTitle : l10n.networkLogDetailTitle),
+          isSimpleLog ? l10n.logDetailTitle : l10n.networkLogDetailTitle,
+        ),
         backgroundColor: theme.colorScheme.surface,
         actions: [
           IconButton(
@@ -54,9 +55,9 @@ class SimpleOverlayLogDetailPage extends StatelessWidget {
   void _copyLog(BuildContext context) {
     Clipboard.setData(ClipboardData(text: _buildCopyableLogText()));
     final l10n = SimpleOverlayLocalizations.of(context);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(l10n.copiedMessage)),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(l10n.copiedMessage)));
   }
 }
 
@@ -66,11 +67,12 @@ class SimpleOverlayLogDetailContent extends StatelessWidget {
   final SimpleOverlayNetworkLog? network;
 
   const SimpleOverlayLogDetailContent.simple({super.key, required this.simple})
-      : network = null;
+    : network = null;
 
-  const SimpleOverlayLogDetailContent.network(
-      {super.key, required this.network})
-      : simple = null;
+  const SimpleOverlayLogDetailContent.network({
+    super.key,
+    required this.network,
+  }) : simple = null;
 
   @override
   Widget build(BuildContext context) {
@@ -94,8 +96,11 @@ class SimpleOverlayLogDetailContent extends StatelessWidget {
         _levelBadge(context, simple!.level.name.toUpperCase(), levelColor),
         const SizedBox(height: 16),
         _section(context, l10n.labelTag, simple!.tag),
-        _section(context, l10n.labelTimestamp,
-            formatTimestamp(simple!.timestamp)),
+        _section(
+          context,
+          l10n.labelTimestamp,
+          formatTimestamp(simple!.timestamp),
+        ),
         _section(context, l10n.labelMessage, simple!.message, monospace: true),
       ],
     );
@@ -123,8 +128,11 @@ class SimpleOverlayLogDetailContent extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         _section(context, l10n.labelUrl, network!.url),
-        _section(context, l10n.labelTimestamp,
-            formatTimestamp(network!.timestamp)),
+        _section(
+          context,
+          l10n.labelTimestamp,
+          formatTimestamp(network!.timestamp),
+        ),
         _section(
           context,
           l10n.labelRequestHeaders,
@@ -151,7 +159,10 @@ class SimpleOverlayLogDetailContent extends StatelessWidget {
   }
 
   Widget _responseBodySection(
-      BuildContext context, SimpleOverlayLocalizations l10n, String body) {
+    BuildContext context,
+    SimpleOverlayLocalizations l10n,
+    String body,
+  ) {
     final contentType = _detectContentType(body);
     switch (contentType) {
       case _ContentType.json:
@@ -169,7 +180,10 @@ class SimpleOverlayLogDetailContent extends StatelessWidget {
   }
 
   Widget _htmlSection(
-      BuildContext context, SimpleOverlayLocalizations l10n, String htmlBody) {
+    BuildContext context,
+    SimpleOverlayLocalizations l10n,
+    String htmlBody,
+  ) {
     final cs = Theme.of(context).colorScheme;
     final theme = Theme.of(context);
 
@@ -236,7 +250,10 @@ class SimpleOverlayLogDetailContent extends StatelessWidget {
   }
 
   Widget _levelBadge(
-      BuildContext context, String label, Color backgroundColor) {
+    BuildContext context,
+    String label,
+    Color backgroundColor,
+  ) {
     return Align(
       alignment: Alignment.centerLeft,
       child: Container(
@@ -249,16 +266,15 @@ class SimpleOverlayLogDetailContent extends StatelessWidget {
         child: Text(
           label,
           style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                color: backgroundColor,
-                fontWeight: FontWeight.w600,
-              ),
+            color: backgroundColor,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ),
     );
   }
 
-  Widget _statusChip(
-      BuildContext context, String label, Color bg, Color fg) {
+  Widget _statusChip(BuildContext context, String label, Color bg, Color fg) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
@@ -267,10 +283,10 @@ class SimpleOverlayLogDetailContent extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: Theme.of(context)
-            .textTheme
-            .labelLarge
-            ?.copyWith(color: fg, fontWeight: FontWeight.w700),
+        style: Theme.of(context).textTheme.labelLarge?.copyWith(
+          color: fg,
+          fontWeight: FontWeight.w700,
+        ),
       ),
     );
   }
@@ -285,16 +301,20 @@ class SimpleOverlayLogDetailContent extends StatelessWidget {
       ),
       child: Text(
         method,
-        style: Theme.of(context)
-            .textTheme
-            .labelLarge
-            ?.copyWith(color: cs.onSurface, fontWeight: FontWeight.w600),
+        style: Theme.of(context).textTheme.labelLarge?.copyWith(
+          color: cs.onSurface,
+          fontWeight: FontWeight.w600,
+        ),
       ),
     );
   }
 
-  Widget _section(BuildContext context, String title, String content,
-      {bool monospace = false}) {
+  Widget _section(
+    BuildContext context,
+    String title,
+    String content, {
+    bool monospace = false,
+  }) {
     final cs = Theme.of(context).colorScheme;
     final theme = Theme.of(context);
     return Column(
@@ -332,11 +352,13 @@ class SimpleOverlayLogDetailContent extends StatelessWidget {
           child: SelectableText(
             content,
             style: theme.textTheme.bodyMedium?.copyWith(
-              fontFamily: monospace ? SimpleLoggerOverlayConfig.monospaceFontFamily : null,
+              fontFamily: monospace
+                  ? SimpleLoggerOverlayConfig.monospaceFontFamily
+                  : null,
               color: cs.onSurface,
             ),
           ),
-        )
+        ),
       ],
     );
   }
@@ -344,10 +366,7 @@ class SimpleOverlayLogDetailContent extends StatelessWidget {
   void _copyToClipboard(BuildContext context, String text) {
     Clipboard.setData(ClipboardData(text: text));
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Copied'),
-        duration: Duration(seconds: 1),
-      ),
+      const SnackBar(content: Text('Copied'), duration: Duration(seconds: 1)),
     );
   }
 

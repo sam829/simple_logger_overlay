@@ -23,20 +23,22 @@ export 'ui/logger_overlay.dart';
 export 'ui/widgets/draggable_floating_overlay.dart';
 
 class SimpleLoggerOverlay {
-  static void show(BuildContext context,
-      {GlobalKey<NavigatorState>? navigatorKey}) {
+  static void show(
+    BuildContext context, {
+    GlobalKey<NavigatorState>? navigatorKey,
+  }) {
     final page = PageRouteBuilder<void>(
       settings: const RouteSettings(name: 'LoggerOverlay'),
       transitionDuration: const Duration(milliseconds: 300),
       reverseTransitionDuration: const Duration(milliseconds: 250),
-      pageBuilder: (_, __, ___) => const SimpleOverlayLoggerScreen(),
+      pageBuilder: (_, _, _) => const SimpleOverlayLoggerScreen(),
       transitionsBuilder: (_, animation, secondaryAnimation, child) =>
           SharedAxisTransition(
-        animation: animation,
-        secondaryAnimation: secondaryAnimation,
-        transitionType: SharedAxisTransitionType.vertical,
-        child: child,
-      ),
+            animation: animation,
+            secondaryAnimation: secondaryAnimation,
+            transitionType: SharedAxisTransitionType.vertical,
+            child: child,
+          ),
     );
 
     if (navigatorKey != null) {

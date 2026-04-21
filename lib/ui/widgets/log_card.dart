@@ -12,10 +12,10 @@ class SimpleOverlayLogCard extends StatelessWidget {
   final SimpleOverlayNetworkLog? network;
 
   const SimpleOverlayLogCard.simple({super.key, required this.simple})
-      : network = null;
+    : network = null;
 
   const SimpleOverlayLogCard.network({super.key, required this.network})
-      : simple = null;
+    : simple = null;
 
   @override
   Widget build(BuildContext context) {
@@ -36,20 +36,20 @@ class SimpleOverlayLogCard extends StatelessWidget {
 
     final (bg, fg, icon) = switch (simple!.level) {
       LogLevel.debug => (
-          cs.tertiaryContainer,
-          cs.onTertiaryContainer,
-          Icons.bug_report_outlined
-        ),
+        cs.tertiaryContainer,
+        cs.onTertiaryContainer,
+        Icons.bug_report_outlined,
+      ),
       LogLevel.info => (
-          cs.primaryContainer,
-          cs.onPrimaryContainer,
-          Icons.info_outline
-        ),
+        cs.primaryContainer,
+        cs.onPrimaryContainer,
+        Icons.info_outline,
+      ),
       LogLevel.error => (
-          cs.errorContainer,
-          cs.onErrorContainer,
-          Icons.error_outline
-        ),
+        cs.errorContainer,
+        cs.onErrorContainer,
+        Icons.error_outline,
+      ),
     };
 
     return Padding(
@@ -65,15 +65,14 @@ class SimpleOverlayLogCard extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(16)),
         ),
         openShape: const RoundedRectangleBorder(),
-        openBuilder: (_, __) => Theme(
+        openBuilder: (_, _) => Theme(
           data: SimpleLoggerOverlayConfig.instance.buildTheme(brightness),
           child: SimpleOverlayLogDetailPage.simple(simple: simple),
         ),
         closedBuilder: (_, openContainer) => InkWell(
           onTap: openContainer,
           child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Row(
               children: [
                 Icon(icon, color: fg, size: 20),
@@ -85,21 +84,27 @@ class SimpleOverlayLogCard extends StatelessWidget {
                       Text(
                         simple!.message,
                         style: textTheme.bodyMedium?.copyWith(
-                            color: fg, fontWeight: FontWeight.w500),
+                          color: fg,
+                          fontWeight: FontWeight.w500,
+                        ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 2),
                       Text(
                         '${simple!.tag} · ${formatTimestamp(simple!.timestamp)}',
-                        style: textTheme.labelSmall
-                            ?.copyWith(color: fg.withValues(alpha: 0.7)),
+                        style: textTheme.labelSmall?.copyWith(
+                          color: fg.withValues(alpha: 0.7),
+                        ),
                       ),
                     ],
                   ),
                 ),
-                Icon(Icons.chevron_right,
-                    color: fg.withValues(alpha: 0.5), size: 18),
+                Icon(
+                  Icons.chevron_right,
+                  color: fg.withValues(alpha: 0.5),
+                  size: 18,
+                ),
               ],
             ),
           ),
@@ -132,20 +137,21 @@ class SimpleOverlayLogCard extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(16)),
         ),
         openShape: const RoundedRectangleBorder(),
-        openBuilder: (_, __) => Theme(
+        openBuilder: (_, _) => Theme(
           data: SimpleLoggerOverlayConfig.instance.buildTheme(brightness),
           child: SimpleOverlayLogDetailPage.network(network: network!),
         ),
         closedBuilder: (_, openContainer) => InkWell(
           onTap: openContainer,
           child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Row(
               children: [
                 Container(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 8, vertical: 3),
+                    horizontal: 8,
+                    vertical: 3,
+                  ),
                   decoration: BoxDecoration(
                     color: fg.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(8),
@@ -166,22 +172,27 @@ class SimpleOverlayLogCard extends StatelessWidget {
                       Text(
                         network!.url,
                         style: textTheme.bodyMedium?.copyWith(
-                            color: fg, fontWeight: FontWeight.w500),
+                          color: fg,
+                          fontWeight: FontWeight.w500,
+                        ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 2),
                       Text(
                         formatTimestamp(network!.timestamp),
-                        style: textTheme.labelSmall
-                            ?.copyWith(color: fg.withValues(alpha: 0.7)),
+                        style: textTheme.labelSmall?.copyWith(
+                          color: fg.withValues(alpha: 0.7),
+                        ),
                       ),
                     ],
                   ),
                 ),
                 Container(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 8, vertical: 3),
+                    horizontal: 8,
+                    vertical: 3,
+                  ),
                   decoration: BoxDecoration(
                     color: fg.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(8),

@@ -38,8 +38,9 @@ class _SimpleOverlayLoggerScreenState extends State<SimpleOverlayLoggerScreen> {
   @override
   Widget build(BuildContext context) {
     final brightness = Theme.of(context).brightness;
-    final overlayTheme =
-        SimpleLoggerOverlayConfig.instance.buildTheme(brightness);
+    final overlayTheme = SimpleLoggerOverlayConfig.instance.buildTheme(
+      brightness,
+    );
 
     return Theme(
       data: overlayTheme,
