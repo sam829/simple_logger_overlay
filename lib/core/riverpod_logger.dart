@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:meta/meta.dart';
 
 import '../models/simple_log.dart';
 import 'log_storage_service.dart';
@@ -15,21 +16,29 @@ class SimpleOverlayLoggerRiverpodObserver extends ProviderObserver {
   @override
   void didUpdateProvider(ProviderBase provider, Object? previousValue,
       Object? newValue, ProviderContainer container) {
-    _storage.addSimpleLog(SimpleOverlayLog(
+    String valueStr;
+    try {
+      valueStr = newValue.toString();
+      if (valueStr.length > 256) valueStr = valueStr.substring(0, 256) + '...';
+    } catch (_) {
+      valueStr = newValue.runtimeType.toString();
+    }
+
+    unawaited(_storage.addSimpleLog(SimpleOverlayLog(
       timestamp: DateTime.now(),
       tag: provider.name ?? provider.runtimeType.toString(),
       level: LogLevel.debug,
-      message: 'Updated: $newValue',
-    ));
+      message: 'Updated: $valueStr',
+    )));
   }
 
   @override
   void didDisposeProvider(ProviderBase provider, ProviderContainer container) {
-    _storage.addSimpleLog(SimpleOverlayLog(
+    unawaited(_storage.addSimpleLog(SimpleOverlayLog(
       timestamp: DateTime.now(),
       tag: provider.name ?? provider.runtimeType.toString(),
       level: LogLevel.info,
       message: 'Disposed',
-    ));
+    )));
   }
 }
