@@ -26,8 +26,6 @@ Everything you need, right inside your app.*
 
 <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/logging-banner.png?raw=true" width="100%" alt="simple_logger_overlay banner"/>
 
-<br />
-
 ---
 
 ## The problem this solves
