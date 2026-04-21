@@ -22,7 +22,8 @@ class SimpleOverlayExportService {
 
     final dir = await getTemporaryDirectory();
     final file = File(
-        '${dir.path}/exported_logs_${DateTime.now().millisecondsSinceEpoch}.json');
+      '${dir.path}/exported_logs_${DateTime.now().millisecondsSinceEpoch}.json',
+    );
 
     await file.writeAsString(jsonEncode(json));
     return file.path;

@@ -24,11 +24,13 @@ class SimpleOverlayAppLifecycleObserver extends WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    _storage.addSimpleLog(SimpleOverlayLog(
-      timestamp: DateTime.now(),
-      tag: 'AppLifecycle',
-      level: LogLevel.info,
-      message: 'State changed: ${state.name}',
-    ));
+    _storage.addSimpleLog(
+      SimpleOverlayLog(
+        timestamp: DateTime.now(),
+        tag: 'AppLifecycle',
+        level: LogLevel.info,
+        message: 'State changed: ${state.name}',
+      ),
+    );
   }
 }

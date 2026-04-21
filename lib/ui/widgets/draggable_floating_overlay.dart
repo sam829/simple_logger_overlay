@@ -42,24 +42,28 @@ class _SimpleOverlayDraggableDebuggerFABState
       vsync: this,
       duration: const Duration(milliseconds: 800),
     );
-    _pulseAnimation = TweenSequence<double>([
-      TweenSequenceItem(tween: Tween(begin: 1.0, end: 1.18), weight: 40),
-      TweenSequenceItem(tween: Tween(begin: 1.18, end: 0.95), weight: 30),
-      TweenSequenceItem(tween: Tween(begin: 0.95, end: 1.0), weight: 30),
-    ]).animate(CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut));
+    _pulseAnimation =
+        TweenSequence<double>([
+          TweenSequenceItem(tween: Tween(begin: 1.0, end: 1.18), weight: 40),
+          TweenSequenceItem(tween: Tween(begin: 1.18, end: 0.95), weight: 30),
+          TweenSequenceItem(tween: Tween(begin: 0.95, end: 1.0), weight: 30),
+        ]).animate(
+          CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
+        );
 
     _snapController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
     );
 
-    _simpleSubscription = SimpleOverlayLogStorageService().simpleLogStream.listen((_) {
-      if (mounted) _pulse();
-    });
-    _networkSubscription =
-        SimpleOverlayLogStorageService().networkLogStream.listen((_) {
-      if (mounted) _pulse();
-    });
+    _simpleSubscription = SimpleOverlayLogStorageService().simpleLogStream
+        .listen((_) {
+          if (mounted) _pulse();
+        });
+    _networkSubscription = SimpleOverlayLogStorageService().networkLogStream
+        .listen((_) {
+          if (mounted) _pulse();
+        });
   }
 
   void _pulse() {
@@ -75,9 +79,13 @@ class _SimpleOverlayDraggableDebuggerFABState
     _snapEnd = Offset(targetX, targetY);
 
     _snapXAnimation = Tween<double>(begin: _snapStart.dx, end: _snapEnd.dx)
-        .animate(CurvedAnimation(parent: _snapController, curve: Curves.elasticOut));
+        .animate(
+          CurvedAnimation(parent: _snapController, curve: Curves.elasticOut),
+        );
     _snapYAnimation = Tween<double>(begin: _snapStart.dy, end: _snapEnd.dy)
-        .animate(CurvedAnimation(parent: _snapController, curve: Curves.easeOutCubic));
+        .animate(
+          CurvedAnimation(parent: _snapController, curve: Curves.easeOutCubic),
+        );
 
     _snapController.removeListener(_onSnapTick);
     _snapController.addListener(_onSnapTick);
@@ -106,8 +114,9 @@ class _SimpleOverlayDraggableDebuggerFABState
   @override
   Widget build(BuildContext context) {
     final brightness = Theme.of(context).brightness;
-    final overlayTheme =
-        SimpleLoggerOverlayConfig.instance.buildTheme(brightness);
+    final overlayTheme = SimpleLoggerOverlayConfig.instance.buildTheme(
+      brightness,
+    );
     final cs = overlayTheme.colorScheme;
 
     return Positioned(
@@ -128,7 +137,10 @@ class _SimpleOverlayDraggableDebuggerFABState
           onTapUp: (_) => setState(() => _pressed = false),
           onTapCancel: () => setState(() => _pressed = false),
           onTap: () {
-            SimpleLoggerOverlay.show(context, navigatorKey: widget.navigatorKey);
+            SimpleLoggerOverlay.show(
+              context,
+              navigatorKey: widget.navigatorKey,
+            );
           },
           child: AnimatedScale(
             scale: _pressed ? 0.88 : 1.0,
@@ -140,12 +152,12 @@ class _SimpleOverlayDraggableDebuggerFABState
                 animation: _pulseAnimation,
                 builder: (_, child) {
                   // Shadow swells with the pulse scale — creates depth pop
-                  final pulseBoost =
-                      (_pulseAnimation.value - 1.0).abs() * 14.0;
+                  final pulseBoost = (_pulseAnimation.value - 1.0).abs() * 14.0;
                   return Material(
                     elevation: (_isDragging ? 12.0 : 6.0) + pulseBoost,
                     shadowColor: cs.primary.withValues(
-                        alpha: 0.4 + (pulseBoost * 0.025).clamp(0.0, 0.3)),
+                      alpha: 0.4 + (pulseBoost * 0.025).clamp(0.0, 0.3),
+                    ),
                     shape: const CircleBorder(),
                     color: cs.primaryContainer,
                     child: child,

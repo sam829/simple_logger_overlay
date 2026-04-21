@@ -90,39 +90,43 @@ class _SimpleOverlayTabbedLoggerState extends State<SimpleOverlayTabbedLogger>
   }
 
   List<SimpleOverlayLog> get _displayedSimpleLogs {
-    final logs = _simpleLogs.where((log) {
-      if (_levelFilter.isNotEmpty && !_levelFilter.contains(log.level)) {
-        return false;
-      }
-      if (_searchText != null && _searchText!.isNotEmpty) {
-        final q = _searchText!.toLowerCase();
-        return log.message.toLowerCase().contains(q) ||
-            log.tag.toLowerCase().contains(q);
-      }
-      return true;
-    }).toList()
-      ..sort((a, b) => _sortDesc
-          ? b.timestamp.compareTo(a.timestamp)
-          : a.timestamp.compareTo(b.timestamp));
+    final logs =
+        _simpleLogs.where((log) {
+          if (_levelFilter.isNotEmpty && !_levelFilter.contains(log.level)) {
+            return false;
+          }
+          if (_searchText != null && _searchText!.isNotEmpty) {
+            final q = _searchText!.toLowerCase();
+            return log.message.toLowerCase().contains(q) ||
+                log.tag.toLowerCase().contains(q);
+          }
+          return true;
+        }).toList()..sort(
+          (a, b) => _sortDesc
+              ? b.timestamp.compareTo(a.timestamp)
+              : a.timestamp.compareTo(b.timestamp),
+        );
     return logs;
   }
 
   List<SimpleOverlayNetworkLog> get _displayedNetworkLogs {
-    final logs = _networkLogs.where((log) {
-      if (_networkSuccessFilter != null &&
-          log.isSuccess != _networkSuccessFilter) {
-        return false;
-      }
-      if (_searchText != null && _searchText!.isNotEmpty) {
-        final q = _searchText!.toLowerCase();
-        return log.url.toLowerCase().contains(q) ||
-            log.method.toLowerCase().contains(q);
-      }
-      return true;
-    }).toList()
-      ..sort((a, b) => _sortDesc
-          ? b.timestamp.compareTo(a.timestamp)
-          : a.timestamp.compareTo(b.timestamp));
+    final logs =
+        _networkLogs.where((log) {
+          if (_networkSuccessFilter != null &&
+              log.isSuccess != _networkSuccessFilter) {
+            return false;
+          }
+          if (_searchText != null && _searchText!.isNotEmpty) {
+            final q = _searchText!.toLowerCase();
+            return log.url.toLowerCase().contains(q) ||
+                log.method.toLowerCase().contains(q);
+          }
+          return true;
+        }).toList()..sort(
+          (a, b) => _sortDesc
+              ? b.timestamp.compareTo(a.timestamp)
+              : a.timestamp.compareTo(b.timestamp),
+        );
     return logs;
   }
 
@@ -161,7 +165,7 @@ class _SimpleOverlayTabbedLoggerState extends State<SimpleOverlayTabbedLogger>
         _buildSearchBar(l10n),
         AnimatedBuilder(
           animation: _tabController,
-          builder: (_, __) => TabBar.secondary(
+          builder: (_, _) => TabBar.secondary(
             controller: _tabController,
             tabs: [
               Tab(text: l10n.logsTab(_simpleLogs.length)),
@@ -172,10 +176,7 @@ class _SimpleOverlayTabbedLoggerState extends State<SimpleOverlayTabbedLogger>
         Expanded(
           child: TabBarView(
             controller: _tabController,
-            children: [
-              _buildLogList(l10n),
-              _buildNetworkList(l10n),
-            ],
+            children: [_buildLogList(l10n), _buildNetworkList(l10n)],
           ),
         ),
       ],
@@ -207,7 +208,8 @@ class _SimpleOverlayTabbedLoggerState extends State<SimpleOverlayTabbedLogger>
                   setState(() => _searchText = val.isEmpty ? null : val),
               elevation: const WidgetStatePropertyAll(0),
               padding: const WidgetStatePropertyAll(
-                  EdgeInsets.symmetric(horizontal: 12)),
+                EdgeInsets.symmetric(horizontal: 12),
+              ),
             ),
           ),
           const SizedBox(width: 6),
@@ -269,7 +271,10 @@ class _SimpleOverlayTabbedLoggerState extends State<SimpleOverlayTabbedLogger>
 
     if (_simpleLogs.isEmpty) {
       return _emptyState(
-          Icons.receipt_long_outlined, l10n.noLogsTitle, l10n.noLogsSubtitle);
+        Icons.receipt_long_outlined,
+        l10n.noLogsTitle,
+        l10n.noLogsSubtitle,
+      );
     }
     if (logs.isEmpty) {
       return _emptyState(
@@ -299,8 +304,11 @@ class _SimpleOverlayTabbedLoggerState extends State<SimpleOverlayTabbedLogger>
     final logs = _displayedNetworkLogs;
 
     if (_networkLogs.isEmpty) {
-      return _emptyState(Icons.wifi_off_outlined, l10n.noNetworkTitle,
-          l10n.noNetworkSubtitle);
+      return _emptyState(
+        Icons.wifi_off_outlined,
+        l10n.noNetworkTitle,
+        l10n.noNetworkSubtitle,
+      );
     }
     if (logs.isEmpty) {
       return _emptyState(
@@ -361,13 +369,18 @@ class _SimpleOverlayTabbedLoggerState extends State<SimpleOverlayTabbedLogger>
           children: [
             Icon(icon, size: 64, color: cs.outlineVariant),
             const SizedBox(height: 16),
-            Text(title,
-                style: theme.textTheme.titleMedium
-                    ?.copyWith(color: cs.onSurfaceVariant)),
+            Text(
+              title,
+              style: theme.textTheme.titleMedium?.copyWith(
+                color: cs.onSurfaceVariant,
+              ),
+            ),
             const SizedBox(height: 4),
-            Text(subtitle,
-                textAlign: TextAlign.center,
-                style: theme.textTheme.bodySmall?.copyWith(color: cs.outline)),
+            Text(
+              subtitle,
+              textAlign: TextAlign.center,
+              style: theme.textTheme.bodySmall?.copyWith(color: cs.outline),
+            ),
           ],
         ),
       ),
@@ -450,22 +463,25 @@ class _FilterSheetState extends State<_FilterSheet> {
           const SizedBox(height: 20),
           Row(
             children: [
-              Text('Filter',
-                  style: theme.textTheme.titleLarge
-                      ?.copyWith(color: cs.onSurface)),
+              Text(
+                'Filter',
+                style: theme.textTheme.titleLarge?.copyWith(
+                  color: cs.onSurface,
+                ),
+              ),
               const Spacer(),
               if (hasActive)
-                TextButton(
-                  onPressed: _clear,
-                  child: const Text('Clear all'),
-                ),
+                TextButton(onPressed: _clear, child: const Text('Clear all')),
             ],
           ),
           const SizedBox(height: 20),
           if (widget.isSimpleTab) ...[
-            Text('Log Level',
-                style: theme.textTheme.labelLarge
-                    ?.copyWith(color: cs.onSurfaceVariant)),
+            Text(
+              'Log Level',
+              style: theme.textTheme.labelLarge?.copyWith(
+                color: cs.onSurfaceVariant,
+              ),
+            ),
             const SizedBox(height: 12),
             Wrap(
               spacing: 8,
@@ -501,9 +517,12 @@ class _FilterSheetState extends State<_FilterSheet> {
               ],
             ),
           ] else ...[
-            Text('Request Status',
-                style: theme.textTheme.labelLarge
-                    ?.copyWith(color: cs.onSurfaceVariant)),
+            Text(
+              'Request Status',
+              style: theme.textTheme.labelLarge?.copyWith(
+                color: cs.onSurfaceVariant,
+              ),
+            ),
             const SizedBox(height: 12),
             Wrap(
               spacing: 8,
@@ -533,10 +552,7 @@ class _FilterSheetState extends State<_FilterSheet> {
           const SizedBox(height: 24),
           SizedBox(
             width: double.infinity,
-            child: FilledButton(
-              onPressed: _apply,
-              child: const Text('Apply'),
-            ),
+            child: FilledButton(onPressed: _apply, child: const Text('Apply')),
           ),
         ],
       ),
@@ -561,7 +577,11 @@ class _FilterSheetState extends State<_FilterSheet> {
           fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
         ),
       ),
-      avatar: Icon(icon, size: 16, color: selected ? selectedFg : cs.onSurfaceVariant),
+      avatar: Icon(
+        icon,
+        size: 16,
+        color: selected ? selectedFg : cs.onSurfaceVariant,
+      ),
       selected: selected,
       selectedColor: selectedBg,
       checkmarkColor: selectedFg,
@@ -569,8 +589,8 @@ class _FilterSheetState extends State<_FilterSheet> {
       side: selected
           ? BorderSide(color: accentBorder.withValues(alpha: 0.45), width: 1.5)
           : BorderSide(color: cs.outlineVariant, width: 1.0),
-      onSelected: (v) => setState(
-          () => v ? _levels.add(level) : _levels.remove(level)),
+      onSelected: (v) =>
+          setState(() => v ? _levels.add(level) : _levels.remove(level)),
     );
   }
 
@@ -592,7 +612,11 @@ class _FilterSheetState extends State<_FilterSheet> {
           fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
         ),
       ),
-      avatar: Icon(icon, size: 16, color: selected ? selectedFg : cs.onSurfaceVariant),
+      avatar: Icon(
+        icon,
+        size: 16,
+        color: selected ? selectedFg : cs.onSurfaceVariant,
+      ),
       selected: selected,
       selectedColor: selectedBg,
       checkmarkColor: selectedFg,

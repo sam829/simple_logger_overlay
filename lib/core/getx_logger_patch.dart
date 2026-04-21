@@ -16,12 +16,14 @@ void simpleOverlayGetXLogObserver() {
   final storage = SimpleOverlayLogStorageService();
   Get.config(
     logWriterCallback: (text, {bool isError = false}) {
-      storage.addSimpleLog(SimpleOverlayLog(
-        timestamp: DateTime.now(),
-        tag: 'GetX',
-        level: isError ? LogLevel.error : LogLevel.debug,
-        message: text,
-      ));
+      storage.addSimpleLog(
+        SimpleOverlayLog(
+          timestamp: DateTime.now(),
+          tag: 'GetX',
+          level: isError ? LogLevel.error : LogLevel.debug,
+          message: text,
+        ),
+      );
     },
   );
 }

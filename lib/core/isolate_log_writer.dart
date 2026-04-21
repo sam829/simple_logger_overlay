@@ -80,7 +80,9 @@ class SimpleOverlayIsolateLogWriter {
   ///
   /// If the file does not exist, an empty list is returned.
   static Future<List<Map<String, dynamic>>> readLogs(
-      String dirPath, String type) async {
+    String dirPath,
+    String type,
+  ) async {
     final file = File('$dirPath/${type}_logs.jsonl');
     if (!await file.exists()) return [];
 

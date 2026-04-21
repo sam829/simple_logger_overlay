@@ -11,7 +11,19 @@ void main() async {
 }
 
 Future<void> _seedLogs() async {
-  await SimpleLoggerOverlay.log('App launched', tag: 'main', level: LogLevel.info);
-  await SimpleLoggerOverlay.log('WidgetsBinding initialized', tag: 'main', level: LogLevel.debug);
-  await SimpleLoggerOverlay.log('AppLifecycleObserver registered', tag: 'main', level: LogLevel.debug);
+  await SimpleLoggerOverlay.log(
+    'App launched',
+    tag: 'main',
+    level: LogLevel.info,
+  );
+  await SimpleLoggerOverlay.log(
+    'WidgetsBinding initialized',
+    tag: 'main',
+    level: LogLevel.debug,
+  );
+  await SimpleLoggerOverlay.log(
+    'AppLifecycleObserver registered',
+    tag: 'main',
+    level: LogLevel.debug,
+  );
 }

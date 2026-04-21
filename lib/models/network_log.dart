@@ -75,18 +75,18 @@ class SimpleOverlayNetworkLog extends SimpleOverlayBaseLog {
   /// that can be easily serialized to JSON.
   @override
   Map<String, dynamic> toJson() => {
-        'timestamp': timestamp.toIso8601String(),
-        'tag': tag,
-        'method': method,
-        'url': url,
-        'requestHeaders': requestHeaders,
-        'requestBody': requestBody,
-        'statusCode': statusCode,
-        'responseHeaders': responseHeaders,
-        'responseBody': responseBody,
-        'isSuccess': isSuccess,
-        'type': 'network',
-      };
+    'timestamp': timestamp.toIso8601String(),
+    'tag': tag,
+    'method': method,
+    'url': url,
+    'requestHeaders': requestHeaders,
+    'requestBody': requestBody,
+    'statusCode': statusCode,
+    'responseHeaders': responseHeaders,
+    'responseBody': responseBody,
+    'isSuccess': isSuccess,
+    'type': 'network',
+  };
 
   /// Creates a NetworkLog instance from a JSON Map
   ///

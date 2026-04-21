@@ -17,7 +17,9 @@ class SimpleOverlayNetworkLoggerInterceptor extends Interceptor {
 
   @override
   void onRequest(
-      RequestOptions options, RequestInterceptorHandler handler) async {
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
     options.extra['startTime'] = DateTime.now();
     handler.next(options);
   }
@@ -34,11 +36,13 @@ class SimpleOverlayNetworkLoggerInterceptor extends Interceptor {
       method: request.method,
       url: request.uri.toString(),
       requestHeaders: Map<String, String>.from(
-          request.headers.map((k, v) => MapEntry(k, v.toString()))),
+        request.headers.map((k, v) => MapEntry(k, v.toString())),
+      ),
       requestBody: _bodyToString(request.data),
       statusCode: response.statusCode,
-      responseHeaders:
-          response.headers.map.map((k, v) => MapEntry(k, v.join(','))),
+      responseHeaders: response.headers.map.map(
+        (k, v) => MapEntry(k, v.join(',')),
+      ),
       responseBody: _bodyToString(response.data),
       isSuccess: response.statusCode != null && response.statusCode! < 400,
     );
@@ -59,11 +63,13 @@ class SimpleOverlayNetworkLoggerInterceptor extends Interceptor {
       method: request.method,
       url: request.uri.toString(),
       requestHeaders: Map<String, String>.from(
-          request.headers.map((k, v) => MapEntry(k, v.toString()))),
+        request.headers.map((k, v) => MapEntry(k, v.toString())),
+      ),
       requestBody: _bodyToString(request.data),
       statusCode: err.response?.statusCode,
-      responseHeaders:
-          err.response?.headers.map.map((k, v) => MapEntry(k, v.join(','))),
+      responseHeaders: err.response?.headers.map.map(
+        (k, v) => MapEntry(k, v.join(',')),
+      ),
       responseBody: _bodyToString(err.response?.data),
       isSuccess: false,
     );

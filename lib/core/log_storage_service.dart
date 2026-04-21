@@ -30,8 +30,7 @@ class SimpleOverlayLogStorageService {
   /// Enables styled logging to console. Defaults to true.
   static bool enableConsole = true;
 
-  final _simpleLogController =
-      StreamController<SimpleOverlayLog>.broadcast();
+  final _simpleLogController = StreamController<SimpleOverlayLog>.broadcast();
   final _networkLogController =
       StreamController<SimpleOverlayNetworkLog>.broadcast();
 
@@ -60,11 +59,7 @@ class SimpleOverlayLogStorageService {
 
     final dir = await getApplicationSupportDirectory();
     final path = dir.path;
-    final payload = {
-      'path': path,
-      'type': 'simple',
-      ...log.toJson(),
-    };
+    final payload = {'path': path, 'type': 'simple', ...log.toJson()};
     await Isolate.run(() => SimpleOverlayIsolateLogWriter.writeLog(payload));
     _simpleLogController.add(log);
   }
@@ -99,11 +94,7 @@ class SimpleOverlayLogStorageService {
 
     final dir = await getApplicationSupportDirectory();
     final path = dir.path;
-    final payload = {
-      'path': path,
-      'type': 'network',
-      ...log.toJson(),
-    };
+    final payload = {'path': path, 'type': 'network', ...log.toJson()};
     await Isolate.run(() => SimpleOverlayIsolateLogWriter.writeLog(payload));
     _networkLogController.add(log);
   }
@@ -120,7 +111,8 @@ class SimpleOverlayLogStorageService {
   Future<List<SimpleOverlayLog>> getSimpleLogs() async {
     final dir = await getApplicationSupportDirectory();
     final rawLogs = await Isolate.run(
-        () => SimpleOverlayIsolateLogWriter.readLogs(dir.path, 'simple'));
+      () => SimpleOverlayIsolateLogWriter.readLogs(dir.path, 'simple'),
+    );
     return rawLogs.map((e) => SimpleOverlayLog.fromJson(e)).toList();
   }
 
@@ -136,7 +128,8 @@ class SimpleOverlayLogStorageService {
   Future<List<SimpleOverlayNetworkLog>> getNetworkLogs() async {
     final dir = await getApplicationSupportDirectory();
     final rawLogs = await Isolate.run(
-        () => SimpleOverlayIsolateLogWriter.readLogs(dir.path, 'network'));
+      () => SimpleOverlayIsolateLogWriter.readLogs(dir.path, 'network'),
+    );
     return rawLogs.map((e) => SimpleOverlayNetworkLog.fromJson(e)).toList();
   }
 
@@ -150,7 +143,8 @@ class SimpleOverlayLogStorageService {
     final dir = await getApplicationSupportDirectory();
     final path = dir.path;
     await Isolate.run(
-        () => SimpleOverlayIsolateLogWriter.purgeOldLogs(path, 2));
+      () => SimpleOverlayIsolateLogWriter.purgeOldLogs(path, 2),
+    );
   }
 
   void _printStyled(String level, String tag, String message) {

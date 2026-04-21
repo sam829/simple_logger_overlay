@@ -67,12 +67,12 @@ class SimpleOverlayLog extends SimpleOverlayBaseLog {
   /// - type: Always 'simple' to identify this log type
   @override
   Map<String, dynamic> toJson() => {
-        'timestamp': timestamp.toIso8601String(),
-        'tag': tag,
-        'message': message,
-        'level': level.name,
-        'type': 'simple',
-      };
+    'timestamp': timestamp.toIso8601String(),
+    'tag': tag,
+    'message': message,
+    'level': level.name,
+    'type': 'simple',
+  };
 
   /// Creates a [SimpleOverlayLog] instance from a JSON map.
   ///
