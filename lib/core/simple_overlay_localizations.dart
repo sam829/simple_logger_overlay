@@ -55,8 +55,7 @@ class SimpleOverlayLocalizations {
   String get noLogsTitle => 'No logs yet';
   String get noLogsSubtitle => 'Logs will appear here as your app runs.';
   String get noNetworkTitle => 'No network logs';
-  String get noNetworkSubtitle =>
-      'Network requests via Dio will appear here.';
+  String get noNetworkSubtitle => 'Network requests via Dio will appear here.';
   String get noResultsTitle => 'No results';
   String noResultsSubtitle(String query) => 'No logs match "$query".';
   String noNetworkResultsSubtitle(String query) =>

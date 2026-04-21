@@ -24,12 +24,14 @@ class SimpleOverlayGoRouterObserver extends NavigatorObserver {
     // ignore internal routes
     if (routeName == 'LoggerOverlay') return;
 
-    _storage.addSimpleLog(SimpleOverlayLog(
-      timestamp: DateTime.now(),
-      tag: 'GoRouter',
-      level: LogLevel.info,
-      message: '$action → $routeName',
-    ));
+    _storage.addSimpleLog(
+      SimpleOverlayLog(
+        timestamp: DateTime.now(),
+        tag: 'GoRouter',
+        level: LogLevel.info,
+        message: '$action → $routeName',
+      ),
+    );
   }
 
   @override

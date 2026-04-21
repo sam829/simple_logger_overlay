@@ -19,10 +19,11 @@ class SimpleOverlayLoggerShakeController {
   /// [enableShake] enables shake-to-open gesture in debug mode.
   /// [enableInRelease] allows logger in release mode (disabled by default).
   /// [performanceMode] disables file writes for high-FPS apps (e.g., games).
-  void init(
-      {required BuildContext context,
-      bool enableShake = true,
-      GlobalKey<NavigatorState>? navigatorKey}) {
+  void init({
+    required BuildContext context,
+    bool enableShake = true,
+    GlobalKey<NavigatorState>? navigatorKey,
+  }) {
     _shakeDetector?.stopListening(); // clean up old
 
     if (enableShake) {
