@@ -1,7 +1,7 @@
 # simple_logger_overlay — Example App
 
 Interactive showcase for the [`simple_logger_overlay`](https://pub.dev/packages/simple_logger_overlay) library.
-Demonstrates every major feature: log levels, burst/drip firing, BLoC + Dio integration, and the full settings panel for live-testing the overlay's theming and localization.
+Run it to test every feature: log firing, live streaming, BLoC + Dio integration, container-transform transitions, and the live settings panel for theming and localization.
 
 ---
 
@@ -9,62 +9,69 @@ Demonstrates every major feature: log levels, burst/drip firing, BLoC + Dio inte
 
 ```bash
 cd example
-fvm flutter run          # or: flutter run
+fvm flutter run      # or: flutter run
 ```
 
-Requires Flutter ≥ 3.19 (Material 3 `SearchBar`, `SegmentedButton`).
+Requires Flutter ≥ 3.19 (`SearchBar`, `SegmentedButton`, `SliverAppBar.large`).
 
 ---
 
 ## Dashboard Sections
 
 ### Log Levels
-Tap **Debug / Info / Error** cards to fire a single log at that level.
-Open the overlay and watch the card slide in with M3 easing.
+Tap **Debug / Info / Error** to fire a single log. Open the overlay and watch the card slide in with M3 emphasized-decelerate easing, then tap it to see the container-transform transition to the detail page. Error-level logs use a spring overshoot curve — they bounce slightly past their final position before settling.
 
 ### Burst & Stress
-| Tile | What it tests |
+| Tile | Tests |
 |---|---|
-| **Fire 10 logs (mixed levels)** | Rapid live-insert into the log list |
-| **Slow drip (1 log/sec × 5)** | FAB pulse animation · live append |
+| Fire 10 logs (mixed levels) | Live list insert · entry animations |
+| Slow drip (1 log/sec × 5) | FAB pulse · live append while overlay is open |
 
 ### Integrations — BLoC Example
-Navigates to a screen that fetches a user list via Dio.
-Logs both BLoC state transitions and the raw network request/response,
-so you can see JSON pretty-printing and HTML response rendering in the overlay.
+Navigates to a screen that fetches users from `jsonplaceholder` via Dio.
+Logs BLoC state transitions and the raw network request/response — shows JSON pretty-printing, per-field copy, and (if the response were HTML) the inline HTML renderer.
+
+### Filter Sheet
+Tap the filter icon in the overlay search bar. The badge dot animates in/out with an `easeOutBack` spring when filters are active. The sheet itself uses M3 `FilterChip` widgets (level: Debug/Info/Error; network: Success/Error) with proper state-layer coloring and a Material You modal scrim.
 
 ### Open Overlay
-Direct button to open the logger overlay via `SimpleLoggerOverlay.show(...)`.
+Direct `FilledButton` calling `SimpleLoggerOverlay.show(...)`.
 
 ### Settings
-Live controls that affect both the example app and the overlay simultaneously.
+Live controls — both the example app and the overlay update immediately.
 
-| Control | What it does |
+| Control | Details |
 |---|---|
-| **Theme Mode** | `SegmentedButton` — System / Light / Dark |
+| **Theme Mode** | Full-width `SegmentedButton` — System / Light / Dark |
+| **Dynamic Color** | Toggle on to use Android 12+ wallpaper-derived colors; disables seed picker |
+| **Seed Color** | 12-swatch grid bottom sheet; tap any swatch — app and overlay recolor live |
 | **Locale** | Bottom-sheet picker — English / Español / Français / العربية / Deutsch / 日本語 |
-| **Seed Color** | Bottom-sheet grid of 12 preset swatches; tap to apply — overlay recolors immediately |
 
 ---
 
-## How Settings Work
+## How It Works
 
-`AppSettings` is a `ChangeNotifier` held at app root (`appSettings` global in
-`lib/app/simple_overlay_logger_app.dart`). When any value changes:
+### Settings state
 
-1. `SimpleLoggerOverlayConfig.configure(seedColor: ...)` is called, updating the
-   overlay's Material You color scheme.
-2. `MaterialApp` rebuilds with the new `themeMode`, `locale`, and seed-derived `ThemeData`.
+`AppSettings` (`lib/app/app_settings.dart`) is a `ChangeNotifier` stored in the global `appSettings` variable. When any value changes:
 
-Both the host app and the overlay always use the same seed — no separate
-configuration step needed.
+1. `SimpleLoggerOverlayConfig.configure(...)` is called to update the overlay's color scheme.
+2. `_SimpleOverlayLoggerAppState` calls `setState`, rebuilding `MaterialApp.router` with the new `themeMode`, `locale`, and `ThemeData`.
+
+### Dynamic color
+
+`DynamicColorBuilder` wraps the `MaterialApp.router`. When `isDynamicTheme` is true and the device provides `lightDynamic`/`darkDynamic` schemes, those are passed directly to `SimpleLoggerOverlayConfig.configure(lightScheme:, darkScheme:)`. On devices/platforms without dynamic color, the toggle has no visible effect (graceful fallback to seed).
+
+### Localization
+
+`ExampleOverlayLocalizationsDelegate` (`lib/l10n/overlay_l10n.dart`) subclasses `SimpleOverlayLocalizations` for each supported locale and registers itself via `localizationsDelegates`. `shouldReload` returns `true` so the overlay reloads its strings when the locale picker changes the app locale.
 
 ---
 
 ## Customizing the Seed in Your Own App
 
 ```dart
-// Call once, before or after runApp — takes effect on next overlay open.
+// Anywhere — before or after runApp.
 SimpleLoggerOverlayConfig.configure(seedColor: Colors.deepPurple);
 ```
 
@@ -75,11 +82,13 @@ SimpleLoggerOverlayConfig.configure(seedColor: Colors.deepPurple);
 ```
 lib/
 ├── app/
-│   ├── app_settings.dart               # ChangeNotifier: themeMode, seedColor, locale
-│   └── simple_overlay_logger_app.dart  # Stateful root; syncs AppSettings → overlay config
+│   ├── app_settings.dart               # ChangeNotifier — themeMode, seedColor, locale, isDynamicTheme
+│   └── simple_overlay_logger_app.dart  # Stateful root; DynamicColorBuilder; syncs settings → overlay
+├── l10n/
+│   └── overlay_l10n.dart               # Translated SimpleOverlayLocalizations for es/fr/ar/de/ja
 ├── router/
-│   └── routes.dart                     # GoRouter config + typed routes
+│   └── routes.dart                     # GoRouter config + typed routes (build_runner generated)
 └── screens/
-    ├── dashboard_screen.dart           # Main showcase screen
-    └── bloc_user_list/                 # BLoC + Dio integration example
+    ├── dashboard_screen.dart           # Main showcase — log tiles, burst, integrations, settings
+    └── bloc_user_list/                 # BLoC + Dio integration demo
 ```

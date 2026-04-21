@@ -136,11 +136,21 @@ class _SimpleOverlayDraggableDebuggerFABState
             curve: Curves.easeOut,
             child: ScaleTransition(
               scale: _pulseAnimation,
-              child: Material(
-                elevation: _isDragging ? 12 : 6,
-                shadowColor: cs.primary.withValues(alpha: 0.4),
-                shape: const CircleBorder(),
-                color: cs.primaryContainer,
+              child: AnimatedBuilder(
+                animation: _pulseAnimation,
+                builder: (_, child) {
+                  // Shadow swells with the pulse scale — creates depth pop
+                  final pulseBoost =
+                      (_pulseAnimation.value - 1.0).abs() * 14.0;
+                  return Material(
+                    elevation: (_isDragging ? 12.0 : 6.0) + pulseBoost,
+                    shadowColor: cs.primary.withValues(
+                        alpha: 0.4 + (pulseBoost * 0.025).clamp(0.0, 0.3)),
+                    shape: const CircleBorder(),
+                    color: cs.primaryContainer,
+                    child: child,
+                  );
+                },
                 child: Padding(
                   padding: const EdgeInsets.all(14.0),
                   child: Icon(

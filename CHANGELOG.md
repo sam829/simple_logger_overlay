@@ -1,5 +1,50 @@
 # Changelog
 
+## 0.2.0
+
+- 🐛 Fix `OpenContainer` deactivated-context crash: pre-compute all `Theme.of` values before any closure — zero `Theme.of` calls inside `openBuilder` or `closedBuilder`
+- 🔧 CI: pin Flutter version to `3.35.6` in publish workflow for reproducible builds
+- 🔧 example: remove `build_verify` dev dependency to resolve `go_router_builder` / `analyzer` version conflict
+
+### ✨ Material You Expressive UI
+
+- **Container transform** — log card → detail page uses `OpenContainer` (fade, 450 ms) for a seamless surface expansion
+- **M3 color system** — all hard-coded colors replaced with semantic tokens (`primaryContainer`, `errorContainer`, `surfaceContainerHighest`, etc.); adapts automatically to light / dark
+- **M3 easing** — list entry animations use emphasized-decelerate curve `Cubic(0.05, 0.7, 0.1, 1.0)` at 350 ms
+- **Shared-axis transition** — vertical slide for overlay open / close
+- **FAB spring snap** — spring physics on drag release; scale press feedback; pulse on new logs
+
+### 🎨 Theming
+
+- **`SimpleLoggerOverlayConfig`** — new singleton with `configure(seedColor:)` API; overlay builds its own `ThemeData` via `ColorScheme.fromSeed`; default seed: sage-mint `0xFF52B788`
+- **Dynamic Color** — `configure(lightScheme:, darkScheme:, clearSchemes:)` accepts a full `ColorScheme` for Android 12+ wallpaper-derived colors
+- **Typography** — Inter (UI text) + JetBrains Mono (JSON / code) via `google_fonts`
+
+### 🌐 Network logs
+
+- HTML response bodies rendered inline via `flutter_html`
+- Auto-detection: JSON (pretty-printed) · HTML (rendered) · plain text
+- Per-field copy buttons on every section in the detail view
+- `_bodyToString()` in interceptor uses `jsonEncode` to avoid Dart Map literal output
+
+### 🔍 Search & filter
+
+- M3 `SearchBar` with inline filter + sort icon buttons
+- Filter sheet — level (Debug / Info / Error) and network status (Success / Error)
+- Sort always applied (newest / oldest first) regardless of filter state
+
+### 🌍 Localization
+
+- `SimpleOverlayLocalizations` delegate — overlay picks up host app locale
+- `shouldReload` fixed to `true` so strings update when locale changes
+
+### 🐛 Bug fixes
+
+- `OpenContainer` deactivated-context crash: pre-compute all `Theme.of` values before any closure; zero `Theme.of` calls inside `openBuilder` or `closedBuilder`
+- `LateInitializationError` on second FAB drag: animation fields made nullable; listener de-registered before re-add
+- `FormatException` on JSONL read: per-line `try/catch` skips malformed / partial lines
+- Sort not applying without active filter: unified display getters always apply both filter and sort
+
 ## 0.1.9
 
 - go_router causing issue on version `15.3.2`, retracted to `15.1.3`

@@ -319,9 +319,11 @@ class _SettingsTilesState extends State<_SettingsTiles> {
       children: [
         _ThemeModeTile(cs: cs),
         const SizedBox(height: 8),
-        _LocaleTile(cs: cs),
+        _DynamicThemeTile(cs: cs),
         const SizedBox(height: 8),
         _SeedColorTile(cs: cs),
+        const SizedBox(height: 8),
+        _LocaleTile(cs: cs),
       ],
     );
   }
@@ -363,22 +365,55 @@ class _ThemeModeTile extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
-            SegmentedButton<ThemeMode>(
-              segments: modes
-                  .map((m) => ButtonSegment<ThemeMode>(
-                        value: m.$1,
-                        label: Text(m.$2),
-                        icon: Icon(m.$3),
-                      ))
-                  .toList(),
-              selected: {appSettings.themeMode},
-              onSelectionChanged: (s) => appSettings.setThemeMode(s.first),
-              style: ButtonStyle(
-                minimumSize: WidgetStateProperty.all(const Size(0, 36)),
+            SizedBox(
+              width: double.infinity,
+              child: SegmentedButton<ThemeMode>(
+                segments: modes
+                    .map((m) => ButtonSegment<ThemeMode>(
+                          value: m.$1,
+                          label: Text(m.$2),
+                          icon: Icon(m.$3),
+                        ))
+                    .toList(),
+                selected: {appSettings.themeMode},
+                onSelectionChanged: (s) => appSettings.setThemeMode(s.first),
+                style: ButtonStyle(
+                  minimumSize: WidgetStateProperty.all(const Size(0, 40)),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _DynamicThemeTile extends StatelessWidget {
+  const _DynamicThemeTile({required this.cs});
+  final ColorScheme cs;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 0,
+      color: cs.surfaceContainerHighest,
+      margin: EdgeInsets.zero,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: SwitchListTile(
+        secondary: Icon(Icons.auto_awesome_outlined, color: cs.onSurfaceVariant),
+        title: Text(
+          'Dynamic Color',
+          style: TextStyle(color: cs.onSurface, fontWeight: FontWeight.w600),
+        ),
+        subtitle: Text(
+          'Use wallpaper-derived colors (Android 12+)',
+          style: TextStyle(color: cs.onSurfaceVariant),
+        ),
+        value: appSettings.isDynamicTheme,
+        onChanged: (v) => appSettings.setDynamicTheme(v),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       ),
     );
   }
@@ -509,27 +544,39 @@ class _SeedColorTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 0,
-      color: cs.surfaceContainerHighest,
-      margin: EdgeInsets.zero,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: ListTile(
-        leading: CircleAvatar(
-          radius: 12,
-          backgroundColor: appSettings.seedColor,
+    final disabled = appSettings.isDynamicTheme;
+    final fg = disabled
+        ? cs.onSurface.withValues(alpha: 0.38)
+        : cs.onSurface;
+    final fgSub = disabled
+        ? cs.onSurfaceVariant.withValues(alpha: 0.38)
+        : cs.onSurfaceVariant;
+
+    return Opacity(
+      opacity: disabled ? 0.5 : 1.0,
+      child: Card(
+        elevation: 0,
+        color: cs.surfaceContainerHighest,
+        margin: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: ListTile(
+          leading: CircleAvatar(
+            radius: 12,
+            backgroundColor:
+                disabled ? cs.onSurface.withValues(alpha: 0.2) : appSettings.seedColor,
+          ),
+          title: Text(
+            'Seed Color',
+            style: TextStyle(color: fg, fontWeight: FontWeight.w600),
+          ),
+          subtitle: Text(
+            disabled ? 'Disabled — dynamic color is on' : _labelForColor(appSettings.seedColor),
+            style: TextStyle(color: fgSub),
+          ),
+          trailing: Icon(Icons.color_lens_outlined,
+              color: fgSub.withValues(alpha: 0.6)),
+          onTap: disabled ? null : () => _showColorPicker(context),
         ),
-        title: Text(
-          'Seed Color',
-          style: TextStyle(color: cs.onSurface, fontWeight: FontWeight.w600),
-        ),
-        subtitle: Text(
-          _labelForColor(appSettings.seedColor),
-          style: TextStyle(color: cs.onSurfaceVariant),
-        ),
-        trailing: Icon(Icons.color_lens_outlined,
-            color: cs.onSurfaceVariant.withValues(alpha: 0.6)),
-        onTap: () => _showColorPicker(context),
       ),
     );
   }
