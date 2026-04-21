@@ -1,12 +1,10 @@
 # Changelog
 
-## 0.2.1
+## 0.2.0
 
 - 🐛 Fix `OpenContainer` deactivated-context crash: pre-compute all `Theme.of` values before any closure — zero `Theme.of` calls inside `openBuilder` or `closedBuilder`
 - 🔧 CI: pin Flutter version to `3.35.6` in publish workflow for reproducible builds
 - 🔧 example: remove `build_verify` dev dependency to resolve `go_router_builder` / `analyzer` version conflict
-
-## 0.2.0
 
 ### ✨ Material You Expressive UI
 
