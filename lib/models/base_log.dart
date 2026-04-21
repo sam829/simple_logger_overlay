@@ -45,10 +45,7 @@ abstract class SimpleOverlayBaseLog {
   ///
   /// Both [timestamp] and [tag] are required parameters as they are
   /// fundamental to all log entries.
-  const SimpleOverlayBaseLog({
-    required this.timestamp,
-    required this.tag,
-  });
+  const SimpleOverlayBaseLog({required this.timestamp, required this.tag});
 
   /// Converts the log entry to a JSON-serializable map.
   ///
