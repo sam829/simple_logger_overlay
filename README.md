@@ -1,6 +1,7 @@
 <div align="center">
 
-<img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/logo.svg?raw=true" width="80" alt="simple_logger_overlay logo"/>
+<img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/logo.svg?raw=true" width="120" alt="simple_logger_overlay logo"/>
+
 # Simple Logger Overlay
 
 **A premium in-app debug logger for Flutter — Material You, zero config, production-safe.** 
@@ -15,13 +16,17 @@
 
 <br/>
 
-*Stop `print`-debugging. Stop switching windows. Everything you need, right inside your app.*
+*Stop `print`-debugging. <br />
+Stop switching windows. <br />
+Everything you need, right inside your app.*
 
 <br/>
 
+</div>
+
 <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/logging-banner.png?raw=true" width="100%" alt="simple_logger_overlay banner"/>
 
-</div>
+<br />
 
 ---
 
@@ -379,17 +384,9 @@ Your App
 
 <div align="center">
 
-| Log list | Network list |
-|:---:|:---:|
-| <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/simple_list.png?raw=true" width="220"/> | <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/network_list.png?raw=true" width="220"/> |
-
-| Log detail | Network detail |
-|:---:|:---:|
-| <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/simple_detail.png?raw=true" width="220"/> | <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/network_detail.png?raw=true" width="220"/> |
-
-| Search & filter | Export |
-|:---:|:---:|
-| <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/search.png?raw=true" width="220"/> | <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/export.png?raw=true" width="220"/> |
+| Log list | Network list | Log detail | Network detail | Search & filter | Export |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/simple_list.png?raw=true" width="220"/> | <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/network_list.png?raw=true" width="220"/> | <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/simple_detail.png?raw=true" width="220"/> | <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/network_detail.png?raw=true" width="220"/> | <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/search.png?raw=true" width="220"/> | <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/export.png?raw=true" width="220"/> |
 
 </div>
 
