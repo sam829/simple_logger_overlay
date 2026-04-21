@@ -35,8 +35,7 @@ class _SimpleOverlayLoggerAppState extends State<SimpleOverlayLoggerApp> {
   Widget build(BuildContext context) {
     return DynamicColorBuilder(
       builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
-        final useDynamic =
-            appSettings.isDynamicTheme && lightDynamic != null;
+        final useDynamic = appSettings.isDynamicTheme && lightDynamic != null;
 
         if (useDynamic) {
           SimpleLoggerOverlayConfig.configure(
@@ -84,7 +83,8 @@ class _SimpleOverlayLoggerAppState extends State<SimpleOverlayLoggerApp> {
               children: [
                 child!,
                 SimpleOverlayDraggableDebuggerFAB(
-                    navigatorKey: rootNavigatorKey),
+                  navigatorKey: rootNavigatorKey,
+                ),
               ],
             );
           },
@@ -115,9 +115,5 @@ ThemeData _buildThemeFromScheme(ColorScheme scheme) {
         : ThemeData.dark().textTheme,
   );
 
-  return ThemeData(
-    useMaterial3: true,
-    colorScheme: scheme,
-    textTheme: base,
-  );
+  return ThemeData(useMaterial3: true, colorScheme: scheme, textTheme: base);
 }

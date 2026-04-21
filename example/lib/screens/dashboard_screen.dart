@@ -57,10 +57,10 @@ class _SectionHeader extends StatelessWidget {
       child: Text(
         title,
         style: Theme.of(context).textTheme.labelLarge?.copyWith(
-              color: Theme.of(context).colorScheme.primary,
-              fontWeight: FontWeight.w700,
-              letterSpacing: 0.8,
-            ),
+          color: Theme.of(context).colorScheme.primary,
+          fontWeight: FontWeight.w700,
+          letterSpacing: 0.8,
+        ),
       ),
     );
   }
@@ -106,16 +106,22 @@ class _LogLevelTiles extends StatelessWidget {
           color: bg,
           margin: const EdgeInsets.only(bottom: 8),
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16)),
+            borderRadius: BorderRadius.circular(16),
+          ),
           child: ListTile(
             leading: Icon(icon, color: fg),
-            title: Text(label,
-                style: TextStyle(
-                    color: fg, fontWeight: FontWeight.w600)),
-            subtitle:
-                Text(subtitle, style: TextStyle(color: fg.withValues(alpha: 0.7))),
-            trailing:
-                Icon(Icons.send_outlined, color: fg.withValues(alpha: 0.6)),
+            title: Text(
+              label,
+              style: TextStyle(color: fg, fontWeight: FontWeight.w600),
+            ),
+            subtitle: Text(
+              subtitle,
+              style: TextStyle(color: fg.withValues(alpha: 0.7)),
+            ),
+            trailing: Icon(
+              Icons.send_outlined,
+              color: fg.withValues(alpha: 0.6),
+            ),
             onTap: () {
               SimpleLoggerOverlay.log(
                 '$label log fired at ${DateTime.now().toIso8601String()}',
@@ -148,20 +154,28 @@ class _BurstTiles extends StatelessWidget {
           elevation: 0,
           color: cs.secondaryContainer,
           margin: const EdgeInsets.only(bottom: 8),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
           child: ListTile(
-            leading:
-                Icon(Icons.bolt_outlined, color: cs.onSecondaryContainer),
-            title: Text('Fire 10 logs (mixed levels)',
-                style: TextStyle(
-                    color: cs.onSecondaryContainer,
-                    fontWeight: FontWeight.w600)),
-            subtitle: Text('Tests AnimatedList live-insert',
-                style: TextStyle(
-                    color: cs.onSecondaryContainer.withValues(alpha: 0.7))),
-            trailing: Icon(Icons.play_arrow_outlined,
-                color: cs.onSecondaryContainer.withValues(alpha: 0.6)),
+            leading: Icon(Icons.bolt_outlined, color: cs.onSecondaryContainer),
+            title: Text(
+              'Fire 10 logs (mixed levels)',
+              style: TextStyle(
+                color: cs.onSecondaryContainer,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            subtitle: Text(
+              'Tests AnimatedList live-insert',
+              style: TextStyle(
+                color: cs.onSecondaryContainer.withValues(alpha: 0.7),
+              ),
+            ),
+            trailing: Icon(
+              Icons.play_arrow_outlined,
+              color: cs.onSecondaryContainer.withValues(alpha: 0.6),
+            ),
             onTap: () => _fireBurst(context),
           ),
         ),
@@ -169,18 +183,26 @@ class _BurstTiles extends StatelessWidget {
           elevation: 0,
           color: cs.surfaceContainerHighest,
           margin: const EdgeInsets.only(bottom: 8),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
           child: ListTile(
-            leading: Icon(Icons.timer_outlined,
-                color: cs.onSurfaceVariant),
-            title: Text('Slow drip (1 log/sec × 5)',
-                style: TextStyle(
-                    color: cs.onSurface, fontWeight: FontWeight.w600)),
-            subtitle: Text('Watch FAB pulse + live append',
-                style: TextStyle(color: cs.onSurfaceVariant)),
-            trailing: Icon(Icons.play_arrow_outlined,
-                color: cs.onSurfaceVariant.withValues(alpha: 0.6)),
+            leading: Icon(Icons.timer_outlined, color: cs.onSurfaceVariant),
+            title: Text(
+              'Slow drip (1 log/sec × 5)',
+              style: TextStyle(
+                color: cs.onSurface,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            subtitle: Text(
+              'Watch FAB pulse + live append',
+              style: TextStyle(color: cs.onSurfaceVariant),
+            ),
+            trailing: Icon(
+              Icons.play_arrow_outlined,
+              color: cs.onSurfaceVariant.withValues(alpha: 0.6),
+            ),
             onTap: () => _fireDrip(context),
           ),
         ),
@@ -249,19 +271,27 @@ class _IntegrationTiles extends StatelessWidget {
           elevation: 0,
           color: cs.surfaceContainerHighest,
           margin: const EdgeInsets.only(bottom: 8),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
           child: ListTile(
-            leading: Icon(Icons.view_list_outlined,
-                color: cs.onSurfaceVariant),
-            title: Text('BLoC Example',
-                style: TextStyle(
-                    color: cs.onSurface, fontWeight: FontWeight.w600)),
+            leading: Icon(Icons.view_list_outlined, color: cs.onSurfaceVariant),
+            title: Text(
+              'BLoC Example',
+              style: TextStyle(
+                color: cs.onSurface,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
             subtitle: Text(
-                'Fetch users — logs BLoC events + Dio network calls',
-                style: TextStyle(color: cs.onSurfaceVariant)),
-            trailing: Icon(Icons.arrow_forward_ios_rounded,
-                size: 16, color: cs.onSurfaceVariant),
+              'Fetch users — logs BLoC events + Dio network calls',
+              style: TextStyle(color: cs.onSurfaceVariant),
+            ),
+            trailing: Icon(
+              Icons.arrow_forward_ios_rounded,
+              size: 16,
+              color: cs.onSurfaceVariant,
+            ),
             onTap: () => BlocUserListRoute().push(context),
           ),
         ),
@@ -280,8 +310,7 @@ class _OverlayTile extends StatelessWidget {
       label: const Text('Open Logger Overlay'),
       style: FilledButton.styleFrom(
         minimumSize: const Size.fromHeight(52),
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       ),
     );
   }
@@ -353,14 +382,18 @@ class _ThemeModeTile extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(Icons.palette_outlined, color: cs.onSurfaceVariant, size: 20),
+                Icon(
+                  Icons.palette_outlined,
+                  color: cs.onSurfaceVariant,
+                  size: 20,
+                ),
                 const SizedBox(width: 12),
                 Text(
                   'Theme Mode',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: cs.onSurface,
-                        fontWeight: FontWeight.w600,
-                      ),
+                    color: cs.onSurface,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ],
             ),
@@ -369,11 +402,13 @@ class _ThemeModeTile extends StatelessWidget {
               width: double.infinity,
               child: SegmentedButton<ThemeMode>(
                 segments: modes
-                    .map((m) => ButtonSegment<ThemeMode>(
-                          value: m.$1,
-                          label: Text(m.$2),
-                          icon: Icon(m.$3),
-                        ))
+                    .map(
+                      (m) => ButtonSegment<ThemeMode>(
+                        value: m.$1,
+                        label: Text(m.$2),
+                        icon: Icon(m.$3),
+                      ),
+                    )
                     .toList(),
                 selected: {appSettings.themeMode},
                 onSelectionChanged: (s) => appSettings.setThemeMode(s.first),
@@ -402,7 +437,10 @@ class _DynamicThemeTile extends StatelessWidget {
       margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: SwitchListTile(
-        secondary: Icon(Icons.auto_awesome_outlined, color: cs.onSurfaceVariant),
+        secondary: Icon(
+          Icons.auto_awesome_outlined,
+          color: cs.onSurfaceVariant,
+        ),
         title: Text(
           'Dynamic Color',
           style: TextStyle(color: cs.onSurface, fontWeight: FontWeight.w600),
@@ -452,8 +490,10 @@ class _LocaleTile extends StatelessWidget {
           style: TextStyle(color: cs.onSurface, fontWeight: FontWeight.w600),
         ),
         subtitle: Text(label, style: TextStyle(color: cs.onSurfaceVariant)),
-        trailing: Icon(Icons.expand_more_rounded,
-            color: cs.onSurfaceVariant.withValues(alpha: 0.6)),
+        trailing: Icon(
+          Icons.expand_more_rounded,
+          color: cs.onSurfaceVariant.withValues(alpha: 0.6),
+        ),
         onTap: () => _showPicker(context),
       ),
     );
@@ -487,9 +527,9 @@ class _LocaleTile extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   'Select Locale',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: cs.onSurface,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleMedium?.copyWith(color: cs.onSurface),
                 ),
               ),
             ),
@@ -497,15 +537,19 @@ class _LocaleTile extends StatelessWidget {
             ..._locales.map((entry) {
               final isSelected = appSettings.locale == entry.$1;
               return ListTile(
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 2),
-                title: Text(entry.$2,
-                    style: TextStyle(
-                      color: isSelected ? cs.primary : cs.onSurface,
-                      fontWeight: isSelected
-                          ? FontWeight.w600
-                          : FontWeight.normal,
-                    )),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 2,
+                ),
+                title: Text(
+                  entry.$2,
+                  style: TextStyle(
+                    color: isSelected ? cs.primary : cs.onSurface,
+                    fontWeight: isSelected
+                        ? FontWeight.w600
+                        : FontWeight.normal,
+                  ),
+                ),
                 trailing: isSelected
                     ? Icon(Icons.check_rounded, color: cs.primary)
                     : null,
@@ -545,9 +589,7 @@ class _SeedColorTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final disabled = appSettings.isDynamicTheme;
-    final fg = disabled
-        ? cs.onSurface.withValues(alpha: 0.38)
-        : cs.onSurface;
+    final fg = disabled ? cs.onSurface.withValues(alpha: 0.38) : cs.onSurface;
     final fgSub = disabled
         ? cs.onSurfaceVariant.withValues(alpha: 0.38)
         : cs.onSurfaceVariant;
@@ -562,19 +604,24 @@ class _SeedColorTile extends StatelessWidget {
         child: ListTile(
           leading: CircleAvatar(
             radius: 12,
-            backgroundColor:
-                disabled ? cs.onSurface.withValues(alpha: 0.2) : appSettings.seedColor,
+            backgroundColor: disabled
+                ? cs.onSurface.withValues(alpha: 0.2)
+                : appSettings.seedColor,
           ),
           title: Text(
             'Seed Color',
             style: TextStyle(color: fg, fontWeight: FontWeight.w600),
           ),
           subtitle: Text(
-            disabled ? 'Disabled — dynamic color is on' : _labelForColor(appSettings.seedColor),
+            disabled
+                ? 'Disabled — dynamic color is on'
+                : _labelForColor(appSettings.seedColor),
             style: TextStyle(color: fgSub),
           ),
-          trailing: Icon(Icons.color_lens_outlined,
-              color: fgSub.withValues(alpha: 0.6)),
+          trailing: Icon(
+            Icons.color_lens_outlined,
+            color: fgSub.withValues(alpha: 0.6),
+          ),
           onTap: disabled ? null : () => _showColorPicker(context),
         ),
       ),
@@ -607,9 +654,9 @@ class _SeedColorTile extends StatelessWidget {
                 children: [
                   Text(
                     'Seed Color',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: cs.onSurface,
-                        ),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.titleMedium?.copyWith(color: cs.onSurface),
                   ),
                   const Spacer(),
                   Container(
@@ -625,9 +672,9 @@ class _SeedColorTile extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 'Pick a seed — both app and overlay update live.',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: cs.onSurfaceVariant,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: cs.onSurfaceVariant),
               ),
               const SizedBox(height: 20),
               Wrap(
@@ -651,10 +698,7 @@ class _SeedColorTile extends StatelessWidget {
                           color: entry.$1,
                           shape: BoxShape.circle,
                           border: isSelected
-                              ? Border.all(
-                                  color: cs.onSurface,
-                                  width: 3,
-                                )
+                              ? Border.all(color: cs.onSurface, width: 3)
                               : null,
                           boxShadow: [
                             BoxShadow(
@@ -665,8 +709,11 @@ class _SeedColorTile extends StatelessWidget {
                           ],
                         ),
                         child: isSelected
-                            ? Icon(Icons.check_rounded,
-                                color: _contrastColor(entry.$1), size: 20)
+                            ? Icon(
+                                Icons.check_rounded,
+                                color: _contrastColor(entry.$1),
+                                size: 20,
+                              )
                             : null,
                       ),
                     ),

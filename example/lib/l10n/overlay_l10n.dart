@@ -138,8 +138,7 @@ class _FrOverlayL10n extends SimpleOverlayLocalizations {
   @override
   String get noResultsTitle => 'Aucun résultat';
   @override
-  String noResultsSubtitle(String q) =>
-      'Aucun journal ne correspond à "$q".';
+  String noResultsSubtitle(String q) => 'Aucun journal ne correspond à "$q".';
   @override
   String noNetworkResultsSubtitle(String q) =>
       'Aucune requête ne correspond à "$q".';
@@ -207,8 +206,7 @@ class _ArOverlayL10n extends SimpleOverlayLocalizations {
   @override
   String noResultsSubtitle(String q) => 'لا توجد سجلات تطابق "$q".';
   @override
-  String noNetworkResultsSubtitle(String q) =>
-      'لا توجد سجلات شبكة تطابق "$q".';
+  String noNetworkResultsSubtitle(String q) => 'لا توجد سجلات شبكة تطابق "$q".';
   @override
   String get logDetailTitle => 'تفاصيل السجل';
   @override
@@ -339,8 +337,7 @@ class _JaOverlayL10n extends SimpleOverlayLocalizations {
   @override
   String noResultsSubtitle(String q) => '"$q" に一致するログはありません。';
   @override
-  String noNetworkResultsSubtitle(String q) =>
-      '"$q" に一致するネットワークログはありません。';
+  String noNetworkResultsSubtitle(String q) => '"$q" に一致するネットワークログはありません。';
   @override
   String get logDetailTitle => 'ログ詳細';
   @override
