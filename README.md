@@ -1,7 +1,6 @@
 <div align="center">
 
 <img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/logo.svg?raw=true" width="80" alt="simple_logger_overlay logo"/>
-
 # Simple Logger Overlay
 
 **A premium in-app debug logger for Flutter — Material You, zero config, production-safe.** 
@@ -20,7 +19,7 @@
 
 <br/>
 
-<img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/banner.svg?raw=true" width="100%" alt="simple_logger_overlay banner"/>
+<img src="https://github.com/sam829/simple_logger_overlay/blob/develop/screenshot/logging-banner.svg?raw=true" width="100%" alt="simple_logger_overlay banner"/>
 
 </div>
 
