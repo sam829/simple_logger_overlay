@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.2.1
+
+### 🐛 Bug fixes
+
+- **Riverpod 3.x compatibility** — `SimpleOverlayLoggerRiverpodObserver` migrated to `flutter_riverpod ^3.x` API:
+  - Class declared `base` (required because `ProviderObserver` is now `base`)
+  - `didUpdateProvider` / `didDisposeProvider` signatures updated to accept `ProviderObserverContext` instead of `ProviderBase` + `ProviderContainer`
+  - Added `dart:async` import for `unawaited`; removed unused `meta` import
+
+### 🔧 Internal
+
+- Applied `dart format` across all core services and data models (no logic changes)
+- Fixed unnecessary multi-underscore wildcard params (`__` / `___` → `_`) per `unnecessary_underscores` lint rule
+
+---
+
 ## 0.2.0
 
 - 🐛 Fix `OpenContainer` deactivated-context crash: pre-compute all `Theme.of` values before any closure — zero `Theme.of` calls inside `openBuilder` or `closedBuilder`
