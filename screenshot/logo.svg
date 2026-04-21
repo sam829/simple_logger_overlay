@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#62C99A;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3A9E70;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="panelGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#2A2D36;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1C1F26;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="8" stdDeviation="16" flood-color="#000000" flood-opacity="0.35"/>
+    </filter>
+    <clipPath id="outerClip">
+      <rect x="24" y="24" width="464" height="464" rx="104"/>
+    </clipPath>
+  </defs>
+
+  <!-- Outer rounded square background -->
+  <rect x="24" y="24" width="464" height="464" rx="104" fill="url(#bgGrad)"/>
+
+  <!-- Subtle grid texture -->
+  <rect x="24" y="24" width="464" height="464" rx="104" fill="none" stroke="#FFFFFF" stroke-width="1" opacity="0.08"/>
+
+  <!-- Floating overlay panel -->
+  <rect x="72" y="110" width="368" height="292" rx="28" fill="url(#panelGrad)" filter="url(#shadow)"/>
+
+  <!-- Panel top bar -->
+  <rect x="72" y="110" width="368" height="52" rx="28" fill="#323641"/>
+  <rect x="72" y="136" width="368" height="26" fill="#323641"/>
+
+  <!-- Top bar dots (traffic light style) -->
+  <circle cx="118" cy="136" r="10" fill="#FF6B6B" opacity="0.85"/>
+  <circle cx="152" cy="136" r="10" fill="#FFD166" opacity="0.85"/>
+  <circle cx="186" cy="136" r="10" fill="#52B788" opacity="0.85"/>
+
+  <!-- Panel title text lines -->
+  <rect x="218" y="128" width="80" height="8" rx="4" fill="#FFFFFF" opacity="0.25"/>
+  <rect x="218" y="140" width="52" height="6" rx="3" fill="#FFFFFF" opacity="0.12"/>
+
+  <!-- Divider -->
+  <rect x="72" y="162" width="368" height="1.5" fill="#FFFFFF" opacity="0.06"/>
+
+  <!-- Log row 1 — Debug (teal) -->
+  <rect x="88" y="178" width="336" height="64" rx="12" fill="#FFFFFF" opacity="0.04"/>
+  <!-- Level dot -->
+  <circle cx="122" cy="210" r="14" fill="#40C9AA" opacity="0.2"/>
+  <circle cx="122" cy="210" r="8" fill="#40C9AA"/>
+  <!-- Log text lines -->
+  <rect x="152" y="200" width="180" height="10" rx="5" fill="#FFFFFF" opacity="0.75"/>
+  <rect x="152" y="216" width="116" height="7" rx="3.5" fill="#FFFFFF" opacity="0.3"/>
+  <!-- Timestamp -->
+  <rect x="352" y="203" width="56" height="7" rx="3.5" fill="#FFFFFF" opacity="0.2"/>
+
+  <!-- Log row 2 — Info (primary blue) -->
+  <rect x="88" y="254" width="336" height="64" rx="12" fill="#FFFFFF" opacity="0.04"/>
+  <circle cx="122" cy="286" r="14" fill="#7CB8FF" opacity="0.2"/>
+  <circle cx="122" cy="286" r="8" fill="#7CB8FF"/>
+  <rect x="152" y="276" width="148" height="10" rx="5" fill="#FFFFFF" opacity="0.75"/>
+  <rect x="152" y="292" width="96" height="7" rx="3.5" fill="#FFFFFF" opacity="0.3"/>
+  <rect x="352" y="279" width="56" height="7" rx="3.5" fill="#FFFFFF" opacity="0.2"/>
+
+  <!-- Log row 3 — Error (red) -->
+  <rect x="88" y="330" width="336" height="64" rx="12" fill="#FF6B6B" opacity="0.06"/>
+  <circle cx="122" cy="362" r="14" fill="#FF6B6B" opacity="0.25"/>
+  <circle cx="122" cy="362" r="8" fill="#FF8A80"/>
+  <rect x="152" y="352" width="200" height="10" rx="5" fill="#FFFFFF" opacity="0.75"/>
+  <rect x="152" y="368" width="132" height="7" rx="3.5" fill="#FFFFFF" opacity="0.3"/>
+  <rect x="352" y="355" width="56" height="7" rx="3.5" fill="#FFFFFF" opacity="0.2"/>
+
+  <!-- FAB (draggable overlay trigger) -->
+  <circle cx="394" cy="408" r="42" fill="#52B788" filter="url(#shadow)"/>
+  <circle cx="394" cy="408" r="42" fill="none" stroke="#FFFFFF" stroke-width="1.5" opacity="0.25"/>
+  <!-- FAB icon: three lines (hamburger/log indicator) -->
+  <rect x="374" y="396" width="40" height="5" rx="2.5" fill="#FFFFFF"/>
+  <rect x="374" y="406" width="30" height="5" rx="2.5" fill="#FFFFFF" opacity="0.75"/>
+  <rect x="374" y="416" width="36" height="5" rx="2.5" fill="#FFFFFF" opacity="0.5"/>
+</svg>
